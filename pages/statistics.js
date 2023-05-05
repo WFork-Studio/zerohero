@@ -2,7 +2,7 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link'
 
-export default function Home() {
+export default function Statistics() {
   return (
     <div className={styles.container}>
 
@@ -12,7 +12,7 @@ export default function Home() {
         </h1>
 
         <p className={styles.description}>
-          Home
+          Statistics
         </p>
 
         <div className='grid grid-cols-2'>
