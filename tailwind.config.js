@@ -21,6 +21,7 @@ module.exports = {
       coolvetica: ["Coolvetica", "cursive"],
       coolveticaCondensed: ["Coolvetica-Condensed", "cursive"],
       coolveticaCrammed: ["Coolvetica-Crammed", "cursive"],
+      roboto: ["Roboto", "sans-serif"],
     },
   },
   plugins: [],
