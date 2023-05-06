@@ -4,13 +4,13 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <nav
-      className="flex items-center justify-between flex-wrap p-6 drop-shadow-xl nav_dropshadow"
+      className="flex items-center justify-between flex-wrap p-3 drop-shadow-xl nav_dropshadow"
       style={{ backgroundColor: "#2F3030" }}
     >
       <div className="flex items-center flex-shrink-0 text-white mr-6 lg:mr-96">
         {/* <img src={zerohero} className="w-100 h-10 mr-2" alt="Logo" />
          */}
-        <a className="text-white lg:text-4xl font-coolvetica font-bold">
+        <a className="text-white lg:text-4xl font-coolvetica font-bold pl-3">
           ZeroHero
         </a>
       </div>
@@ -60,9 +60,9 @@ export default function Navbar() {
             Statistics
           </a>
         </div>
-        <div>
+        <div className="pr-3">
           <button
-            className="inline-flex items-center border-0 py-4 px-10 text-black rounded-md font-roboto font-bold"
+            className="inline-flex items-center border-0 py-3 px-7 text-black rounded-md font-roboto font-bold text-sm"
             style={{ backgroundColor: "#00F0FF" }}
           >
             Connect Wallet
