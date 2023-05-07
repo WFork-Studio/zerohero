@@ -14,6 +14,12 @@ export async function getStaticProps() {
 
 export default function Statistics(statsDatas) {
   const stats = statsDatas.statistics;
+  const statsWinsCount = statsDatas.statistics.filter(
+    (stat) => stat.profit > 0
+  ).length;
+  const statsLossesCount = statsDatas.statistics.filter(
+    (stat) => stat.profit < 0
+  ).length;
   return (
     <section className="font-coolvetica">
       <div className={styles.container}>
@@ -44,7 +50,7 @@ export default function Statistics(statsDatas) {
                       scope="row"
                       className="text-3xl px-6 py-2 pb-2 font-medium whitespace-nowrap dark:text-white"
                     >
-                      50203
+                      {stats.length}
                       <br />
                       <div className="text-[#8C8888] text-sm">
                         Gamble sum: 71,419,291
@@ -75,7 +81,7 @@ export default function Statistics(statsDatas) {
                       scope="row"
                       className="text-3xl px-6 py-2 pb-2 font-medium whitespace-nowrap dark:text-white"
                     >
-                      30525
+                      {statsWinsCount}
                       <br />
                       <div className="text-[#8C8888] text-sm">
                         Gamble sum: 46,419,123
@@ -106,7 +112,7 @@ export default function Statistics(statsDatas) {
                       scope="row"
                       className="text-3xl px-6 py-2 pb-2 font-medium whitespace-nowrap dark:text-white"
                     >
-                      19678
+                      {statsLossesCount}
                       <br />
                       <div className="text-[#8C8888] text-sm">
                         Gamble sum: 30,219,291
@@ -145,6 +151,7 @@ export default function Statistics(statsDatas) {
             <tbody>
               {stats.map((stat) => (
                 <tr
+                  key={stat.player}
                   className="border-b border-[#2F3030] dark:border-[#2F3030] text-white"
                   style={{ backgroundColor: "#262626" }}
                 >
