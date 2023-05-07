@@ -171,7 +171,7 @@ export default function Home() {
             </thead>
             <tbody>
               <tr
-                className="border-b border-gray-200 dark:border-gray-700 text-white"
+                className="border-b border-[#2F3030] dark:border-[#2F3030] text-white"
                 style={{ backgroundColor: "#262626" }}
               >
                 <th
@@ -196,7 +196,7 @@ export default function Home() {
                 </td>
               </tr>
               <tr
-                className="border-b border-gray-200 dark:border-gray-700 text-white"
+                className="border-b border-[#2F3030] dark:border-[#2F3030] text-white"
                 style={{ backgroundColor: "#262626" }}
               >
                 <th
@@ -282,6 +282,46 @@ export default function Home() {
             alt="Rock Paper Scissors"
           />
         </div>
+        <div className="pt-8 font-coolvetica text-2xl text-white overflow-auto">
+          <div className="flex items-center pt-3 justify-between">
+            <div className="w-1/3 mr-4 h-60 rounded-tr-[100px] rounded-[10px] bg-gradient-to-r p-[6px] from-[#6002BF] via-[#C74CDB] to-[#4C6BDB]">
+              <div className="flex flex-col justify-center h-full bg-[#2F3030] text-white rounded-tr-[100px] rounded-[10px] p-4">
+                <div className="text-3xl text-white">Provably fair betting</div>
+                <div className="text-xl text-[#808080]">
+                  Our bet results are backed by Chainlink VRF so you can trust
+                  that every spin and deal is completely fair and random.
+                </div>
+              </div>
+            </div>
+            <div className="w-1/3 mr-4 h-60 rounded-[10px] bg-gradient-to-r p-[6px] from-[#6002BF] via-[#C74CDB] to-[#4C6BDB]">
+              <div className="flex flex-col justify-center text-center h-full bg-[#2F3030] text-white rounded-[10px] p-4">
+                <div className="text-3xl text-white">
+                  Play, earn, and win ZeroHero NFTs!
+                </div>
+                <div className="text-xl text-[#808080]">
+                  1% of all bets will be distributed back to ZeroHero holders.
+                  If you lose 13 consecutive flips of 4 SUI or more, we'll
+                  airdrop you a free random ZeroHero NFT.
+                </div>
+              </div>
+            </div>
+            <div className="w-1/3 h-60 rounded-tl-[100px] rounded-[10px] bg-gradient-to-r p-[6px] from-[#6002BF] via-[#C74CDB] to-[#4C6BDB]">
+              <div className="flex flex-col justify-center text-right h-full bg-[#2F3030] text-white rounded-tl-[100px] rounded-[10px] p-4">
+                <div className="text-3xl text-white">Play risk free</div>
+                <div className="text-xl text-[#808080]">
+                  We do not require user registration or funds to be deposited.
+                  Simply connect to the website and place bets straight from
+                  your wallet.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="mx-auto h-0 w-0 border-r-[25px] border-b-[55px] 
+border-l-[25px] border-solid border-r-transparent
+border-l-transparent border-b-[#000]"
+        ></div>
       </div>
     </section>
   );

@@ -7,10 +7,11 @@ export default function Navbar() {
       className="flex items-center justify-between flex-wrap p-3 drop-shadow-xl nav_dropshadow"
       style={{ backgroundColor: "#2F3030" }}
     >
-      <div className="flex items-center flex-shrink-0 text-white mr-6 lg:mr-96">
-        {/* <img src={zerohero} className="w-100 h-10 mr-2" alt="Logo" />
-         */}
-        <a className="text-white lg:text-4xl font-coolvetica font-bold pl-3">
+      <div className="mr-6 lg:mr-80 flex flex-shrink-0 items-center text-white bg-gradient-to-b from-purple-500 to-purple-500/25 self-stretch pr-20 [clip-path:polygon(0_0,100%_0,calc(100%-theme(spacing.8))_100%,0_100%)]">
+        <a
+          className="font-coolvetica pl-10 font-bold text-white text-4xl"
+          href="/"
+        >
           ZeroHero
         </a>
       </div>
@@ -42,7 +43,7 @@ export default function Navbar() {
       >
         <div className="text-sm lg:flex-grow font-coolveticaCondensed text-white text-xl/8">
           <a
-            href="#"
+            href="/"
             className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4"
           >
             Dashboard
@@ -54,7 +55,7 @@ export default function Navbar() {
             Games
           </a>
           <a
-            href="#"
+            href="/statistics"
             className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4"
           >
             Statistics
