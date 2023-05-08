@@ -149,9 +149,9 @@ export default function Statistics(statsDatas) {
               </tr>
             </thead>
             <tbody>
-              {stats.map((stat) => (
+              {stats.map((stat, index) => (
                 <tr
-                  key={stat.player}
+                  key={index}
                   className="border-b border-[#2F3030] dark:border-[#2F3030] text-white"
                   style={{ backgroundColor: "#262626" }}
                 >

@@ -2,15 +2,14 @@ import React, { useEffect } from "react";
 
 export default function Chatbox() {
   const ChatBubble = (props) => (
-    <div class="mx-auto flex h-auto max-w-screen-sm items-start justify-start pb-1">
-      <div class="w-full rounded-[8px] rounded-bl-[0px] bg-gradient-to-r from-[#6002BF] via-[#C74CDB] to-[#4C6BDB] p-0.5">
-        <div class="flex rounded-[8px] rounded-bl-[0px] h-full w-full bg-[#121212] back p-2">
+    <div className="mx-auto flex h-auto max-w-screen-sm items-start justify-start pb-1">
+      <div className="w-full rounded-[8px] rounded-bl-[0px] bg-gradient-to-r from-[#6002BF] via-[#C74CDB] to-[#4C6BDB] p-0.5">
+        <div className="flex rounded-[8px] rounded-bl-[0px] h-full w-full bg-[#121212] back p-2">
           knownaskey: WOI
         </div>
       </div>
     </div>
   );
-
   return (
     <div className="floating-chat">
       <i className="fa fa-comments" aria-hidden="true"></i>
@@ -24,9 +23,9 @@ export default function Chatbox() {
           </button>
         </div>
         <ul className="messages font-coolvetica text-sm">
-          {/* <div class="mx-auto flex h-auto max-w-screen-sm items-start justify-start">
-            <div class="w-full rounded-[8px] rounded-bl-[0px] bg-gradient-to-r from-[#6002BF] via-[#C74CDB] to-[#4C6BDB] p-0.5">
-              <div class="flex rounded-[8px] rounded-bl-[0px] h-full w-full bg-[#121212] back p-2">
+          {/* <div className="mx-auto flex h-auto max-w-screen-sm items-start justify-start">
+            <div className="w-full rounded-[8px] rounded-bl-[0px] bg-gradient-to-r from-[#6002BF] via-[#C74CDB] to-[#4C6BDB] p-0.5">
+              <div className="flex rounded-[8px] rounded-bl-[0px] h-full w-full bg-[#121212] back p-2">
                 knownaskey: WOI
               </div>
             </div>
@@ -49,5 +48,12 @@ export default function Chatbox() {
         </div>
       </div>
     </div>
+    // <Html>
+    //   <Head></Head>
+    //   <body>
+    //     <Main />
+    //     <NextScript />
+    //   </body>
+    // </Html>
   );
 }
