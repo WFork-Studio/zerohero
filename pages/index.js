@@ -1,6 +1,8 @@
 import styles from "../styles/Home.module.css";
 import fsPromises from "fs/promises";
 import path from "path";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { Carousel } from "react-responsive-carousel";
 
 export async function getStaticProps() {
   const filePath = path.join(process.cwd(), "dummy.json");
@@ -14,6 +16,12 @@ export async function getStaticProps() {
 
 export default function Home(statsDatas) {
   const stats = statsDatas.statistics;
+
+  const images = [
+    { url: "images/nft1.JPG" },
+    { url: "images/nft2.JPG" },
+    { url: "images/nft3.JPG" },
+  ];
   return (
     <section className="font-coolvetica">
       <div className={styles.container}>
@@ -28,8 +36,36 @@ export default function Home(statsDatas) {
           <div className="w-1/2 h-max grid grid-cols-1">
             <div className="h-72 shadow-lg w-full">
               <div className="flex">
-                <div className="text-3xl text-white w-[50%] p-3">
-                  Slider will be here
+                <div className="text-3xl text-white w-[50%] p-3 items-center justify-center pt-10 pl-12">
+                  {/* Slider will be here */}
+
+                  <Carousel
+                    showThumbs={false}
+                    showArrows={false}
+                    infiniteLoop={true}
+                    dynamicHeight={true}
+                    autoPlay={true}
+                    interval={3000}
+                  >
+                    <div>
+                      <img
+                        className="rounded-xl h-[220px]"
+                        src="images/nft1.JPG"
+                      />
+                    </div>
+                    <div>
+                      <img
+                        className="rounded-xl h-[220px]"
+                        src="images/nft2.JPG"
+                      />
+                    </div>
+                    <div>
+                      <img
+                        className="rounded-xl h-[220px]"
+                        src="images/nft3.JPG"
+                      />
+                    </div>
+                  </Carousel>
                 </div>
                 <div className="w-[50%] h-72">
                   <img
