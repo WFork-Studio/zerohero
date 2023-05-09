@@ -1,8 +1,8 @@
 import { useState } from "react";
-import {ConnectButton, useWallet} from '@suiet/wallet-kit';
+import { ConnectButton, useWallet } from "@suiet/wallet-kit";
 
 export default function Navbar() {
-  const wallet = useWallet()
+  const wallet = useWallet();
   const [isOpen, setIsOpen] = useState(false);
   return (
     <nav
@@ -51,7 +51,7 @@ export default function Navbar() {
             Dashboard
           </a>
           <a
-            href="#"
+            href="/games"
             className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4"
           >
             Games
@@ -70,7 +70,7 @@ export default function Navbar() {
           >
             Connect Wallet
           </button> */}
-          <ConnectButton label="Connect Wallet"/>
+          <ConnectButton label="Connect Wallet" />
         </div>
       </div>
     </nav>

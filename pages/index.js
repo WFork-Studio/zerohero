@@ -172,11 +172,11 @@ export default function Home(statsDatas) {
             </tbody>
           </table>
           <nav
-            className="flex items-center justify-between pt-2"
+            className="flex items-center justify-between p-2"
             style={{ backgroundColor: "#2F3030" }}
             aria-label="Table navigation"
           >
-            <span className="text-sm font-normal text-white dark:text-gray-400">
+            <span className="text-sm font-normal text-white dark:text-gray-400 pl-2">
               Showing{" "}
               <span className="font-semibold text-white dark:text-white">
                 3
@@ -188,7 +188,7 @@ export default function Home(statsDatas) {
               statistics data
             </span>
             <a
-              className="inline-flex items-center -space-x-px text-white"
+              className="inline-flex items-center -space-x-px text-white pr-2"
               href="/statistics"
             >
               Show more
@@ -199,12 +199,17 @@ export default function Home(statsDatas) {
           Game List
         </div>
         <div className="flex items-center pt-3">
-          <img className="pr-5" src="/images/flipcoin.png" alt="Flip Coin" />
-          <img
-            className="pr-5"
-            src="/images/catchemall.png"
-            alt="Catch'em All"
-          />
+          <a href="/coin-flip">
+            <img className="pr-5" src="/images/flipcoin.png" alt="Flip Coin" />
+          </a>
+
+          <a href="/catchem-all">
+            <img
+              className="pr-5"
+              src="/images/catchemall.png"
+              alt="Catch'em All"
+            />
+          </a>
           <img className="pr-5" src="/images/dice.png" alt="Dice" />
           <img
             className="pr-5"
