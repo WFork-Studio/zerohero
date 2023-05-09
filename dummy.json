@@ -1,6 +1,7 @@
 {
-  "players": {
-    "identity": "0x41319sda409120910a4201aa"
+  "playerInfo": {
+    "contractAddress": "0x41319sda409120910a4201aa",
+    "betForFirstTime": false
   },
   "statistics": [
     {

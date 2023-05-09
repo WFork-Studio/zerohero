@@ -32,10 +32,10 @@ body {
   background-color: #121212;
 }
 
-.wkit-button{
-  background-color: #00F0FF !important;
+.wkit-button {
+  background-color: #00f0ff !important;
   color: black !important;
-  border-radius: .5rem !important;
+  border-radius: 0.5rem !important;
   width: 200px !important;
 }
 
