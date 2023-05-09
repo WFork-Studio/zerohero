@@ -23,7 +23,7 @@ export default function Home(statsDatas) {
     { url: "images/nft3.JPG" },
   ];
   return (
-    <section className="font-coolvetica">
+    <section className="font-coolvetica pb-7">
       <div className={styles.container}>
         <div className="flex items-center pt-3 justify-between">
           <div className="row-span-3 text-white text-7xl py-20">
@@ -253,7 +253,7 @@ export default function Home(statsDatas) {
             alt="Rock Paper Scissors"
           />
         </div>
-        <div className="pt-8 font-coolvetica text-2xl text-white overflow-auto pb-7">
+        <div className="pt-8 font-coolvetica text-2xl text-white overflow-auto">
           <div className="flex items-center pt-3 justify-between">
             <div className="w-1/3 mr-4 h-60 rounded-tr-[100px] rounded-[10px] bg-gradient-to-r p-[6px] from-[#6002BF] via-[#C74CDB] to-[#4C6BDB]">
               <div className="flex flex-col justify-center h-full bg-[#2F3030] text-white rounded-tr-[100px] rounded-[10px] p-4">

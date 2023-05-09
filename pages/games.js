@@ -2,7 +2,7 @@ import styles from "../styles/Home.module.css";
 
 export default function Games(statsDatas) {
   return (
-    <section className="font-coolvetica h-screen">
+    <section className="font-coolvetica h-screen pb-7">
       <div className={styles.container}>
         <div className="text-white text-6xl py-5">
           Game
