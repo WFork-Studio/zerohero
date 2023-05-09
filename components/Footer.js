@@ -4,7 +4,9 @@ export default function Footer() {
       <div className="flex items-start">
         <div className="column-3xs self-center w-[20%] ">
           <img src="/images/begamble.png" alt="Be Gamble" />
-          <div className="mt-1 text-xl pl-1">Our Community and Social</div>
+          <div className="mt-1 text-xl pl-1 text-white">
+            Our Community and Social
+          </div>
           <div className="flex flex-row pl-1 pt-1">
             <a href="#">
               <img
@@ -31,7 +33,7 @@ export default function Footer() {
         </div>
 
         <div className="column-3xs pl-7 w-[30%]">
-          <div className="mt-1 text-4xl">ZeroHero</div>
+          <div className="mt-1 text-4xl text-white">ZeroHero</div>
           <div className="mt-1 text-md text-[#A5A5A5]">
             Please research if ZeroHero is legal to use in your jurisdiction
             prior to use. ZeroHero assumes no responsibility for your use of the
@@ -42,7 +44,7 @@ export default function Footer() {
         </div>
 
         <div className="column-3xs pl-7 w-[20%]">
-          <div className="mt-1 text-4xl">Support</div>
+          <div className="mt-1 text-4xl text-white">Support</div>
           <a href="#">
             <div className="mt-1 text-lg text-[#A5A5A5]">Buy Lucky Charm</div>
           </a>
@@ -59,7 +61,7 @@ export default function Footer() {
 
         <div className="column-3xs pl-7 w-[30%] self-center">
           <div className="flex items-center">
-            <div className="mt-1 text-2xl font-coolveticaCondensed pr-3">
+            <div className="mt-1 text-2xl font-coolveticaCondensed pr-3 text-white">
               AVAILABLE ON:
             </div>
             <img src="images/sui_brand_text.png" />
