@@ -21,7 +21,7 @@ export default function Statistics(statsDatas) {
     (stat) => stat.profit < 0
   ).length;
   return (
-    <section className="font-coolvetica">
+    <section className="font-coolvetica pb-7">
       <div className={styles.container}>
         <div className="flex items-center pt-3 justify-between">
           <div className="text-white text-6xl py-5">

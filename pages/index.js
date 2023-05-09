@@ -1,6 +1,8 @@
 import styles from "../styles/Home.module.css";
 import fsPromises from "fs/promises";
 import path from "path";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { Carousel } from "react-responsive-carousel";
 
 export async function getStaticProps() {
   const filePath = path.join(process.cwd(), "dummy.json");
@@ -14,8 +16,14 @@ export async function getStaticProps() {
 
 export default function Home(statsDatas) {
   const stats = statsDatas.statistics;
+
+  const images = [
+    { url: "images/nft1.JPG" },
+    { url: "images/nft2.JPG" },
+    { url: "images/nft3.JPG" },
+  ];
   return (
-    <section className="font-coolvetica">
+    <section className="font-coolvetica pb-7">
       <div className={styles.container}>
         <div className="flex items-center pt-3 justify-between">
           <div className="row-span-3 text-white text-7xl py-20">
@@ -28,8 +36,36 @@ export default function Home(statsDatas) {
           <div className="w-1/2 h-max grid grid-cols-1">
             <div className="h-72 shadow-lg w-full">
               <div className="flex">
-                <div className="text-3xl text-white w-[50%] p-3">
-                  Slider will be here
+                <div className="text-3xl text-white w-[50%] p-3 items-center justify-center pt-10 pl-12">
+                  {/* Slider will be here */}
+
+                  <Carousel
+                    showThumbs={false}
+                    showArrows={false}
+                    infiniteLoop={true}
+                    dynamicHeight={true}
+                    autoPlay={true}
+                    interval={3000}
+                  >
+                    <div>
+                      <img
+                        className="rounded-xl h-[220px]"
+                        src="images/nft1.JPG"
+                      />
+                    </div>
+                    <div>
+                      <img
+                        className="rounded-xl h-[220px]"
+                        src="images/nft2.JPG"
+                      />
+                    </div>
+                    <div>
+                      <img
+                        className="rounded-xl h-[220px]"
+                        src="images/nft3.JPG"
+                      />
+                    </div>
+                  </Carousel>
                 </div>
                 <div className="w-[50%] h-72">
                   <img
@@ -172,11 +208,11 @@ export default function Home(statsDatas) {
             </tbody>
           </table>
           <nav
-            className="flex items-center justify-between pt-2"
+            className="flex items-center justify-between p-2"
             style={{ backgroundColor: "#2F3030" }}
             aria-label="Table navigation"
           >
-            <span className="text-sm font-normal text-white dark:text-gray-400">
+            <span className="text-sm font-normal text-white dark:text-gray-400 pl-2">
               Showing{" "}
               <span className="font-semibold text-white dark:text-white">
                 3
@@ -188,7 +224,7 @@ export default function Home(statsDatas) {
               statistics data
             </span>
             <a
-              className="inline-flex items-center -space-x-px text-white"
+              className="inline-flex items-center -space-x-px text-white pr-2"
               href="/statistics"
             >
               Show more
@@ -199,12 +235,17 @@ export default function Home(statsDatas) {
           Game List
         </div>
         <div className="flex items-center pt-3">
-          <img className="pr-5" src="/images/flipcoin.png" alt="Flip Coin" />
-          <img
-            className="pr-5"
-            src="/images/catchemall.png"
-            alt="Catch'em All"
-          />
+          <a href="/coin-flip">
+            <img className="pr-5" src="/images/flipcoin.png" alt="Flip Coin" />
+          </a>
+
+          <a href="/catchem-all">
+            <img
+              className="pr-5"
+              src="/images/catchemall.png"
+              alt="Catch'em All"
+            />
+          </a>
           <img className="pr-5" src="/images/dice.png" alt="Dice" />
           <img
             className="pr-5"

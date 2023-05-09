@@ -1,15 +1,17 @@
 import { useState } from "react";
+import { ConnectButton, useWallet } from "@suiet/wallet-kit";
 
 export default function Navbar() {
+  const wallet = useWallet();
   const [isOpen, setIsOpen] = useState(false);
   return (
     <nav
-      className="flex items-center justify-between flex-wrap p-3 drop-shadow-xl nav_dropshadow"
+      className="flex items-center justify-between flex-wrap drop-shadow-xl nav_dropshadow"
       style={{ backgroundColor: "#2F3030" }}
     >
       <div className="mr-6 lg:mr-80 flex flex-shrink-0 items-center text-white bg-gradient-to-b from-purple-500 to-purple-500/25 self-stretch pr-20 [clip-path:polygon(0_0,100%_0,calc(100%-theme(spacing.8))_100%,0_100%)]">
         <a
-          className="font-coolvetica pl-10 font-bold text-white text-4xl"
+          className="font-coolvetica pl-10 font-bold text-white text-4xl py-4"
           href="/"
         >
           ZeroHero
@@ -49,7 +51,7 @@ export default function Navbar() {
             Dashboard
           </a>
           <a
-            href="#"
+            href="/games"
             className="block mt-4 lg:inline-block lg:mt-0 text-white-200 mr-4"
           >
             Games
@@ -62,12 +64,13 @@ export default function Navbar() {
           </a>
         </div>
         <div className="pr-3">
-          <button
+          {/* <button
             className="inline-flex items-center border-0 py-3 px-7 text-black rounded-md font-roboto font-bold text-sm"
             style={{ backgroundColor: "#00F0FF" }}
           >
             Connect Wallet
-          </button>
+          </button> */}
+          <ConnectButton label="Connect Wallet" />
         </div>
       </div>
     </nav>
