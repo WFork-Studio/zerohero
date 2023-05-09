@@ -1,93 +1,108 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useWallet, ConnectButton } from "@suiet/wallet-kit";
+import io from "socket.io-client";
 
-export default function Chatbox({ room, setRoom, socket }) {
+export default function Chatbox() {
   const [messagesRecieved, setMessagesReceived] = useState([]);
   const messagesColumnRef = useRef(null);
   const [message, setMessage] = useState("");
   const wallet = useWallet();
   let contractAddress = wallet.address;
 
-  const sendMessage = () => {
-    if (message !== "") {
-      console.log("sending message");
-      const __createdtime__ = Date.now();
-      // Send message to server. We can't specify who we send the message to from the frontend. We can only send to server. Server can then send message to rest of users in room
-      socket.emit("sendMessage", {
-        contractAddress,
-        room,
-        message,
-        __createdtime__,
+  const [room, setRoom] = useState("zerohero_chatbox");
+  const [socket, setSocket] = useState(io.connect("http://localhost:4000"));
+
+  useEffect(() => {
+    if (wallet.address !== undefined) {
+      const newS = io("http://localhost:4000", { autoConnect: false });
+      newS.on("connect", (socket) => {
+        console.log("socket connected", socket);
       });
-      setMessage("");
+      setSocket(newS);
     }
-  };
+    return () => socket.close();
+  }, [setSocket]);
 
-  const ChatBubble = ({ message, key }) => (
-    <div
-      className="mx-auto flex h-auto max-w-screen-sm items-start justify-start pb-1"
-      key={key}
-    >
-      <div className="w-full rounded-[8px] rounded-bl-[0px] bg-gradient-to-r from-[#6002BF] via-[#C74CDB] to-[#4C6BDB] p-0.5">
-        <div className="flex rounded-[8px] rounded-bl-[0px] h-auto break-all w-full bg-[#121212] back p-2">
-          {message.contractAddress}: {message.message}
-        </div>
-      </div>
-    </div>
-  );
+  // const sendMessage = () => {
+  //   if (message !== "") {
+  //     console.log("sending message");
+  //     const __createdtime__ = Date.now();
+  //     // Send message to server. We can't specify who we send the message to from the frontend. We can only send to server. Server can then send message to rest of users in room
+  //     socket.emit("sendMessage", {
+  //       contractAddress,
+  //       room,
+  //       message,
+  //       __createdtime__,
+  //     });
+  //     setMessage("");
+  //   }
+  // };
 
-  useEffect(() => {
-    // if (!socket.connected) {
-    if (contractAddress !== undefined) {
-      console.log(contractAddress);
-      socket.emit("joinRoom", { contractAddress, room });
-    }
-    // }
+  // const ChatBubble = ({ message, key }) => (
+  //   <div
+  //     className="mx-auto flex h-auto max-w-screen-sm items-start justify-start pb-1"
+  //     key={key}
+  //   >
+  //     <div className="w-full rounded-[8px] rounded-bl-[0px] bg-gradient-to-r from-[#6002BF] via-[#C74CDB] to-[#4C6BDB] p-0.5">
+  //       <div className="flex rounded-[8px] rounded-bl-[0px] h-auto break-all w-full bg-[#121212] back p-2">
+  //         {message.contractAddress}: {message.message}
+  //       </div>
+  //     </div>
+  //   </div>
+  // );
 
-    socket.on("receiveMessage", (data) => {
-      console.log(data);
-      setMessagesReceived((state) => [
-        ...state,
-        {
-          message: data.message,
-          contractAddress: data.contractAddress,
-          __createdtime__: data.__createdtime__,
-        },
-      ]);
-    });
+  // useEffect(() => {
+  //   // if (!socket.connected) {
+  //   if (contractAddress !== undefined) {
+  //     console.log(contractAddress);
+  //     socket.emit("joinRoom", { contractAddress, room });
+  //   }
+  //   // }
 
-    // Remove event listener on component unmount
-    return () => socket.off("receiveMessage");
-  }, [socket]);
+  //   socket.on("receiveMessage", (data) => {
+  //     console.log(data);
+  //     setMessagesReceived((state) => [
+  //       ...state,
+  //       {
+  //         message: data.message,
+  //         contractAddress: data.contractAddress,
+  //         __createdtime__: data.__createdtime__,
+  //       },
+  //     ]);
+  //   });
 
-  useEffect(() => {
-    // Last 100 messages sent in the chat room (fetched from the db in backend)
-    socket.on("last100Messages", (last100Messages) => {
-      console.log("Last 100 messages: ", JSON.parse(last100Messages));
-      last100Messages = JSON.parse(last100Messages);
-      // Sort these messages by __createdtime__
-      last100Messages = sortMessagesByDate(last100Messages);
-      setMessagesReceived((state) => [...last100Messages, ...state]);
-    });
+  //   // Remove event listener on component unmount
+  //   return () => socket.off("receiveMessage");
+  // }, [socket]);
 
-    return () => socket.off("last100Messages");
-  }, [socket]);
+  // useEffect(() => {
+  //   // Last 100 messages sent in the chat room (fetched from the db in backend)
+  //   socket.on("last100Messages", (last100Messages) => {
+  //     console.log("Last 100 messages: ", JSON.parse(last100Messages));
+  //     last100Messages = JSON.parse(last100Messages);
+  //     // Sort these messages by __createdtime__
+  //     last100Messages = sortMessagesByDate(last100Messages);
+  //     setMessagesReceived((state) => [...last100Messages, ...state]);
+  //   });
 
-  useEffect(() => {
-    messagesColumnRef.current.scrollTop =
-      messagesColumnRef.current.scrollHeight;
-  }, [messagesRecieved]);
+  //   return () => socket.off("last100Messages");
+  // }, [socket]);
 
-  function sortMessagesByDate(messages) {
-    return messages.sort(
-      (a, b) => parseInt(a.__createdtime__) - parseInt(b.__createdtime__)
-    );
-  }
+  // useEffect(() => {
+  //   messagesColumnRef.current.scrollTop =
+  //     messagesColumnRef.current.scrollHeight;
+  // }, [messagesRecieved]);
 
-  function formatDateFromTimestamp(timestamp) {
-    const date = new Date(timestamp);
-    return date.toLocaleString();
-  }
+  // function sortMessagesByDate(messages) {
+  //   return messages.sort(
+  //     (a, b) => parseInt(a.__createdtime__) - parseInt(b.__createdtime__)
+  //   );
+  // }
+
+  // function formatDateFromTimestamp(timestamp) {
+  //   const date = new Date(timestamp);
+  //   return date.toLocaleString();
+  // }
 
   return (
     <div className="floating-chat">
@@ -140,7 +155,7 @@ export default function Chatbox({ room, setRoom, socket }) {
             <button
               // id="sendMessage"
               className="font-coolvetica"
-              onClick={sendMessage}
+              // onClick={sendMessage}
             >
               <i className="fa fa-paper-plane pl-2 pr-2"></i>
             </button>
