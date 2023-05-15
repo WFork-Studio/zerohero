@@ -70,7 +70,10 @@ export default function Navbar() {
           >
             Connect Wallet
           </button> */}
-          <ConnectButton label="Connect Wallet" />
+          <ConnectButton
+            label="Connect Wallet"
+            onDisconnectSuccess={() => {}}
+          />
         </div>
       </div>
     </nav>
