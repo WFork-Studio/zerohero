@@ -1,59 +1,67 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useWallet, ConnectButton } from "@suiet/wallet-kit";
-import io from "socket.io-client";
+import { io } from "socket.io-client";
+import { headers } from "next/dist/client/components/headers";
 
 export default function Chatbox() {
   const [messagesRecieved, setMessagesReceived] = useState([]);
   const messagesColumnRef = useRef(null);
   const [message, setMessage] = useState("");
-  const [userAuthenticated, setUserAuthenticated] = useState(false);
   const wallet = useWallet();
   let error = null;
+  // const [socket, setSocket] = useState([]);
 
-  const [room, setRoom] = useState("zerohero_chatbox");
-  const socket = io("http://192.168.49.21:4001", { autoConnect: true });
+  var socket = io("http://192.168.49.21:4001", {
+    autoConnect: true,
+  });
+
   useEffect(() => {
     if (wallet.address === undefined) {
-      console.log("Wallet is undefined");
-
-      socket.on("connect", async () => {
-        socket.on("latestMessage", (last100Messages) => {
-          console.log("Last 100 messages: ", JSON.parse(last100Messages));
-          last100Messages = JSON.parse(last100Messages);
-          // Sort these messages by __createdtime__
-          last100Messages = sortMessagesByDate(last100Messages);
-          setMessagesReceived((state) => [...last100Messages, ...state]);
-        });
+      socket = io("http://192.168.49.21:4001", {
+        autoConnect: true,
+        query: {
+          tempUid: createUUID(),
+        },
       });
-      setUserAuthenticated(false);
+
+      socket.on("latestMessage", (last10Messages) => {
+        console.log("Last 10 messages: ", JSON.parse(last10Messages));
+        last10Messages = JSON.parse(last10Messages);
+        // Sort these messages by __createdtime__
+        last10Messages = sortMessagesByDate(last10Messages);
+        setMessagesReceived((state) => [...last10Messages, ...state]);
+      });
     } else {
-      console.log("Wallet available, ready to connect!");
-      socket.on("connect", async () => {
-        console.log(`[SOCKET] Successfully Connected as ${socket.id}!`);
-
-        if (userAuthenticated == false) {
-          await socket.emit("authentication", {
-            contractAddress: wallet.address,
-          });
-        }
-        socket.on("authenticated", () => {
-          socket.emit("joinRoom", {
-            contractAddress: wallet.address,
-            room,
-          });
-          socket.on("latestMessage", (last100Messages) => {
-            console.log("Last 100 messages: ", JSON.parse(last100Messages));
-            last100Messages = JSON.parse(last100Messages);
-            // Sort these messages by __createdtime__
-            last100Messages = sortMessagesByDate(last100Messages);
-            setMessagesReceived((state) => [...last100Messages, ...state]);
-          });
-          console.log(`${wallet.address} has joined the room.`);
-        });
+      socket = io("http://192.168.49.21:4001", {
+        autoConnect: true,
+        query: {
+          contractAddress: wallet.address,
+        },
       });
-    }
 
-    return () => socket.close();
+      //Getting User Data
+      socket.on("userData", (userData) => {
+        console.log(userData);
+      });
+
+      // //Join A Room
+      // socket.emit("joinRoom", {
+      //   contractAddress: wallet.address,
+      //   room,
+      // });
+
+      //Getting Latest Message
+      socket.on("latestMessage", (last10Messages) => {
+        console.log("Last 10 messages: ", JSON.parse(last10Messages));
+        last10Messages = JSON.parse(last10Messages);
+        // Sort these messages by __createdtime__
+        last10Messages = sortMessagesByDate(last10Messages);
+        setMessagesReceived((state) => [...last10Messages, ...state]);
+      });
+
+      console.log(`[USER] Connected to wallet address ${wallet.address}`);
+      // getSocket();
+    }
   }, [wallet]);
 
   useEffect(() => {
@@ -72,18 +80,32 @@ export default function Chatbox() {
 
   const sendMessage = () => {
     if (message !== "") {
-      console.log("sending message");
+      console.log("sending message from  " + wallet.address + " " + message);
       const __createdtime__ = Date.now();
       // Send message to server. We can't specify who we send the message to from the frontend. We can only send to server. Server can then send message to rest of users in room
       socket.emit("sendMessage", {
         contractAddress: wallet.address,
-        room,
         message,
         __createdtime__,
       });
       setMessage("");
     }
   };
+
+  function createUUID() {
+    // http://www.ietf.org/rfc/rfc4122.txt
+    var s = [];
+    var hexDigits = "0123456789abcdef";
+    for (var i = 0; i < 36; i++) {
+      s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+    }
+    s[14] = "4"; // bits 12-15 of the time_hi_and_version field to 0010
+    s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1); // bits 6-7 of the clock_seq_hi_and_reserved to 01
+    s[8] = s[13] = s[18] = s[23] = "-";
+
+    var uuid = s.join("");
+    return uuid;
+  }
 
   const ChatBubble = ({ message, key }) => (
     <div
@@ -224,18 +246,23 @@ export default function Chatbox() {
   //     textRange.select();
   //   }
   // }
-  // function onMetaAndEnter(evt) {
-  // if ((event.metaKey || event.ctrlKey) && event.keyCode == 13) {
-  // sendNewMessage();
-  // form.submit();
-  // }
-  //   if (evt.keyCode == 13 && evt.shiftKey) {
-  //     if (evt.type == "keypress") {
-  //       pasteIntoInput(this, "\n");
-  //     }
-  //     evt.preventDefault();
-  //   }
-  // }
+  function onMetaAndEnter(evt) {
+    if (evt.keyCode === 13) {
+      if (message !== "" || message !== null) {
+        sendMessage();
+      }
+    }
+    // if ((event.metaKey || event.ctrlKey) && event.keyCode == 13) {
+    // sendNewMessage();
+    // form.submit();
+    // }
+    //   if (evt.keyCode == 13 && evt.shiftKey) {
+    //     if (evt.type == "keypress") {
+    //       pasteIntoInput(this, "\n");
+    //     }
+    //     evt.preventDefault();
+    //   }
+  }
   return (
     <div className="floating-chat">
       <i className="fa fa-comments" aria-hidden="true"></i>
@@ -284,7 +311,7 @@ export default function Chatbox() {
               onChange={(e) => {
                 setMessage(e.target.value);
               }}
-              // onKeyDown={onMetaAndEnter}
+              onKeyDown={onMetaAndEnter}
               // disabled={true}
             ></input>
             <button
