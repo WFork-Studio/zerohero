@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useWallet, ConnectButton } from "@suiet/wallet-kit";
 import { io } from "socket.io-client";
-import { headers } from "next/dist/client/components/headers";
 
 export default function Chatbox() {
   const [messagesRecieved, setMessagesReceived] = useState([]);
@@ -19,9 +18,9 @@ export default function Chatbox() {
     if (wallet.address === undefined) {
       socket = io("http://192.168.49.21:4001", {
         autoConnect: true,
-        query: {
-          tempUid: createUUID(),
-        },
+        // query: {
+        //   tempUid: createUUID(),
+        // },
       });
 
       socket.on("latestMessage", (last10Messages) => {
@@ -92,21 +91,6 @@ export default function Chatbox() {
     }
   };
 
-  function createUUID() {
-    // http://www.ietf.org/rfc/rfc4122.txt
-    var s = [];
-    var hexDigits = "0123456789abcdef";
-    for (var i = 0; i < 36; i++) {
-      s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
-    }
-    s[14] = "4"; // bits 12-15 of the time_hi_and_version field to 0010
-    s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1); // bits 6-7 of the clock_seq_hi_and_reserved to 01
-    s[8] = s[13] = s[18] = s[23] = "-";
-
-    var uuid = s.join("");
-    return uuid;
-  }
-
   const ChatBubble = ({ message, key }) => (
     <div
       className="mx-auto flex h-auto max-w-screen-sm items-start justify-start pb-1"
@@ -120,19 +104,6 @@ export default function Chatbox() {
       </div>
     </div>
   );
-
-  // useEffect(() => {
-  //   // Last 100 messages sent in the chat room (fetched from the db in backend)
-  //   socket.on("latestMessage", (last100Messages) => {
-  //     console.log("Last 100 messages: ", JSON.parse(last100Messages));
-  //     last100Messages = JSON.parse(last100Messages);
-  //     // Sort these messages by __createdtime__
-  //     last100Messages = sortMessagesByDate(last100Messages);
-  //     setMessagesReceived((state) => [...last100Messages, ...state]);
-  //   });
-
-  //   return () => socket.off("last100Messages");
-  // }, [socket]);
 
   useEffect(() => {
     messagesColumnRef.current.scrollTop =
@@ -163,105 +134,33 @@ export default function Chatbox() {
     function openElement() {
       var messages = element.querySelector(".messages");
       var textInput = element.querySelector(".text-box");
-      // element.querySelector(">i").style.display = "none";
       element.classList.add("expand");
       element.querySelector(".chat").classList.add("enter");
-      // var strLength = textInput.value.length * 2;
-      // if (wallet.address !== undefined) {
-      //   // textInput.addEventListener("keydown", onMetaAndEnter);
-      //   element
-      //     .querySelector("#sendMessage")
-      //     .addEventListener("click", sendNewMessage);
-      // }
       element.removeEventListener("click", openElement);
       element
         .querySelector(".header button")
         .addEventListener("click", closeElement);
-      // messages.scrollTop(messages.prop("scrollHeight"));
     }
 
     function closeElement() {
       element.querySelector(".chat").classList.remove("enter");
-      // element.querySelector(">i").show();
       element.classList.remove("expand");
       element
         .querySelector(".header button")
         .removeEventListener("click", closeElement);
-      // element
-      //   .querySelector("#sendMessage")
-      //   .removeEventListener("click", sendNewMessage);
-      // element
-      //   .querySelector(".text-box")
-      //   .removeEventListener("keydown", onMetaAndEnter);
-      // .prop("disabled", true)
-      // .trigger("blur");
       setTimeout(function () {
         element.querySelector(".chat").classList.remove("enter");
         element.addEventListener("click", openElement);
       }, 500);
     }
   }, []);
-  // function sendNewMessage() {
-  //   var userInput = document.querySelector(".text-box");
-  //   var newMessage = userInput
-  //     .html()
-  //     .replace(/\<div\>|\<br.*?\>/gi, "\n")
-  //     .replace(/\<\/div\>/g, "")
-  //     .trim()
-  //     .replace(/\n/g, "<br>");
 
-  //   if (!newMessage) return;
-
-  //   var messagesContainer = document.querySelector(".messages");
-
-  //   messagesContainer.insertAdjacentHTML(
-  //     "beforeend",
-  //     ['<li class="self">', newMessage, "</li>"].join("")
-  //   );
-
-  //   userInput.html("");
-  //   userInput.trigger("focus");
-
-  //   messagesContainer.finish().animate(
-  //     {
-  //       scrollTop: messagesContainer.prop("scrollHeight"),
-  //     },
-  //     250
-  //   );
-  // }
-  // function pasteIntoInput(el, text) {
-  //   el.focus();
-  //   if (
-  //     typeof el.selectionStart == "number" &&
-  //     typeof el.selectionEnd == "number"
-  //   ) {
-  //     var val = el.value;
-  //     var selStart = el.selectionStart;
-  //     el.value = val.slice(0, selStart) + text + val.slice(el.selectionEnd);
-  //     el.selectionEnd = el.selectionStart = selStart + text.length;
-  //   } else if (typeof document.selection != "undefined") {
-  //     var textRange = document.selection.createRange();
-  //     textRange.text = text;
-  //     textRange.collapse(false);
-  //     textRange.select();
-  //   }
-  // }
   function onMetaAndEnter(evt) {
     if (evt.keyCode === 13) {
       if (message !== "" || message !== null) {
         sendMessage();
       }
     }
-    // if ((event.metaKey || event.ctrlKey) && event.keyCode == 13) {
-    // sendNewMessage();
-    // form.submit();
-    // }
-    //   if (evt.keyCode == 13 && evt.shiftKey) {
-    //     if (evt.type == "keypress") {
-    //       pasteIntoInput(this, "\n");
-    //     }
-    //     evt.preventDefault();
-    //   }
   }
   return (
     <div className="floating-chat">
@@ -279,13 +178,6 @@ export default function Chatbox() {
           className="messages font-coolvetica text-sm"
           ref={messagesColumnRef}
         >
-          {/* <div className="mx-auto flex h-auto max-w-screen-sm items-start justify-start">
-            <div className="w-full rounded-[8px] rounded-bl-[0px] bg-gradient-to-r from-[#6002BF] via-[#C74CDB] to-[#4C6BDB] p-0.5">
-              <div className="flex rounded-[8px] rounded-bl-[0px] h-full w-full bg-[#121212] back p-2">
-                knownaskey: WOI
-              </div>
-            </div>
-          </div> */}
           {messagesRecieved.map((msg, i) => (
             <ChatBubble message={msg} key={i} />
           ))}
@@ -293,12 +185,6 @@ export default function Chatbox() {
 
         {wallet.address === undefined ? (
           <div className="footer">
-            {/* <button
-              className="w-full inline-flex items-center border-0 py-2 items-center justify-center  rounded-md font-coolvetica"
-              style={{ backgroundColor: "#00F0FF" }}
-            >
-              Connect Wallet
-            </button> */}
             <div className="w-full">
               <ConnectButton label="Connect Wallet" />
             </div>
