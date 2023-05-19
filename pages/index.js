@@ -3,7 +3,7 @@ import fsPromises from "fs/promises";
 import path from "path";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
-import MediaQuery from 'react-responsive'
+import MediaQuery from "react-responsive";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
@@ -40,7 +40,10 @@ export default function Home(statsDatas) {
               <div className="row-span-3 text-white text-6xl md:text-7xl 2xl:text-8xl py-6 md:py-20">
                 <div className="col-span-3">Work is overrated</div>
                 <span className="row-span-3 col-span-3">Retire early at</span>
-                <span className="row-span-3 col-span-3" style={{ color: "#00F0FF" }}>
+                <span
+                  className="row-span-3 col-span-3"
+                  style={{ color: "#00F0FF" }}
+                >
                   &nbsp;ZeroHero
                 </span>
               </div>
@@ -60,31 +63,29 @@ export default function Home(statsDatas) {
                           interval={3000}
                         >
                           <div>
-                            <img
-                              className="rounded-xl"
-                              src="images/nft1.JPG"
-                            />
+                            <img className="rounded-xl" src="images/nft1.JPG" />
                           </div>
                           <div>
-                            <img
-                              className="rounded-xl"
-                              src="images/nft2.JPG"
-                            />
+                            <img className="rounded-xl" src="images/nft2.JPG" />
                           </div>
                           <div>
-                            <img
-                              className="rounded-xl"
-                              src="images/nft3.JPG"
-                            />
+                            <img className="rounded-xl" src="images/nft3.JPG" />
                           </div>
                         </Carousel>
                       </div>
                       <div className="flex mb-4">
                         <div className="w-full">
-                          <h2 className="text-xl">Buy ZeroHero NFTs on the market now!</h2>
+                          <h2 className="text-xl">
+                            Buy ZeroHero NFTs on the market now!
+                          </h2>
                         </div>
                         <div>
-                          <button className='w-full py-4 px-10 bg-primary-800 rounded-lg text-black font-bold' style={{ minWidth: 'max-content' }}>Shop Now</button>
+                          <button
+                            className="w-full py-4 px-10 bg-primary-800 rounded-lg text-black font-bold"
+                            style={{ minWidth: "max-content" }}
+                          >
+                            Shop Now
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -104,31 +105,29 @@ export default function Home(statsDatas) {
                           interval={3000}
                         >
                           <div>
-                            <img
-                              className="rounded-xl"
-                              src="images/nft1.JPG"
-                            />
+                            <img className="rounded-xl" src="images/nft1.JPG" />
                           </div>
                           <div>
-                            <img
-                              className="rounded-xl"
-                              src="images/nft2.JPG"
-                            />
+                            <img className="rounded-xl" src="images/nft2.JPG" />
                           </div>
                           <div>
-                            <img
-                              className="rounded-xl"
-                              src="images/nft3.JPG"
-                            />
+                            <img className="rounded-xl" src="images/nft3.JPG" />
                           </div>
                         </Carousel>
                       </div>
                       <div className="mb-4">
                         <div className="w-full mb-2">
-                          <h2 className="text-xl">Buy ZeroHero NFTs on the market now!</h2>
+                          <h2 className="text-xl">
+                            Buy ZeroHero NFTs on the market now!
+                          </h2>
                         </div>
                         <div>
-                          <button className='w-full py-4 px-10 bg-primary-800 rounded-lg text-black font-bold' style={{ minWidth: 'max-content' }}>Shop Now</button>
+                          <button
+                            className="w-full py-4 px-10 bg-primary-800 rounded-lg text-black font-bold"
+                            style={{ minWidth: "max-content" }}
+                          >
+                            Shop Now
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -174,13 +173,29 @@ export default function Home(statsDatas) {
                           src="/images/buynow.png"
                           alt="Buy Now"
                         /> */}
-                        <div className="w-full lg:h-[220px] 2xl:h-80 bg-[#2f3030] mt-10">
 
+                        <div className="relative w-full lg:h-[220px] 2xl:h-80">
+                          <div className="absolute bg-gradient-to-r p-[4px] from-[#6002BF] via-[#C74CDB] to-[#4C6BDB] w-full lg:h-[220px] 2xl:h-80 mt-10 [clip-path:polygon(0_0,65%_0,71%_18%,100%_18%,100%_100%,0_100%)]">
+                            <div className="flex flex-col w-full h-full bg-[#2f3030] p-3 items-center justify-center [clip-path:polygon(0_0,65%_0,71%_18%,100%_18%,100%_100%,0_100%)]">
+                              <h2 className="text-xl">
+                                Buy ZeroHero NFTs on the market now!
+                              </h2>
+                              <button
+                                className="w-full py-4 px-10 bg-primary-800 rounded-lg text-black font-bold"
+                                style={{ minWidth: "max-content" }}
+                              >
+                                Shop Now
+                              </button>
+                            </div>
+                          </div>
+
+                          <div className="absolute bg-gradient-to-r p-[4px] from-[#6002BF] via-[#C74CDB] to-[#4C6BDB] w-full right-0 top-0 lg:h-[220px] mt-10 2xl:h-80 [clip-path:polygon(67%_0,100%_0,100%_15%,72%_15%)]">
+                            {/* <div className="flex w-full h-full bg-[#2f3030] [clip-path:polygon(67%_0,100%_0,100%_15%,72%_15%)]"></div> */}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </MediaQuery>
-
                 </div>
                 <div className="flex pt-2 pb-2 justify-end items-end">
                   <div className="relative overflow-x-auto shadow-md rounded-lg w-[250px] mr-2">
@@ -190,8 +205,14 @@ export default function Home(statsDatas) {
                         style={{ backgroundColor: "#2F3030" }}
                       >
                         <tr>
-                          <th scope="col" className="px-6 py-1 text-sm lg:text-lg" style={{ color: '#00F0FF' }}>
-                            Total<br />Wagered
+                          <th
+                            scope="col"
+                            className="px-6 py-1 text-sm lg:text-lg"
+                            style={{ color: "#00F0FF" }}
+                          >
+                            Total
+                            <br />
+                            Wagered
                           </th>
                         </tr>
                       </thead>
@@ -221,8 +242,14 @@ export default function Home(statsDatas) {
                         style={{ backgroundColor: "#2F3030" }}
                       >
                         <tr>
-                          <th scope="col" className="px-6 py-1 text-sm lg:text-lg" style={{ color: '#00F0FF' }}>
-                            Total<br />Bets
+                          <th
+                            scope="col"
+                            className="px-6 py-1 text-sm lg:text-lg"
+                            style={{ color: "#00F0FF" }}
+                          >
+                            Total
+                            <br />
+                            Bets
                           </th>
                         </tr>
                       </thead>
@@ -341,7 +368,11 @@ export default function Home(statsDatas) {
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 2xl:grid-cols-6 items-center pt-3 gap-2">
               <Link href="/coin-flip">
-                <img className="md:pr-5 w-full my-2 md:my-0" src="/images/flipcoin.png" alt="Flip Coin" />
+                <img
+                  className="md:pr-5 w-full my-2 md:my-0"
+                  src="/images/flipcoin.png"
+                  alt="Flip Coin"
+                />
               </Link>
 
               <Link href="/catchem-all">
@@ -351,7 +382,11 @@ export default function Home(statsDatas) {
                   alt="Catch'em All"
                 />
               </Link>
-              <img className="md:pr-5 w-full my-2 md:my-0" src="/images/dice.png" alt="Dice" />
+              <img
+                className="md:pr-5 w-full my-2 md:my-0"
+                src="/images/dice.png"
+                alt="Dice"
+              />
               <img
                 className="md:pr-5 w-full my-2 md:my-0"
                 src="/images/rps.png"
@@ -362,10 +397,13 @@ export default function Home(statsDatas) {
               <div className="md:flex items-center pt-3 justify-between space-y-4 md:space-y-0">
                 <div className="md:w-1/3 md:mr-4 h-60 rounded-tr-[100px] rounded-[10px] bg-gradient-to-r p-[6px] from-[#6002BF] via-[#C74CDB] to-[#4C6BDB]">
                   <div className="flex flex-col justify-center h-full bg-[#2F3030] text-white rounded-tr-[100px] rounded-[10px] p-4">
-                    <div className="text-xl lg:text-3xl text-white">Provably fair betting</div>
+                    <div className="text-xl lg:text-3xl text-white">
+                      Provably fair betting
+                    </div>
                     <div className="text-base lg:text-xl text-[#808080]">
-                      Our bet results are backed by Chainlink VRF so you can trust
-                      that every spin and deal is completely fair and random.
+                      Our bet results are backed by Chainlink VRF so you can
+                      trust that every spin and deal is completely fair and
+                      random.
                     </div>
                   </div>
                 </div>
@@ -375,19 +413,21 @@ export default function Home(statsDatas) {
                       Play, earn, and win ZeroHero NFTs!
                     </div>
                     <div className="text-base lg:text-xl text-[#808080]">
-                      1% of all bets will be distributed back to ZeroHero holders.
-                      If you lose 13 consecutive flips of 4 SUI or more, we'll
-                      airdrop you a free random ZeroHero NFT.
+                      1% of all bets will be distributed back to ZeroHero
+                      holders. If you lose 13 consecutive flips of 4 SUI or
+                      more, we'll airdrop you a free random ZeroHero NFT.
                     </div>
                   </div>
                 </div>
                 <div className="md:w-1/3 h-60 rounded-tl-[100px] rounded-[10px] bg-gradient-to-r p-[6px] from-[#6002BF] via-[#C74CDB] to-[#4C6BDB]">
                   <div className="flex flex-col justify-center text-right h-full bg-[#2F3030] text-white rounded-tl-[100px] rounded-[10px] p-4">
-                    <div className="text-xl lg:text-3xl text-white">Play risk free</div>
+                    <div className="text-xl lg:text-3xl text-white">
+                      Play risk free
+                    </div>
                     <div className="text-base lg:text-xl text-[#808080]">
-                      We do not require user registration or funds to be deposited.
-                      Simply connect to the website and place bets straight from
-                      your wallet.
+                      We do not require user registration or funds to be
+                      deposited. Simply connect to the website and place bets
+                      straight from your wallet.
                     </div>
                   </div>
                 </div>
