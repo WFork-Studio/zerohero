@@ -6,17 +6,18 @@ export default function Chatbox() {
   const [messagesRecieved, setMessagesReceived] = useState([]);
   const messagesColumnRef = useRef(null);
   const [message, setMessage] = useState("");
+  const [walletAddress, setWalletAddress] = useState("");
   const wallet = useWallet();
   let error = null;
   // const [socket, setSocket] = useState([]);
 
-  var socket = io("http://192.168.49.21:4001", {
+  var socket = io("http://192.168.49.21:4000", {
     autoConnect: true,
   });
 
   useEffect(() => {
     if (wallet.address === undefined) {
-      socket = io("http://192.168.49.21:4001", {
+      socket = io("http://192.168.49.21:4000", {
         autoConnect: true,
         // query: {
         //   tempUid: createUUID(),
@@ -31,7 +32,9 @@ export default function Chatbox() {
         setMessagesReceived((state) => [...last10Messages, ...state]);
       });
     } else {
-      socket = io("http://192.168.49.21:4001", {
+      setWalletAddress(wallet.address);
+
+      socket = io("http://192.168.49.21:4000", {
         autoConnect: true,
         query: {
           contractAddress: wallet.address,
@@ -98,7 +101,15 @@ export default function Chatbox() {
     >
       <div className="w-full rounded-[8px] rounded-bl-[0px] bg-gradient-to-r from-[#6002BF] via-[#C74CDB] to-[#4C6BDB] p-0.5">
         <div className="rounded-[8px] rounded-bl-[0px] h-auto break-all w-full bg-[#121212] back p-2">
-          <span className="text-blue-500">{message.contractAddress}:</span>{" "}
+          <span className="text-blue-500">
+            {message.contractAddress.substr(0, 12) +
+              "....." +
+              message.contractAddress.substr(
+                message.contractAddress.length - 12,
+                message.contractAddress.length
+              )}
+            :
+          </span>{" "}
           <span>{message.message}</span>
         </div>
       </div>
@@ -194,6 +205,7 @@ export default function Chatbox() {
             <input
               className="text-box"
               // contentEditable={true}
+              value={message}
               onChange={(e) => {
                 setMessage(e.target.value);
               }}
@@ -211,10 +223,15 @@ export default function Chatbox() {
             </button>
           </div>
         )}
-        <div className="font-coolvetica text-xs pt-1 text-ellipsis overflow-hidden">
+        <div className="font-coolvetica text-xs pt-1 text-ellipsis">
           Connected as:
-          <br />
-          {wallet.address}
+          {" " +
+            walletAddress.substring(0, 12) +
+            "....." +
+            walletAddress.substring(
+              walletAddress.length - 12,
+              walletAddress.length
+            )}
         </div>
       </div>
     </div>
