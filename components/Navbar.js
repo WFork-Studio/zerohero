@@ -40,8 +40,9 @@ export default function Navbar() {
         </button>
       </div>
       <div
-        className={`w-full block flex-grow lg:flex lg:items-center lg:w-auto ${isOpen ? "block" : "hidden"
-          }`}
+        className={`w-full block flex-grow lg:flex lg:items-center lg:w-auto ${
+          isOpen ? "block" : "hidden"
+        }`}
       >
         <div className="text-sm text-center lg:flex-grow font-coolveticaCondensed text-white text-xl/8">
           <Link
@@ -71,8 +72,20 @@ export default function Navbar() {
             Connect Wallet
           </button> */}
           <ConnectButton label="Connect Wallet" />
-          <Link href="/profile" className="mx-4 rounded-full border-4 p-2 hover:border-[#00f0ff] transition-all duration-200">
-            <svg className="w-6 h-6" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="white" d="M288 320a224 224 0 1 0 448 0 224 224 0 1 0-448 0zm544 608H160a32 32 0 0 1-32-32v-96a160 160 0 0 1 160-160h448a160 160 0 0 1 160 160v96a32 32 0 0 1-32 32z"></path></svg>
+          <Link
+            href="/profile"
+            className="mx-4 rounded-full border-4 p-2 hover:border-[#00f0ff] transition-all duration-200"
+          >
+            <svg
+              className="w-6 h-6"
+              viewBox="0 0 1024 1024"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill="white"
+                d="M288 320a224 224 0 1 0 448 0 224 224 0 1 0-448 0zm544 608H160a32 32 0 0 1-32-32v-96a160 160 0 0 1 160-160h448a160 160 0 0 1 160 160v96a32 32 0 0 1-32 32z"
+              ></path>
+            </svg>
           </Link>
         </div>
       </div>
