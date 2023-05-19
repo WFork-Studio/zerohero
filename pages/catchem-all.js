@@ -70,18 +70,9 @@ export default function CatchemAll(statsDatas) {
                 <h1 className='text-center text-4xl font-bold text-primary-800'>Catch'em All</h1>
                 <h3 className='text-center text-2xl font-bold'>Game</h3>
               </div>
-              <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+              <h1 className='px-6 py-3 text-center text-lg font-bold rounded-t-lg' style={{ backgroundColor: "#2F3030" }}>Recently Play</h1>
+              <div className="relative overflow-x-auto shadow-md rounded-b-lg">
                 <table className="w-full text-base text-left text-gray-500 dark:text-gray-400 font-coolvetica">
-                  <thead
-                    className="text-xs text-white dark:text-white tracking-widest"
-                    style={{ backgroundColor: "#2F3030" }}
-                  >
-                    <tr className="text-lg">
-                      <th scope="col" colSpan={5} className="px-6 py-3 text-center">
-                        Recently Play
-                      </th>
-                    </tr>
-                  </thead>
                   <tbody>
                     {stats.slice(0, 10).map((stat, index) => (
                       <tr
@@ -122,8 +113,8 @@ export default function CatchemAll(statsDatas) {
           }
           <div className="col-span-3 w-1/3 h-full w-full mr-4 h-60 bg-gradient-to-r p-[6px] from-[#6002BF] via-[#C74CDB] to-[#4C6BDB] rounded-lg">
             <div className="lg:grid lg:grid-cols-5 justify-center h-full bg-[#2F3030] text-white p-4 rounded-lg">
-              <div className="col-span-2 md:px-28 xl:px-2 2xl:px-8 self-center">
-                <img className='mx-auto' src='/images/catchem-chara.png' />
+              <div className="col-span-2 xl:px-2 2xl:px-2 self-center">
+                <img className='mx-auto catchem-img' src='/images/catchem-chara.png' />
               </div>
               <div className="col-span-3 lg:px-10 self-center">
                 <h1 className='text-center text-xl font-bold'>Set Your Bet</h1>
@@ -160,8 +151,8 @@ export default function CatchemAll(statsDatas) {
           </div>
           {isTabletOrMobile &&
             <div className='col-span- mt-6'>
-              <h1 className='px-6 py-3 text-center text-lg font-bold rounded-lg' style={{ backgroundColor: "#2F3030" }}>Recently Play</h1>
-              <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+              <h1 className='px-6 py-3 text-center text-lg font-bold rounded-t-lg' style={{ backgroundColor: "#2F3030" }}>Recently Play</h1>
+              <div className="relative overflow-x-auto shadow-md rounded-b-lg">
                 <table className="w-full text-base text-left text-gray-500 dark:text-gray-400 font-coolvetica">
                   <tbody>
                     {stats.slice(0, 10).map((stat, index) => (

@@ -23,20 +23,20 @@ export default function Statistics(statsDatas) {
   return (
     <section className="font-coolvetica pb-7">
       <div className={styles.container}>
-        <div className="flex items-center pt-3 justify-between">
+        <div className="lg:flex mb-4 items-center pt-3 justify-between lg:overflow-x-auto lg:space-x-4">
           <div className="text-white text-6xl py-5">
             All
             <br /> Statistics
           </div>
           <div className="flex items-center pt-3">
-            <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-[250px] mr-2">
+            <div className="relative overflow-x-auto shadow-md rounded-lg w-[250px] mr-2">
               <table className="w-full text-base text-left text-gray-500 dark:text-gray-400 font-coolvetica">
                 <thead
-                  className="text-lg text-center text-[#00F0FF] dark:text-white tracking-widest"
+                  className="text-xs md:text-lg text-center text-[#00F0FF] dark:text-white tracking-widest"
                   style={{ backgroundColor: "#2F3030" }}
                 >
                   <tr>
-                    <th scope="col" className="px-6 py-1">
+                    <th scope="col" className="px-2 md:px-6 py-1">
                       Total Bets
                     </th>
                   </tr>
@@ -48,7 +48,7 @@ export default function Statistics(statsDatas) {
                   >
                     <th
                       scope="row"
-                      className="text-3xl px-6 py-2 pb-2 font-medium whitespace-nowrap dark:text-white"
+                      className="text-base md:text-3xl md:px-6 py-2 pb-2 font-medium md:whitespace-nowrap dark:text-white"
                     >
                       {stats.length}
                       <br />
@@ -60,14 +60,14 @@ export default function Statistics(statsDatas) {
                 </tbody>
               </table>
             </div>
-            <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-[250px] mr-2">
+            <div className="relative overflow-x-auto shadow-md rounded-lg w-[250px] mr-2">
               <table className="w-full text-base text-left text-gray-500 dark:text-gray-400 font-coolvetica">
                 <thead
-                  className="text-lg text-center text-[#00F0FF] dark:text-white tracking-widest"
+                  className="text-xs md:text-lg text-center text-[#00F0FF] dark:text-white tracking-widest"
                   style={{ backgroundColor: "#2F3030" }}
                 >
                   <tr>
-                    <th scope="col" className="px-6 py-1">
+                    <th scope="col" className="px-2 md:px-6 py-1">
                       Wins
                     </th>
                   </tr>
@@ -79,7 +79,7 @@ export default function Statistics(statsDatas) {
                   >
                     <th
                       scope="row"
-                      className="text-3xl px-6 py-2 pb-2 font-medium whitespace-nowrap dark:text-white"
+                      className="text-base md:text-3xl md:px-6 py-2 pb-2 font-medium md:whitespace-nowrap dark:text-white"
                     >
                       {statsWinsCount}
                       <br />
@@ -91,14 +91,14 @@ export default function Statistics(statsDatas) {
                 </tbody>
               </table>
             </div>
-            <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-[250px] mr-2">
+            <div className="relative overflow-x-auto shadow-md rounded-lg w-[250px] mr-2">
               <table className="w-full text-base text-left text-gray-500 dark:text-gray-400 font-coolvetica">
                 <thead
-                  className="text-lg text-center text-[#00F0FF] dark:text-white tracking-widest"
+                  className="text-xs md:text-lg text-center text-[#00F0FF] dark:text-white tracking-widest"
                   style={{ backgroundColor: "#2F3030" }}
                 >
                   <tr>
-                    <th scope="col" className="px-6 py-1">
+                    <th scope="col" className="px-2 md:px-6 py-1">
                       Loses
                     </th>
                   </tr>
@@ -110,7 +110,7 @@ export default function Statistics(statsDatas) {
                   >
                     <th
                       scope="row"
-                      className="text-3xl px-6 py-2 pb-2 font-medium whitespace-nowrap dark:text-white"
+                      className="text-base md:text-3xl md:px-6 py-2 pb-2 font-medium md:whitespace-nowrap dark:text-white"
                     >
                       {statsLossesCount}
                       <br />
@@ -124,10 +124,10 @@ export default function Statistics(statsDatas) {
             </div>
           </div>
         </div>
-        <div className="relative overflow-x-auto shadow-md sm:rounded-lg max-h-[800px]">
-          <table className="w-full text-base text-left text-gray-500 dark:text-gray-400 font-coolvetica">
+        <div className="table-wrp relative overflow-x-auto shadow-md rounded-lg max-h-[800px] block max-h-96">
+          <table className="w-full text-base text-left text-gray-500 dark:text-gray-400 font-coolvetica whitespace-nowrap">
             <thead
-              className="text-xs text-white dark:text-white tracking-widest"
+              className="text-xs text-white dark:text-white tracking-widest sticky"
               style={{ backgroundColor: "#2F3030" }}
             >
               <tr className="text-lg">

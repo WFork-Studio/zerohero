@@ -1,4 +1,5 @@
 import styles from "../styles/Home.module.css";
+import Link from "next/link";
 
 export default function Games(statsDatas) {
   return (
@@ -8,24 +9,28 @@ export default function Games(statsDatas) {
           Game
           <br /> List
         </div>
-        <div className="flex items-center pt-3">
-          <a href="/coin-flip">
-            <img className="pr-5" src="/images/flipcoin.png" alt="Flip Coin" />
-          </a>
+        <div className="grid grid-cols-2 lg:flex items-center pt-3">
+          <Link href="/coin-flip">
+            <img className="lg:pr-5 p-4 w-full" src="/images/flipcoin.png" alt="Flip Coin" />
+          </Link>
 
-          <a href="/catchem-all">
+          <Link href="/catchem-all">
             <img
-              className="pr-5"
+              className="lg:pr-5 p-4 w-full"
               src="/images/catchemall.png"
               alt="Catch'em All"
             />
-          </a>
-          <img className="pr-5" src="/images/dice.png" alt="Dice" />
-          <img
-            className="pr-5"
-            src="/images/rps.png"
-            alt="Rock Paper Scissors"
-          />
+          </Link>
+          <Link href="/games">
+            <img className="lg:pr-5 p-4 w-full" src="/images/dice.png" alt="Dice" />
+          </Link>
+          <Link href="/games">
+            <img
+              className="lg:pr-5 p-4 w-full"
+              src="/images/rps.png"
+              alt="Rock Paper Scissors"
+            />
+          </Link>
         </div>
       </div>
     </section>
