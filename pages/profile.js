@@ -34,15 +34,15 @@ export default function profile() {
                             <div class="grid grid-cols-3 text-center justify-between mt-32 md:mt-0 md:justify-center gap-2 md:gap-4">
                                 <div className='py-4 rounded-lg' style={{ backgroundColor: "#262626" }}>
                                     <p class="font-bold text-white text-xl">22</p>
-                                    <p class="text-gray-400">Wins</p>
+                                    <p class="text-gray-400">Profit</p>
                                 </div>
                                 <div className='py-4 rounded-lg' style={{ backgroundColor: "#262626" }}>
                                     <p class="font-bold text-white text-xl">10</p>
-                                    <p class="text-gray-400">Biggest Bet</p>
+                                    <p class="text-gray-400">Total Game Play</p>
                                 </div>
                                 <div className='py-4 rounded-lg' style={{ backgroundColor: "#262626" }}>
                                     <p class="font-bold text-white text-xl">89</p>
-                                    <p class="text-gray-400">Bets</p>
+                                    <p class="text-gray-400">Favorite Game</p>
                                 </div>
                             </div>
                         </div>
