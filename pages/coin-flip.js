@@ -25,8 +25,8 @@ export default function CoinFlip(statsDatas) {
   const [MayPayout, setMayPayout] = useState(0);
   const [TotalWager, setTotalWager] = useState(0);
   const stats = statsDatas.statistics;
-  const isDesktop = useMediaQuery({ minWidth: 1224 })
-  const isTabletOrMobile = useMediaQuery({ maxWidth: 1223.9 })
+  const isDesktop = useMediaQuery({ minWidth: 992 })
+  const isTabletOrMobile = useMediaQuery({ maxWidth: 991.9 })
 
   const calculateBet = async () => {
     // console.log(Number(Wager), Number(MultipleBets));
@@ -72,18 +72,9 @@ export default function CoinFlip(statsDatas) {
                 <h1 className='text-center text-4xl font-bold text-primary-800'>Coin Flip</h1>
                 <h3 className='text-center text-2xl font-bold'>Game</h3>
               </div>
-              <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+              <h1 className='px-6 py-3 text-center text-lg font-bold rounded-t-lg' style={{ backgroundColor: "#2F3030" }}>Recently Play</h1>
+              <div className="relative overflow-x-auto shadow-md rounded-b-lg">
                 <table className="w-full text-base text-left text-gray-500 dark:text-gray-400 font-coolvetica">
-                  <thead
-                    className="text-xs text-white dark:text-white tracking-widest"
-                    style={{ backgroundColor: "#2F3030" }}
-                  >
-                    <tr className="text-lg">
-                      <th scope="col" colSpan={5} className="px-6 py-3 text-center">
-                        Recently Play
-                      </th>
-                    </tr>
-                  </thead>
                   <tbody>
                     {stats.slice(0, 10).map((stat, index) => (
                       <tr
@@ -191,8 +182,8 @@ export default function CoinFlip(statsDatas) {
           </div>
           {isTabletOrMobile &&
             <div className='col-span- mt-6'>
-              <h1 className='px-6 py-3 text-center text-lg font-bold rounded-lg' style={{ backgroundColor: "#2F3030" }}>Recently Play</h1>
-              <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+              <h1 className='px-6 py-3 text-center text-lg font-bold rounded-t-lg' style={{ backgroundColor: "#2F3030" }}>Recently Play</h1>
+              <div className="relative overflow-x-auto shadow-md rounded-b-lg">
                 <table className="w-full text-base text-left text-gray-500 dark:text-gray-400 font-coolvetica">
                   <tbody>
                     {stats.slice(0, 10).map((stat, index) => (
