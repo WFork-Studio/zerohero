@@ -176,12 +176,12 @@ export default function Home(statsDatas) {
 
                         <div className="relative w-full lg:h-[220px] 2xl:h-80">
                           <div className="absolute bg-gradient-to-r p-[4px] from-[#6002BF] via-[#C74CDB] to-[#4C6BDB] w-full lg:h-[220px] 2xl:h-80 mt-10 [clip-path:polygon(0_0,65%_0,71%_18%,100%_18%,100%_100%,0_100%)]">
-                            <div className="flex flex-col w-full h-full bg-[#2f3030] p-3 items-center justify-center [clip-path:polygon(0_0,65%_0,71%_18%,100%_18%,100%_100%,0_100%)]">
-                              <h2 className="text-xl">
+                            <div className="flex flex-col w-full h-full bg-[#2f3030] p-3 items-center justify-center [clip-path:polygon(0_0,65%_0,71%_18%,100%_18%,100%_100%,0_100%)]" style={{alignItems: 'self-start'}}>
+                              <h2 className="mt-2 lg:text-xl xl:text-2xl 2xl:text-5xl">
                                 Buy ZeroHero NFTs on the market now!
                               </h2>
                               <button
-                                className="w-full py-4 px-10 bg-primary-800 rounded-lg text-black font-bold"
+                                className="mt-2 w-1/3 py-4 px-10 bg-primary-800 rounded-lg text-black font-bold"
                                 style={{ minWidth: "max-content" }}
                               >
                                 Shop Now
