@@ -108,7 +108,7 @@ export default function CoinFlip(statsDatas) {
           }
 
         });
-        
+
         setFlipResult(result.events[0].parsedJson?.bet);
         if (result.events[0].parsedJson?.winning === 'win') {
           setIsConfetti(true);
@@ -229,7 +229,11 @@ export default function CoinFlip(statsDatas) {
                         <label className="block mb-2 text-sm font-medium text-white text-start">Wager</label>
                         <label className="block mb-2 text-sm font-medium text-white text-end">Min {MinBet}</label>
                       </div>
-                      <input value={Wager} onChange={(e) => { setWager(e.target.value) }} type="text" className="bg-black border border-primary-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-2.5" placeholder="" />
+                      <input value={Wager} onChange={(e) => {
+                        const inputValue = e.target.value;
+                        const sanitizedValue = inputValue.replace(/[^0-9.]/g, '');
+                        setWager(sanitizedValue)
+                      }} type="text" className="bg-black border border-primary-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-2.5" placeholder="" />
                       <label className="block mb-2 text-sm font-bold text-primary-500 bg-primary-800 w-fit float-right p-1 rounded-md text-end mt-1.5">Max {MaxBet}</label>
                     </div>
                     <div>
