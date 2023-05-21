@@ -1,6 +1,8 @@
 import styles from "../styles/Home.module.css";
 import fsPromises from "fs/promises";
 import path from "path";
+import { getAllHistories, storeHistory } from "./api/db_services";
+import { useState } from "react";
 
 export async function getStaticProps() {
   const filePath = path.join(process.cwd(), "dummy.json");
@@ -20,6 +22,12 @@ export default function Statistics(statsDatas) {
   const statsLossesCount = statsDatas.statistics.filter(
     (stat) => stat.profit < 0
   ).length;
+
+  const [allHistories, setAllHistories] = useState([]);
+
+  useState(() => {
+    setAllHistories(getAllHistories());
+  }, []);
   return (
     <section className="font-coolvetica pb-7">
       <div className={styles.container}>
@@ -50,7 +58,7 @@ export default function Statistics(statsDatas) {
                       scope="row"
                       className="text-base md:text-3xl md:px-6 py-2 pb-2 font-medium md:whitespace-nowrap dark:text-white"
                     >
-                      {stats.length}
+                      {allHistories.length}
                       <br />
                       <div className="text-[#8C8888] text-sm">
                         Gamble sum: 71,419,291

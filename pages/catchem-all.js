@@ -1,14 +1,21 @@
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
-import Link from 'next/link'
+import Image from "next/image";
+import styles from "../styles/Home.module.css";
+import Link from "next/link";
 import path from "path";
 import fsPromises from "fs/promises";
-import { useMediaQuery } from 'react-responsive';
-import { useState, useEffect } from 'react';
+import { useMediaQuery } from "react-responsive";
+import { useState, useEffect } from "react";
 import { useWallet, useAccountBalance, ConnectButton } from "@suiet/wallet-kit";
-import { JsonRpcProvider, testnetConnection, TransactionBlock, Inputs, RawSigner, Ed25519Keypair } from '@mysten/sui.js';
-import { ToastContainer, toast } from 'react-toastify';
-import Confetti from 'react-confetti'
+import {
+  JsonRpcProvider,
+  testnetConnection,
+  TransactionBlock,
+  Inputs,
+  RawSigner,
+  Ed25519Keypair,
+} from "@mysten/sui.js";
+import { ToastContainer, toast } from "react-toastify";
+import Confetti from "react-confetti";
 const provider = new JsonRpcProvider(testnetConnection);
 
 export async function getStaticProps() {
@@ -32,14 +39,14 @@ export default function CatchemAll(statsDatas) {
   const [MinBet, setMinBet] = useState();
   const [MaxBet, setMaxBet] = useState();
   const [IsConfetti, setIsConfetti] = useState(false);
-  const [StatusGame, setStatusGame] = useState('ready');
+  const [StatusGame, setStatusGame] = useState("ready");
   const [IsWin, setIsWin] = useState(false);
   const stats = statsDatas.statistics;
-  const isDesktop = useMediaQuery({ minWidth: 992 })
-  const isTabletOrMobile = useMediaQuery({ maxWidth: 991.9 })
+  const isDesktop = useMediaQuery({ minWidth: 992 });
+  const isTabletOrMobile = useMediaQuery({ maxWidth: 991.9 });
 
   const contextClass = {
-    info: "bg-[#6103bf]"
+    info: "bg-[#6103bf]",
   };
 
   const calculateBet = async () => {
@@ -56,7 +63,7 @@ export default function CatchemAll(statsDatas) {
 
   const getMinMax = async (e) => {
     const txn = await provider.getObject({
-      id: '0x4636ec6eeb986b3c1f09931b3abfd166692d64d514b7ee9c1c356fb605cb6d8d',
+      id: "0x4636ec6eeb986b3c1f09931b3abfd166692d64d514b7ee9c1c356fb605cb6d8d",
       // fetch the object content field
       options: { showContent: true },
     });
@@ -75,38 +82,56 @@ export default function CatchemAll(statsDatas) {
       if (Number(walletBalance) > wager) {
         const betValue = Number(TotalWager) * 1000000000;
 
-        const packageId = "0x8c9a415d0d7eef5264a794174c9683d1f161a658d0ee9e10a1a9e5ada459e893";
-        const catchemAllId = "0x4636ec6eeb986b3c1f09931b3abfd166692d64d514b7ee9c1c356fb605cb6d8d";
+        const packageId =
+          "0x8c9a415d0d7eef5264a794174c9683d1f161a658d0ee9e10a1a9e5ada459e893";
+        const catchemAllId =
+          "0x4636ec6eeb986b3c1f09931b3abfd166692d64d514b7ee9c1c356fb605cb6d8d";
         const tx = new TransactionBlock();
         let [coin] = tx.splitCoins(tx.gas, [tx.pure(betValue)]);
         tx.setGasBudget(10000000);
         tx.moveCall({
           target: `${packageId}::catchemAll::play_game`,
           typeArguments: [],
-          arguments: [tx.object(catchemAllId), coin, tx.object(Inputs.SharedObjectRef({
-            objectId: "0x6",
-            initialSharedVersion: 1,
-            mutable: false
-          }))],
-        })
+          arguments: [
+            tx.object(catchemAllId),
+            coin,
+            tx.object(
+              Inputs.SharedObjectRef({
+                objectId: "0x6",
+                initialSharedVersion: 1,
+                mutable: false,
+              })
+            ),
+          ],
+        });
 
         const result = await wallet.signAndExecuteTransactionBlock({
           transactionBlock: tx,
           options: {
-            showEvents: true
-          }
-
+            showEvents: true,
+          },
         });
-        if (result.events[0].parsedJson?.winning === 'win') {
+        if (result.events[0].parsedJson?.winning === "win") {
           setIsConfetti(true);
           setIsWin(true);
         } else {
           setIsWin(false);
         }
-        setStatusGame('over')
+
+        //Storing Result to Database
+        storeHistory(
+          result.events[0].parsedJson?.sender,
+          `${parseFloat(result.events[0].parsedJson?.profit) / 1000000000}`,
+          `${parseFloat(result.events[0].parsedJson?.bet_amount) / 1000000000}`,
+          {},
+          result.events[0].parsedJson?.winning,
+          "Catch'em All"
+        );
+
+        setStatusGame("over");
       } else {
         toast.info("You don't have sufficient balance !", {
-          position: toast.POSITION.BOTTOM_CENTER
+          position: toast.POSITION.BOTTOM_CENTER,
         });
       }
     } catch (error) {
@@ -115,7 +140,7 @@ export default function CatchemAll(statsDatas) {
         // nothing
       } else {
         toast.info("Something is wrong please try again !", {
-          position: toast.POSITION.BOTTOM_CENTER
+          position: toast.POSITION.BOTTOM_CENTER,
         });
       }
     }
@@ -143,20 +168,29 @@ export default function CatchemAll(statsDatas) {
   return (
     <>
       {domLoaded && (
-        <div className='px-4 lg:px-10 py-10 lg:py-24 lg:grid lg:grid-cols-5'>
-          {isTabletOrMobile &&
-            <div className='pb-6'>
-              <h1 className='text-center text-4xl font-bold text-primary-800'>Catch'em All</h1>
-              <h3 className='text-center text-2xl font-bold'>Game</h3>
+        <div className="px-4 lg:px-10 py-10 lg:py-24 lg:grid lg:grid-cols-5">
+          {isTabletOrMobile && (
+            <div className="pb-6">
+              <h1 className="text-center text-4xl font-bold text-primary-800">
+                Catch'em All
+              </h1>
+              <h3 className="text-center text-2xl font-bold">Game</h3>
             </div>
-          }
-          {isDesktop &&
-            <div className='col-span-2 px-4'>
-              <div className='pb-6'>
-                <h1 className='text-center text-4xl font-bold text-primary-800'>Catch'em All</h1>
-                <h3 className='text-center text-2xl font-bold'>Game</h3>
+          )}
+          {isDesktop && (
+            <div className="col-span-2 px-4">
+              <div className="pb-6">
+                <h1 className="text-center text-4xl font-bold text-primary-800">
+                  Catch'em All
+                </h1>
+                <h3 className="text-center text-2xl font-bold">Game</h3>
               </div>
-              <h1 className='px-6 py-3 text-center text-lg font-bold rounded-t-lg' style={{ backgroundColor: "#2F3030" }}>Recently Play</h1>
+              <h1
+                className="px-6 py-3 text-center text-lg font-bold rounded-t-lg"
+                style={{ backgroundColor: "#2F3030" }}
+              >
+                Recently Play
+              </h1>
               <div className="relative overflow-x-auto shadow-md rounded-b-lg">
                 <table className="w-full text-base text-left text-gray-500 dark:text-gray-400 font-coolvetica">
                   <tbody>
@@ -172,17 +206,30 @@ export default function CatchemAll(statsDatas) {
                         >
                           {stat.player} choose {stat.game} with result
                           {stat.profit < 0 ? (
-                            <div className="flex items-center justify-center" style={{ color: 'red' }}>
-                              <img width={25} src="/images/sui_brand.png" alt="Sui Brand" />
+                            <div
+                              className="flex items-center justify-center"
+                              style={{ color: "red" }}
+                            >
+                              <img
+                                width={25}
+                                src="/images/sui_brand.png"
+                                alt="Sui Brand"
+                              />
                               {stat.profit}
                             </div>
-                          )
-                            : (
-                              <div className="flex items-center justify-center" style={{ color: 'green' }}>
-                                <img width={25} src="/images/sui_brand.png" alt="Sui Brand" />+
-                                {stat.profit}
-                              </div>
-                            )}
+                          ) : (
+                            <div
+                              className="flex items-center justify-center"
+                              style={{ color: "green" }}
+                            >
+                              <img
+                                width={25}
+                                src="/images/sui_brand.png"
+                                alt="Sui Brand"
+                              />
+                              +{stat.profit}
+                            </div>
+                          )}
                         </th>
                         <th
                           scope="row"
@@ -196,90 +243,191 @@ export default function CatchemAll(statsDatas) {
                 </table>
               </div>
             </div>
-          }
+          )}
           <div className="col-span-3 w-1/3 h-full w-full mr-4 h-60 bg-gradient-to-r p-[6px] from-[#6002BF] via-[#C74CDB] to-[#4C6BDB] rounded-lg">
-            {StatusGame === 'ready' ?
+            {StatusGame === "ready" ? (
               <div className="lg:grid lg:grid-cols-5 justify-center h-full bg-[#2F3030] text-white p-4 rounded-lg">
                 <div className="col-span-2 xl:px-2 2xl:px-2 self-center">
-                  <img className='mx-auto catchem-img' src='/images/catchem-chara.png' />
+                  <img
+                    className="mx-auto catchem-img"
+                    src="/images/catchem-chara.png"
+                  />
                 </div>
                 <div className="col-span-3 lg:px-10 self-center">
-                  <h1 className='text-center text-xl font-bold'>Set Your Bet</h1>
-                  <div className='2xl:px-14'>
-                    <div className='flow-root'>
-                      <div className='grid grid-cols-2'>
-                        <label className="block mb-2 text-sm font-medium text-white text-start">Wager</label>
-                        <label className="block mb-2 text-sm font-medium text-white text-end">Min {MinBet}</label>
+                  <h1 className="text-center text-xl font-bold">
+                    Set Your Bet
+                  </h1>
+                  <div className="2xl:px-14">
+                    <div className="flow-root">
+                      <div className="grid grid-cols-2">
+                        <label className="block mb-2 text-sm font-medium text-white text-start">
+                          Wager
+                        </label>
+                        <label className="block mb-2 text-sm font-medium text-white text-end">
+                          Min {MinBet}
+                        </label>
                       </div>
-                      <input value={Wager} onChange={(e) => {
-                        const inputValue = e.target.value;
-                        const sanitizedValue = inputValue.replace(/[^0-9.]/g, '');
-                        setWager(sanitizedValue)
-                      }} type="text" className="bg-black border border-primary-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-2.5" placeholder="" />
-                      <label className="block mb-2 text-sm font-bold text-primary-500 bg-primary-800 w-fit float-right p-1 rounded-md text-end mt-1.5">Max {MaxBet}</label>
+                      <input
+                        value={Wager}
+                        onChange={(e) => {
+                          const inputValue = e.target.value;
+                          const sanitizedValue = inputValue.replace(
+                            /[^0-9.]/g,
+                            ""
+                          );
+                          setWager(sanitizedValue);
+                        }}
+                        type="text"
+                        className="bg-black border border-primary-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-2.5"
+                        placeholder=""
+                      />
+                      <label className="block mb-2 text-sm font-bold text-primary-500 bg-primary-800 w-fit float-right p-1 rounded-md text-end mt-1.5">
+                        Max {MaxBet}
+                      </label>
                     </div>
                     <div>
-                      <label className="block mb-2 text-sm font-medium text-white">Multiple Bets</label>
-                      <input value={MultipleBets} disabled type="text" className="bg-black border border-primary-500 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-2.5" placeholder="" />
-                      <input value={MultipleBets} onChange={(e) => { setMultipleBets(e.target.value) }} type="range" min={1} max={10} step={1} className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer" />
+                      <label className="block mb-2 text-sm font-medium text-white">
+                        Multiple Bets
+                      </label>
+                      <input
+                        value={MultipleBets}
+                        disabled
+                        type="text"
+                        className="bg-black border border-primary-500 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-2.5"
+                        placeholder=""
+                      />
+                      <input
+                        value={MultipleBets}
+                        onChange={(e) => {
+                          setMultipleBets(e.target.value);
+                        }}
+                        type="range"
+                        min={1}
+                        max={10}
+                        step={1}
+                        className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                      />
                     </div>
-                    <div className='mt-4 grid grid-cols-2 space-x-4'>
+                    <div className="mt-4 grid grid-cols-2 space-x-4">
                       <div>
-                        <label className="block mb-2 text-sm font-medium text-white">Max Payout</label>
-                        <input value={MaxPayout} onChange={(e) => { setMaxPayout(e.target.value) }} type="text" disabled className="bg-black border border-primary-500 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-2.5" placeholder="" />
+                        <label className="block mb-2 text-sm font-medium text-white">
+                          Max Payout
+                        </label>
+                        <input
+                          value={MaxPayout}
+                          onChange={(e) => {
+                            setMaxPayout(e.target.value);
+                          }}
+                          type="text"
+                          disabled
+                          className="bg-black border border-primary-500 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-2.5"
+                          placeholder=""
+                        />
                       </div>
                       <div>
-                        <label className="block mb-2 text-sm font-medium text-white text-end">Total Wager</label>
-                        <input value={TotalWager} onChange={(e) => {
-                          var value = Number(e.target.value).toFixed(2);
-                          setTotalWager(value)
-                        }} type="text" disabled className="bg-black border border-primary-500 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-2.5" placeholder="" />
+                        <label className="block mb-2 text-sm font-medium text-white text-end">
+                          Total Wager
+                        </label>
+                        <input
+                          value={TotalWager}
+                          onChange={(e) => {
+                            var value = Number(e.target.value).toFixed(2);
+                            setTotalWager(value);
+                          }}
+                          type="text"
+                          disabled
+                          className="bg-black border border-primary-500 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-2.5"
+                          placeholder=""
+                        />
                       </div>
                     </div>
-                    <div className='mt-6 play-wrapper'>
-                      {wallet?.connected ?
+                    <div className="mt-6 play-wrapper">
+                      {wallet?.connected ? (
                         <>
-                          {Number(TotalWager) <= Number(MaxBet) && Number(TotalWager) >= Number(MinBet) ?
-                            <button onClick={playGame} className='w-full py-2 bg-primary-800 rounded-lg text-black font-bold'>PLAY</button>
-                            :
-                            <button disabled className='w-full py-2 bg-gray-500 rounded-lg text-gray-300 text-sm font-bold'>Total Bet doesn't meet min/max requirements.</button>
-                          }
+                          {Number(TotalWager) <= Number(MaxBet) &&
+                          Number(TotalWager) >= Number(MinBet) ? (
+                            <button
+                              onClick={playGame}
+                              className="w-full py-2 bg-primary-800 rounded-lg text-black font-bold"
+                            >
+                              PLAY
+                            </button>
+                          ) : (
+                            <button
+                              disabled
+                              className="w-full py-2 bg-gray-500 rounded-lg text-gray-300 text-sm font-bold"
+                            >
+                              Total Bet doesn't meet min/max requirements.
+                            </button>
+                          )}
                         </>
-                        :
+                      ) : (
                         <ConnectButton label="Connect Wallet" />
-                      }
+                      )}
                     </div>
                   </div>
                 </div>
               </div>
-              :
+            ) : (
               <div className="justify-center h-full bg-[#2F3030] text-white p-4 rounded-lg grid">
                 <div className="lg:px-10 self-center">
-                  <div className='2xl:px-14'>
-                    {IsWin ?
-                      <div className='text-center'>
-                        <label className="block mb-2 text-5xl font-bold text-white">WIN</label>
-                        <label className="block mb-2 text-3xl font-medium" style={{ color: 'green' }}>+{MaxPayout}</label>
-                        <img className='mx-auto' style={{ width: '15em' }} src='/images/catchem-chara.png' />
+                  <div className="2xl:px-14">
+                    {IsWin ? (
+                      <div className="text-center">
+                        <label className="block mb-2 text-5xl font-bold text-white">
+                          WIN
+                        </label>
+                        <label
+                          className="block mb-2 text-3xl font-medium"
+                          style={{ color: "green" }}
+                        >
+                          +{MaxPayout}
+                        </label>
+                        <img
+                          className="mx-auto"
+                          style={{ width: "15em" }}
+                          src="/images/catchem-chara.png"
+                        />
                       </div>
-                      :
-                      <div className='text-center'>
-                        <label className="block mb-2 text-5xl font-bold text-white">LOSE</label>
-                        <label className="block mb-2 text-3xl font-medium" style={{ color: 'red' }}>-{TotalWager}</label>
-                        <img className='mx-auto' style={{ width: '15em' }} src='/images/catchem-chara.png' />
+                    ) : (
+                      <div className="text-center">
+                        <label className="block mb-2 text-5xl font-bold text-white">
+                          LOSE
+                        </label>
+                        <label
+                          className="block mb-2 text-3xl font-medium"
+                          style={{ color: "red" }}
+                        >
+                          -{TotalWager}
+                        </label>
+                        <img
+                          className="mx-auto"
+                          style={{ width: "15em" }}
+                          src="/images/catchem-chara.png"
+                        />
                       </div>
-                    }
-                    <div className='mt-6 play-wrapper text-center'>
-                      <button onClick={() => setStatusGame('ready')} className='w-full py-2 bg-primary-800 rounded-lg text-black font-bold'>Try Again</button>
+                    )}
+                    <div className="mt-6 play-wrapper text-center">
+                      <button
+                        onClick={() => setStatusGame("ready")}
+                        className="w-full py-2 bg-primary-800 rounded-lg text-black font-bold"
+                      >
+                        Try Again
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
-            }
+            )}
           </div>
-          {isTabletOrMobile &&
-            <div className='col-span- mt-6'>
-              <h1 className='px-6 py-3 text-center text-lg font-bold rounded-t-lg' style={{ backgroundColor: "#2F3030" }}>Recently Play</h1>
+          {isTabletOrMobile && (
+            <div className="col-span- mt-6">
+              <h1
+                className="px-6 py-3 text-center text-lg font-bold rounded-t-lg"
+                style={{ backgroundColor: "#2F3030" }}
+              >
+                Recently Play
+              </h1>
               <div className="relative overflow-x-auto shadow-md rounded-b-lg">
                 <table className="w-full text-base text-left text-gray-500 dark:text-gray-400 font-coolvetica">
                   <tbody>
@@ -295,17 +443,30 @@ export default function CatchemAll(statsDatas) {
                         >
                           {stat.player} choose {stat.game} with result
                           {stat.profit < 0 ? (
-                            <div className="flex items-center justify-center" style={{ color: 'red' }}>
-                              <img width={25} src="/images/sui_brand.png" alt="Sui Brand" />
+                            <div
+                              className="flex items-center justify-center"
+                              style={{ color: "red" }}
+                            >
+                              <img
+                                width={25}
+                                src="/images/sui_brand.png"
+                                alt="Sui Brand"
+                              />
                               {stat.profit}
                             </div>
-                          )
-                            : (
-                              <div className="flex items-center justify-center" style={{ color: 'green' }}>
-                                <img width={25} src="/images/sui_brand.png" alt="Sui Brand" />+
-                                {stat.profit}
-                              </div>
-                            )}
+                          ) : (
+                            <div
+                              className="flex items-center justify-center"
+                              style={{ color: "green" }}
+                            >
+                              <img
+                                width={25}
+                                src="/images/sui_brand.png"
+                                alt="Sui Brand"
+                              />
+                              +{stat.profit}
+                            </div>
+                          )}
                         </th>
                         <th
                           scope="row"
@@ -319,18 +480,18 @@ export default function CatchemAll(statsDatas) {
                 </table>
               </div>
             </div>
-          }
+          )}
           <div>
             <ToastContainer
-              toastClassName={({ type }) => contextClass[type || "default"] +
+              toastClassName={({ type }) =>
+                contextClass[type || "default"] +
                 " relative flex p-1 min-h-10 rounded-md justify-between overflow-hidden cursor-pointer font-bold w-max"
-              } />
+              }
+            />
           </div>
-          {IsConfetti &&
-            <Confetti />
-          }
+          {IsConfetti && <Confetti />}
         </div>
       )}
     </>
-  )
+  );
 }

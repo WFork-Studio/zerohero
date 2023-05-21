@@ -16,6 +16,7 @@ export default function Chatbox() {
   });
 
   useEffect(() => {
+    // setMessagesReceived([]);
     if (wallet.address === undefined) {
       socket = io("http://192.168.49.21:4000", {
         autoConnect: true,
@@ -37,7 +38,7 @@ export default function Chatbox() {
       socket = io("http://192.168.49.21:4000", {
         autoConnect: true,
         query: {
-          contractAddress: wallet.address,
+          walletAddress: wallet.address,
         },
       });
 
@@ -48,7 +49,7 @@ export default function Chatbox() {
 
       // //Join A Room
       // socket.emit("joinRoom", {
-      //   contractAddress: wallet.address,
+      //   walletAddress: wallet.address,
       //   room,
       // });
 
@@ -61,24 +62,38 @@ export default function Chatbox() {
         setMessagesReceived((state) => [...last10Messages, ...state]);
       });
 
+      socket.on("receiveMessage", (data) => {
+        console.log("Received: " + data);
+        setMessagesReceived((state) => [
+          ...state,
+          {
+            message: data.message,
+            walletAddress: data.walletAddress,
+            __createdtime__: data.__createdtime__,
+          },
+        ]);
+      });
+
       console.log(`[USER] Connected to wallet address ${wallet.address}`);
       // getSocket();
     }
   }, [wallet]);
 
-  useEffect(() => {
-    socket.on("receiveMessage", (data) => {
-      console.log(data);
-      setMessagesReceived((state) => [
-        ...state,
-        {
-          message: data.message,
-          contractAddress: data.contractAddress,
-          __createdtime__: data.__createdtime__,
-        },
-      ]);
-    });
-  }, [socket]);
+  // useEffect(() => {
+  //   socket.on("receiveMessage", (data) => {
+  //     console.log("Received: " + data);
+  //     setMessagesReceived((state) => [
+  //       ...state,
+  //       {
+  //         message: data.message,
+  //         walletAddress: data.walletAddress,
+  //         __createdtime__: data.__createdtime__,
+  //       },
+  //     ]);
+  //   });
+
+  //   return () => socket.off("receiveMessage");
+  // }, [socket]);
 
   const sendMessage = () => {
     if (message !== "") {
@@ -86,7 +101,7 @@ export default function Chatbox() {
       const __createdtime__ = Date.now();
       // Send message to server. We can't specify who we send the message to from the frontend. We can only send to server. Server can then send message to rest of users in room
       socket.emit("sendMessage", {
-        contractAddress: wallet.address,
+        walletAddress: wallet.address,
         message,
         __createdtime__,
       });
@@ -102,11 +117,11 @@ export default function Chatbox() {
       <div className="w-full rounded-[8px] rounded-bl-[0px] bg-gradient-to-r from-[#6002BF] via-[#C74CDB] to-[#4C6BDB] p-0.5">
         <div className="rounded-[8px] rounded-bl-[0px] h-auto break-all w-full bg-[#121212] back p-2">
           <span className="text-blue-500">
-            {message.contractAddress.substr(0, 12) +
+            {message.walletAddress.substr(0, 12) +
               "....." +
-              message.contractAddress.substr(
-                message.contractAddress.length - 12,
-                message.contractAddress.length
+              message.walletAddress.substr(
+                message.walletAddress.length - 12,
+                message.walletAddress.length
               )}
             :
           </span>{" "}
