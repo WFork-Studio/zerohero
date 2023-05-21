@@ -1,14 +1,7 @@
 var authKey = "Basic emVyb2hlcm86bm9wYXNzd29yZA==";
 var schema = "zerohero_app";
 
-export function storeHistory(
-  walletAddress,
-  profit,
-  wager,
-  data,
-  result,
-  gameName
-) {
+function storeHistory(walletAddress, profit, wager, data, result, gameName) {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("Authorization", authKey);
@@ -42,7 +35,7 @@ export function storeHistory(
     .catch((error) => console.log("error", error));
 }
 
-export function getUserData({ walletAddress }) {
+function getUserData({ walletAddress }) {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("Authorization", authKey);
@@ -65,7 +58,7 @@ export function getUserData({ walletAddress }) {
     .catch((error) => console.log("error", error));
 }
 
-export function updateUserData({ walletAddress, query }) {
+function updateUserData({ walletAddress, query }) {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("Authorization", authKey);
@@ -88,7 +81,7 @@ export function updateUserData({ walletAddress, query }) {
     .catch((error) => console.log("error", error));
 }
 
-export function getPlayerHistories({ walletAddress }) {
+function getPlayerHistories({ walletAddress }) {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("Authorization", authKey);
@@ -111,7 +104,7 @@ export function getPlayerHistories({ walletAddress }) {
     .catch((error) => console.log("error", error));
 }
 
-export function getAllHistories(game = null, limit = 10) {
+function getAllHistories(game = null, limit = 10) {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("Authorization", authKey);
@@ -136,3 +129,11 @@ export function getAllHistories(game = null, limit = 10) {
     .then((result) => console.log(result))
     .catch((error) => console.log("error", error));
 }
+
+export default {
+  storeHistory,
+  getUserData,
+  updateUserData,
+  getPlayerHistories,
+  getAllHistories,
+};
