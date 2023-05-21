@@ -5,6 +5,11 @@ import path from "path";
 import fsPromises from "fs/promises";
 import { useMediaQuery } from 'react-responsive';
 import { useState, useEffect } from 'react';
+import { useWallet, useAccountBalance, ConnectButton } from "@suiet/wallet-kit";
+import { JsonRpcProvider, testnetConnection, TransactionBlock, Inputs, RawSigner, Ed25519Keypair } from '@mysten/sui.js';
+import { ToastContainer, toast } from 'react-toastify';
+import Confetti from 'react-confetti'
+const provider = new JsonRpcProvider(testnetConnection);
 
 export async function getStaticProps() {
   const filePath = path.join(process.cwd(), "dummy.json");
@@ -17,42 +22,123 @@ export async function getStaticProps() {
 }
 
 export default function CatchemAll(statsDatas) {
+  const wallet = useWallet();
+  const { balance: walletBalance } = useAccountBalance();
   const [domLoaded, setDomLoaded] = useState(false);
   const [Wager, setWager] = useState(1);
   const [MultipleBets, setMultipleBets] = useState(1);
-  const [MayPayout, setMayPayout] = useState(0);
+  const [MaxPayout, setMaxPayout] = useState(0);
   const [TotalWager, setTotalWager] = useState(0);
+  const [MinBet, setMinBet] = useState();
+  const [MaxBet, setMaxBet] = useState();
+  const [IsConfetti, setIsConfetti] = useState(false);
+  const [StatusGame, setStatusGame] = useState('ready');
+  const [IsWin, setIsWin] = useState(false);
   const stats = statsDatas.statistics;
   const isDesktop = useMediaQuery({ minWidth: 992 })
   const isTabletOrMobile = useMediaQuery({ maxWidth: 991.9 })
 
+  const contextClass = {
+    info: "bg-[#6103bf]"
+  };
+
   const calculateBet = async () => {
-    // console.log(Number(Wager), Number(MultipleBets));
+    // Calculate Total Wager
     var total_wager = Number(Wager) * Number(MultipleBets);
-    //  var max_payout = ((Number(Wager) * 2) * Number(MultipleBets)) / 10;
-    setTotalWager(total_wager);
-    //  setMayPayout(max_payout);
-    // Define the wager amount
+    setTotalWager(total_wager.toFixed(2));
 
-    // Calculate the wager multiplied by 2
-    const wagerMultipliedBy2 = Number(Wager) * 2;
+    // Calculate Max Payout
+    var max_payout = Number(total_wager) * 2;
+    let fee_percentage = 0.05;
+    let payout_total = max_payout * (1 - fee_percentage);
+    setMaxPayout(payout_total.toFixed(2));
+  };
 
-    // Calculate both the wager and the multiplied amount multiplied by 2
-    const totalMultipliedBy2 = wagerMultipliedBy2 * Number(MultipleBets);
+  const getMinMax = async (e) => {
+    const txn = await provider.getObject({
+      id: '0x4636ec6eeb986b3c1f09931b3abfd166692d64d514b7ee9c1c356fb605cb6d8d',
+      // fetch the object content field
+      options: { showContent: true },
+    });
 
-    // Calculate the final result after dividing by 10%
-    const finalResult = totalMultipliedBy2 / 10;
+    var minBet = txn?.data?.content?.fields?.min_bet / 1000000000;
+    setMinBet(minBet);
 
-    console.log(finalResult);
+    let bank = Number(txn?.data?.content?.fields?.bank) / 1000000000;
+    let max = (bank * txn?.data?.content?.fields?.max_bet) / 10000;
+    setMaxBet(Number(max.toFixed(1)));
+  };
+
+  const playGame = async (e) => {
+    var wager = Number(TotalWager) * 1000000000;
+    try {
+      if (Number(walletBalance) > wager) {
+        const betValue = Number(TotalWager) * 1000000000;
+
+        const packageId = "0x8c9a415d0d7eef5264a794174c9683d1f161a658d0ee9e10a1a9e5ada459e893";
+        const catchemAllId = "0x4636ec6eeb986b3c1f09931b3abfd166692d64d514b7ee9c1c356fb605cb6d8d";
+        const tx = new TransactionBlock();
+        let [coin] = tx.splitCoins(tx.gas, [tx.pure(betValue)]);
+        tx.setGasBudget(10000000);
+        tx.moveCall({
+          target: `${packageId}::catchemAll::play_game`,
+          typeArguments: [],
+          arguments: [tx.object(catchemAllId), coin, tx.object(Inputs.SharedObjectRef({
+            objectId: "0x6",
+            initialSharedVersion: 1,
+            mutable: false
+          }))],
+        })
+
+        const result = await wallet.signAndExecuteTransactionBlock({
+          transactionBlock: tx,
+          options: {
+            showEvents: true
+          }
+
+        });
+        if (result.events[0].parsedJson?.winning === 'win') {
+          setIsConfetti(true);
+          setIsWin(true);
+        } else {
+          setIsWin(false);
+        }
+        setStatusGame('over')
+      } else {
+        toast.info("You don't have sufficient balance !", {
+          position: toast.POSITION.BOTTOM_CENTER
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      if (error.toString().includes("Rejected from user")) {
+        // nothing
+      } else {
+        toast.info("Something is wrong please try again !", {
+          position: toast.POSITION.BOTTOM_CENTER
+        });
+      }
+    }
   };
 
   useEffect(() => {
     setDomLoaded(true);
+    getMinMax();
   }, []);
 
   useEffect(() => {
     calculateBet();
   }, [MultipleBets, Wager]);
+
+  useEffect(() => {
+    if (!IsConfetti) return;
+
+    const intervalId = setInterval(() => {
+      setIsConfetti(false);
+    }, 5000);
+
+    return () => clearInterval(intervalId);
+  }, [IsConfetti]);
 
   return (
     <>
@@ -112,42 +198,84 @@ export default function CatchemAll(statsDatas) {
             </div>
           }
           <div className="col-span-3 w-1/3 h-full w-full mr-4 h-60 bg-gradient-to-r p-[6px] from-[#6002BF] via-[#C74CDB] to-[#4C6BDB] rounded-lg">
-            <div className="lg:grid lg:grid-cols-5 justify-center h-full bg-[#2F3030] text-white p-4 rounded-lg">
-              <div className="col-span-2 xl:px-2 2xl:px-2 self-center">
-                <img className='mx-auto catchem-img' src='/images/catchem-chara.png' />
-              </div>
-              <div className="col-span-3 lg:px-10 self-center">
-                <h1 className='text-center text-xl font-bold'>Set Your Bet</h1>
-                <div className='2xl:px-14'>
-                  <div className='flow-root'>
-                    <div className='grid grid-cols-2'>
-                      <label className="block mb-2 text-sm font-medium text-white text-start">Wager</label>
-                      <label className="block mb-2 text-sm font-medium text-white text-end">Min 0.5</label>
-                    </div>
-                    <input value={Wager} onChange={(e) => { setWager(e.target.value) }} type="text" className="bg-black border border-primary-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-2.5" placeholder="" />
-                    <label className="block mb-2 text-sm font-bold text-primary-500 bg-primary-800 w-fit float-right p-1 rounded-md text-end mt-1.5">Max 80</label>
-                  </div>
-                  <div>
-                    <label className="block mb-2 text-sm font-medium text-white">Multiple Bets</label>
-                    <input value={MultipleBets} disabled type="text" className="bg-black border border-primary-500 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-2.5" placeholder="" />
-                    <input value={MultipleBets} onChange={(e) => { setMultipleBets(e.target.value) }} type="range" min={1} max={5} step={1} className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer" />
-                  </div>
-                  <div className='mt-4 grid grid-cols-2 space-x-4'>
-                    <div>
-                      <label className="block mb-2 text-sm font-medium text-white">Max Payout</label>
-                      <input value={MayPayout} onChange={(e) => { setMayPayout(e.target.value) }} type="text" disabled className="bg-black border border-primary-500 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-2.5" placeholder="" />
+            {StatusGame === 'ready' ?
+              <div className="lg:grid lg:grid-cols-5 justify-center h-full bg-[#2F3030] text-white p-4 rounded-lg">
+                <div className="col-span-2 xl:px-2 2xl:px-2 self-center">
+                  <img className='mx-auto catchem-img' src='/images/catchem-chara.png' />
+                </div>
+                <div className="col-span-3 lg:px-10 self-center">
+                  <h1 className='text-center text-xl font-bold'>Set Your Bet</h1>
+                  <div className='2xl:px-14'>
+                    <div className='flow-root'>
+                      <div className='grid grid-cols-2'>
+                        <label className="block mb-2 text-sm font-medium text-white text-start">Wager</label>
+                        <label className="block mb-2 text-sm font-medium text-white text-end">Min {MinBet}</label>
+                      </div>
+                      <input value={Wager} onChange={(e) => {
+                        const inputValue = e.target.value;
+                        const sanitizedValue = inputValue.replace(/[^0-9.]/g, '');
+                        setWager(sanitizedValue)
+                      }} type="text" className="bg-black border border-primary-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-2.5" placeholder="" />
+                      <label className="block mb-2 text-sm font-bold text-primary-500 bg-primary-800 w-fit float-right p-1 rounded-md text-end mt-1.5">Max {MaxBet}</label>
                     </div>
                     <div>
-                      <label className="block mb-2 text-sm font-medium text-white text-end">Total Wager</label>
-                      <input value={TotalWager} onChange={(e) => { setTotalWager(e.target.value) }} type="text" disabled className="bg-black border border-primary-500 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-2.5" placeholder="" />
+                      <label className="block mb-2 text-sm font-medium text-white">Multiple Bets</label>
+                      <input value={MultipleBets} disabled type="text" className="bg-black border border-primary-500 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-2.5" placeholder="" />
+                      <input value={MultipleBets} onChange={(e) => { setMultipleBets(e.target.value) }} type="range" min={1} max={10} step={1} className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer" />
                     </div>
-                  </div>
-                  <div className='mt-6'>
-                    <button className='w-full py-2 bg-primary-800 rounded-lg text-black font-bold'>PLAY</button>
+                    <div className='mt-4 grid grid-cols-2 space-x-4'>
+                      <div>
+                        <label className="block mb-2 text-sm font-medium text-white">Max Payout</label>
+                        <input value={MaxPayout} onChange={(e) => { setMaxPayout(e.target.value) }} type="text" disabled className="bg-black border border-primary-500 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-2.5" placeholder="" />
+                      </div>
+                      <div>
+                        <label className="block mb-2 text-sm font-medium text-white text-end">Total Wager</label>
+                        <input value={TotalWager} onChange={(e) => {
+                          var value = Number(e.target.value).toFixed(2);
+                          setTotalWager(value)
+                        }} type="text" disabled className="bg-black border border-primary-500 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-2.5" placeholder="" />
+                      </div>
+                    </div>
+                    <div className='mt-6 play-wrapper'>
+                      {wallet?.connected ?
+                        <>
+                          {Number(TotalWager) <= Number(MaxBet) && Number(TotalWager) >= Number(MinBet) ?
+                            <button onClick={playGame} className='w-full py-2 bg-primary-800 rounded-lg text-black font-bold'>PLAY</button>
+                            :
+                            <button disabled className='w-full py-2 bg-gray-500 rounded-lg text-gray-300 text-sm font-bold'>Total Bet doesn't meet min/max requirements.</button>
+                          }
+                        </>
+                        :
+                        <ConnectButton label="Connect Wallet" />
+                      }
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+              :
+              <div className="justify-center h-full bg-[#2F3030] text-white p-4 rounded-lg grid">
+                <div className="lg:px-10 self-center">
+                  <div className='2xl:px-14'>
+                    {IsWin ?
+                      <div className='text-center'>
+                        <label className="block mb-2 text-5xl font-bold text-white">WIN</label>
+                        <label className="block mb-2 text-3xl font-medium" style={{ color: 'green' }}>+{MaxPayout}</label>
+                        <img className='mx-auto' style={{ width: '15em' }} src='/images/catchem-chara.png' />
+                      </div>
+                      :
+                      <div className='text-center'>
+                        <label className="block mb-2 text-5xl font-bold text-white">LOSE</label>
+                        <label className="block mb-2 text-3xl font-medium" style={{ color: 'red' }}>-{TotalWager}</label>
+                        <img className='mx-auto' style={{ width: '15em' }} src='/images/catchem-chara.png' />
+                      </div>
+                    }
+                    <div className='mt-6 play-wrapper text-center'>
+                      <button onClick={() => setStatusGame('ready')} className='w-full py-2 bg-primary-800 rounded-lg text-black font-bold'>Try Again</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
           </div>
           {isTabletOrMobile &&
             <div className='col-span- mt-6'>
@@ -191,6 +319,15 @@ export default function CatchemAll(statsDatas) {
                 </table>
               </div>
             </div>
+          }
+          <div>
+            <ToastContainer
+              toastClassName={({ type }) => contextClass[type || "default"] +
+                " relative flex p-1 min-h-10 rounded-md justify-between overflow-hidden cursor-pointer font-bold w-max"
+              } />
+          </div>
+          {IsConfetti &&
+            <Confetti />
           }
         </div>
       )}

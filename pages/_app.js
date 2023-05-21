@@ -6,6 +6,7 @@ import Chatbox from "../components/Chatbox";
 import * as React from "react";
 import { WalletProvider } from "@suiet/wallet-kit";
 import "@suiet/wallet-kit/style.css";
+import 'react-toastify/dist/ReactToastify.css';
 // import fsPromises from "fs/promises";
 // import path from "path";
 
