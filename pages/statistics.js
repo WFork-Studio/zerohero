@@ -15,6 +15,7 @@ export async function getStaticProps() {
 }
 
 export default function Statistics(statsDatas) {
+  const [isLoad, setisLoad] = useState();
   const stats = statsDatas.statistics;
   const statsWinsCount = statsDatas.statistics.filter(
     (stat) => stat.profit > 0
@@ -25,9 +26,17 @@ export default function Statistics(statsDatas) {
 
   const [allHistories, setAllHistories] = useState([]);
 
+  const getHistories = async (e) => {
+    const resp = await getAllHistories();
+    setAllHistories(resp);
+    setisLoad(true);
+  };
+
   useState(() => {
-    setAllHistories(getAllHistories());
+    getHistories();
   }, []);
+
+  if(isLoad)
   return (
     <section className="font-coolvetica pb-7">
       <div className={styles.container}>
@@ -58,7 +67,7 @@ export default function Statistics(statsDatas) {
                       scope="row"
                       className="text-base md:text-3xl md:px-6 py-2 pb-2 font-medium md:whitespace-nowrap dark:text-white"
                     >
-                      {allHistories.length}
+                      {allHistories?.length}
                       <br />
                       <div className="text-[#8C8888] text-sm">
                         Gamble sum: 71,419,291

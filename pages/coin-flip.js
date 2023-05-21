@@ -7,6 +7,7 @@ import fsPromises from "fs/promises";
 import MediaQuery from "react-responsive";
 import { useMediaQuery } from "react-responsive";
 import { useState, useEffect } from "react";
+import moment from "moment/moment";
 import {
   JsonRpcProvider,
   testnetConnection,
@@ -15,7 +16,7 @@ import {
 } from "@mysten/sui.js";
 import { ToastContainer, toast } from "react-toastify";
 import Confetti from "react-confetti";
-import storeHistory from "./api/db_services";
+import { storeHistory, getAllHistories } from "./api/db_services";
 const provider = new JsonRpcProvider(testnetConnection);
 
 export async function getStaticProps() {
@@ -162,9 +163,15 @@ export default function CoinFlip(statsDatas) {
     }
   };
 
+  const getHistories = async (e) => {
+    const resp = await getAllHistories('Coin Flip', 10);
+    setRecentlyPlay(resp);
+  };
+
   useEffect(() => {
     setDomLoaded(true);
     getMinMax();
+    getHistories();
   }, []);
 
   useEffect(() => {
@@ -220,10 +227,16 @@ export default function CoinFlip(statsDatas) {
                           scope="row"
                           className="px-6 py-2 font-medium whitespace-nowrap dark:text-white inline-flex"
                         >
-                          {stat.sender} choose{" "}
-                          {stat.bet.charAt(0).toUpperCase() + stat.bet.slice(1)}{" "}
+                          {stat.walletAddress.substr(0, 4) +
+                            "....." +
+                            stat.walletAddress.substr(
+                              stat.walletAddress.length - 4,
+                              stat.walletAddress.length
+                            )}{" "}
+                          choose{" "}
+                          {stat.gameData?.choice?.charAt(0).toUpperCase() + stat.gameData?.choice?.slice(1)}{" "}
                           with result
-                          {stat.winning === "lose" ? (
+                          {stat.result === "lose" ? (
                             <div
                               className="flex items-center justify-center"
                               style={{ color: "red" }}
@@ -234,7 +247,7 @@ export default function CoinFlip(statsDatas) {
                                 alt="Sui Brand"
                               />
                               -
-                              {(Number(stat.bet_amount) / 100000000).toFixed(2)}
+                              {(Number(stat.wager)).toFixed(2)}
                             </div>
                           ) : (
                             <div
@@ -246,7 +259,7 @@ export default function CoinFlip(statsDatas) {
                                 src="/images/sui_brand.png"
                                 alt="Sui Brand"
                               />
-                              +{(Number(stat.profit) / 100000000).toFixed(2)}
+                              +{(Number(stat.wager)).toFixed(2)}
                             </div>
                           )}
                         </th>
@@ -254,7 +267,7 @@ export default function CoinFlip(statsDatas) {
                           scope="row"
                           className="px-6 py-2 font-medium whitespace-nowrap text-end dark:text-white"
                         >
-                          {Number(stat.time)}
+                          {moment(Number(stat.__createdtime__)).fromNow()}
                         </th>
                       </tr>
                     ))}
@@ -416,7 +429,7 @@ export default function CoinFlip(statsDatas) {
                       {wallet?.connected ? (
                         <>
                           {Number(TotalWager) <= Number(MaxBet) &&
-                          Number(TotalWager) >= Number(MinBet) ? (
+                            Number(TotalWager) >= Number(MinBet) ? (
                             <button
                               onClick={playGame}
                               className="w-full py-2 bg-primary-800 rounded-lg text-black font-bold"
@@ -496,7 +509,10 @@ export default function CoinFlip(statsDatas) {
                     )}
                     <div className="mt-6 play-wrapper text-center">
                       <button
-                        onClick={() => setStatusGame("ready")}
+                        onClick={() => {
+                          setStatusGame("ready");
+                          getHistories();
+                        }}
                         className="w-full py-2 bg-primary-800 rounded-lg text-black font-bold"
                       >
                         Try Again

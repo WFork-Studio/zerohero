@@ -1,7 +1,7 @@
 var authKey = "Basic emVyb2hlcm86bm9wYXNzd29yZA==";
 var schema = "zerohero_app";
 
-function storeHistory(walletAddress, profit, wager, data, result, gameName) {
+export function storeHistory(walletAddress, profit, wager, data, result, gameName) {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("Authorization", authKey);
@@ -35,7 +35,7 @@ function storeHistory(walletAddress, profit, wager, data, result, gameName) {
     .catch((error) => console.log("error", error));
 }
 
-function getUserData({ walletAddress }) {
+export function getUserData({ walletAddress }) {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("Authorization", authKey);
@@ -58,7 +58,7 @@ function getUserData({ walletAddress }) {
     .catch((error) => console.log("error", error));
 }
 
-function updateUserData({ walletAddress, query }) {
+export function updateUserData({ walletAddress, query }) {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("Authorization", authKey);
@@ -81,14 +81,14 @@ function updateUserData({ walletAddress, query }) {
     .catch((error) => console.log("error", error));
 }
 
-function getPlayerHistories({ walletAddress }) {
+export async function getPlayerHistories({ walletAddress }) {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("Authorization", authKey);
 
   var raw = JSON.stringify({
     operation: "sql",
-    sql: `SELECT * FROM ${schema}.histories where walletAddress = ${walletAddress}`,
+    sql: `SELECT * FROM ${schema}.histories where walletAddress = ${walletAddress} ORDER BY __createdtime__ DESC`,
   });
 
   var requestOptions = {
@@ -98,13 +98,16 @@ function getPlayerHistories({ walletAddress }) {
     redirect: "follow",
   };
 
-  return fetch("https://zerohero-wfs.harperdbcloud.com", requestOptions)
-    .then((response) => response.text())
-    .then((result) => console.log(result))
-    .catch((error) => console.log("error", error));
+  try {
+    const response = await fetch("https://zerohero-wfs.harperdbcloud.com", requestOptions);
+    const result_1 = await response.text();
+    return JSON.parse(result_1);
+  } catch (error) {
+    return console.log("error", error);
+  }
 }
 
-function getAllHistories(game = null, limit = 10) {
+export async function getAllHistories(game = null, limit = 10) {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("Authorization", authKey);
@@ -113,8 +116,8 @@ function getAllHistories(game = null, limit = 10) {
     operation: "sql",
     sql:
       game === null
-        ? `SELECT * FROM ${schema}.histories LIMIT ${limit}`
-        : `SELECT * FROM ${schema}.histories WHERE gameName = ${game} LIMIT ${limit}`,
+        ? `SELECT * FROM ${schema}.histories ORDER BY __createdtime__ DESC LIMIT ${limit}`
+        : `SELECT * FROM ${schema}.histories WHERE gameName = '${game}' ORDER BY __createdtime__ DESC LIMIT ${limit}`,
   });
 
   var requestOptions = {
@@ -124,16 +127,11 @@ function getAllHistories(game = null, limit = 10) {
     redirect: "follow",
   };
 
-  return fetch("https://zerohero-wfs.harperdbcloud.com", requestOptions)
-    .then((response) => response.text())
-    .then((result) => console.log(result))
-    .catch((error) => console.log("error", error));
+  try {
+    const response = await fetch("https://zerohero-wfs.harperdbcloud.com", requestOptions);
+    const result_1 = await response.text();
+    return JSON.parse(result_1);
+  } catch (error) {
+    return console.log("error", error);
+  }
 }
-
-export default {
-  storeHistory,
-  getUserData,
-  updateUserData,
-  getPlayerHistories,
-  getAllHistories,
-};

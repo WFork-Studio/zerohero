@@ -10,12 +10,12 @@ import {
   JsonRpcProvider,
   testnetConnection,
   TransactionBlock,
-  Inputs,
-  RawSigner,
-  Ed25519Keypair,
+  Inputs
 } from "@mysten/sui.js";
 import { ToastContainer, toast } from "react-toastify";
 import Confetti from "react-confetti";
+import { storeHistory, getAllHistories } from "./api/db_services";
+import moment from "moment";
 const provider = new JsonRpcProvider(testnetConnection);
 
 export async function getStaticProps() {
@@ -38,6 +38,7 @@ export default function CatchemAll(statsDatas) {
   const [TotalWager, setTotalWager] = useState(0);
   const [MinBet, setMinBet] = useState();
   const [MaxBet, setMaxBet] = useState();
+  const [RecentlyPlay, setRecentlyPlay] = useState();
   const [IsConfetti, setIsConfetti] = useState(false);
   const [StatusGame, setStatusGame] = useState("ready");
   const [IsWin, setIsWin] = useState(false);
@@ -125,7 +126,7 @@ export default function CatchemAll(statsDatas) {
           `${parseFloat(result.events[0].parsedJson?.bet_amount) / 1000000000}`,
           {},
           result.events[0].parsedJson?.winning,
-          "Catch'em All"
+          "Catchem All"
         );
 
         setStatusGame("over");
@@ -146,9 +147,15 @@ export default function CatchemAll(statsDatas) {
     }
   };
 
+  const getHistories = async (e) => {
+    const resp = await getAllHistories('Catchem All', 10);
+    setRecentlyPlay(resp);
+  };
+
   useEffect(() => {
     setDomLoaded(true);
     getMinMax();
+    getHistories();
   }, []);
 
   useEffect(() => {
@@ -194,7 +201,7 @@ export default function CatchemAll(statsDatas) {
               <div className="relative overflow-x-auto shadow-md rounded-b-lg">
                 <table className="w-full text-base text-left text-gray-500 dark:text-gray-400 font-coolvetica">
                   <tbody>
-                    {stats.slice(0, 10).map((stat, index) => (
+                    {RecentlyPlay?.map((stat, index) => (
                       <tr
                         key={index}
                         className="border-b border-[#2F3030] dark:border-[#2F3030] text-white"
@@ -204,10 +211,16 @@ export default function CatchemAll(statsDatas) {
                           scope="row"
                           className="px-6 py-2 font-medium whitespace-nowrap dark:text-white inline-flex"
                         >
-                          {stat.player} choose {stat.game} with result
-                          {stat.profit < 0 ? (
+
+                          {stat.walletAddress.substr(0, 4) +
+                            "....." +
+                            stat.walletAddress.substr(
+                              stat.walletAddress.length - 4,
+                              stat.walletAddress.length
+                            )}{" "} attempted to catch but {stat.result}{" "}
+                          {stat.result === "lose" ? (
                             <div
-                              className="flex items-center justify-center"
+                              className="ml-3 flex items-center justify-center"
                               style={{ color: "red" }}
                             >
                               <img
@@ -215,11 +228,12 @@ export default function CatchemAll(statsDatas) {
                                 src="/images/sui_brand.png"
                                 alt="Sui Brand"
                               />
-                              {stat.profit}
+                              -
+                              {(Number(stat.wager)).toFixed(2)}
                             </div>
                           ) : (
                             <div
-                              className="flex items-center justify-center"
+                              className="ml-3 flex items-center justify-center"
                               style={{ color: "green" }}
                             >
                               <img
@@ -227,7 +241,7 @@ export default function CatchemAll(statsDatas) {
                                 src="/images/sui_brand.png"
                                 alt="Sui Brand"
                               />
-                              +{stat.profit}
+                              +{(Number(stat.wager)).toFixed(2)}
                             </div>
                           )}
                         </th>
@@ -235,7 +249,7 @@ export default function CatchemAll(statsDatas) {
                           scope="row"
                           className="px-6 py-2 font-medium whitespace-nowrap text-end dark:text-white"
                         >
-                          {stat.time}
+                          {moment(Number(stat.__createdtime__)).fromNow()}
                         </th>
                       </tr>
                     ))}
@@ -345,7 +359,7 @@ export default function CatchemAll(statsDatas) {
                       {wallet?.connected ? (
                         <>
                           {Number(TotalWager) <= Number(MaxBet) &&
-                          Number(TotalWager) >= Number(MinBet) ? (
+                            Number(TotalWager) >= Number(MinBet) ? (
                             <button
                               onClick={playGame}
                               className="w-full py-2 bg-primary-800 rounded-lg text-black font-bold"
@@ -409,7 +423,10 @@ export default function CatchemAll(statsDatas) {
                     )}
                     <div className="mt-6 play-wrapper text-center">
                       <button
-                        onClick={() => setStatusGame("ready")}
+                        onClick={() => {
+                          setStatusGame("ready");
+                          getHistories();
+                        }}
                         className="w-full py-2 bg-primary-800 rounded-lg text-black font-bold"
                       >
                         Try Again
