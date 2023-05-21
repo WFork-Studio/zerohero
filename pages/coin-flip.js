@@ -534,7 +534,7 @@ export default function CoinFlip(statsDatas) {
               <div className="relative overflow-x-auto shadow-md rounded-b-lg">
                 <table className="w-full text-base text-left text-gray-500 dark:text-gray-400 font-coolvetica">
                   <tbody>
-                    {RecentlyPlay.map((stat, index) => (
+                    {RecentlyPlay?.map((stat, index) => (
                       <tr
                         key={index}
                         className="border-b border-[#2F3030] dark:border-[#2F3030] text-white"
@@ -544,8 +544,16 @@ export default function CoinFlip(statsDatas) {
                           scope="row"
                           className="px-6 py-2 font-medium whitespace-nowrap dark:text-white inline-flex"
                         >
-                          {stat.sender} choose {stat.result} with result
-                          {Number(stat.profit) < 0 ? (
+                          {stat.walletAddress.substr(0, 4) +
+                            "....." +
+                            stat.walletAddress.substr(
+                              stat.walletAddress.length - 4,
+                              stat.walletAddress.length
+                            )}{" "}
+                          choose{" "}
+                          {stat.gameData?.choice?.charAt(0).toUpperCase() + stat.gameData?.choice?.slice(1)}{" "}
+                          with result
+                          {stat.result === "lose" ? (
                             <div
                               className="flex items-center justify-center"
                               style={{ color: "red" }}
@@ -555,7 +563,8 @@ export default function CoinFlip(statsDatas) {
                                 src="/images/sui_brand.png"
                                 alt="Sui Brand"
                               />
-                              {stat.profit}
+                              -
+                              {(Number(stat.wager)).toFixed(2)}
                             </div>
                           ) : (
                             <div
@@ -567,7 +576,7 @@ export default function CoinFlip(statsDatas) {
                                 src="/images/sui_brand.png"
                                 alt="Sui Brand"
                               />
-                              +{(Number(stat.profit) / 100000000).toFixed(2)}
+                              +{(Number(stat.wager)).toFixed(2)}
                             </div>
                           )}
                         </th>
@@ -575,7 +584,7 @@ export default function CoinFlip(statsDatas) {
                           scope="row"
                           className="px-6 py-2 font-medium whitespace-nowrap text-end dark:text-white"
                         >
-                          {stat.time}
+                          {moment(Number(stat.__createdtime__)).fromNow()}
                         </th>
                       </tr>
                     ))}

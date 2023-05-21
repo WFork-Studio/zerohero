@@ -448,7 +448,7 @@ export default function CatchemAll(statsDatas) {
               <div className="relative overflow-x-auto shadow-md rounded-b-lg">
                 <table className="w-full text-base text-left text-gray-500 dark:text-gray-400 font-coolvetica">
                   <tbody>
-                    {stats.slice(0, 10).map((stat, index) => (
+                    {RecentlyPlay?.map((stat, index) => (
                       <tr
                         key={index}
                         className="border-b border-[#2F3030] dark:border-[#2F3030] text-white"
@@ -458,10 +458,16 @@ export default function CatchemAll(statsDatas) {
                           scope="row"
                           className="px-6 py-2 font-medium whitespace-nowrap dark:text-white inline-flex"
                         >
-                          {stat.player} choose {stat.game} with result
-                          {stat.profit < 0 ? (
+
+                          {stat.walletAddress.substr(0, 4) +
+                            "....." +
+                            stat.walletAddress.substr(
+                              stat.walletAddress.length - 4,
+                              stat.walletAddress.length
+                            )}{" "} attempted to catch but {stat.result}{" "}
+                          {stat.result === "lose" ? (
                             <div
-                              className="flex items-center justify-center"
+                              className="ml-3 flex items-center justify-center"
                               style={{ color: "red" }}
                             >
                               <img
@@ -469,11 +475,12 @@ export default function CatchemAll(statsDatas) {
                                 src="/images/sui_brand.png"
                                 alt="Sui Brand"
                               />
-                              {stat.profit}
+                              -
+                              {(Number(stat.wager)).toFixed(2)}
                             </div>
                           ) : (
                             <div
-                              className="flex items-center justify-center"
+                              className="ml-3 flex items-center justify-center"
                               style={{ color: "green" }}
                             >
                               <img
@@ -481,7 +488,7 @@ export default function CatchemAll(statsDatas) {
                                 src="/images/sui_brand.png"
                                 alt="Sui Brand"
                               />
-                              +{stat.profit}
+                              +{(Number(stat.wager)).toFixed(2)}
                             </div>
                           )}
                         </th>
@@ -489,7 +496,7 @@ export default function CatchemAll(statsDatas) {
                           scope="row"
                           className="px-6 py-2 font-medium whitespace-nowrap text-end dark:text-white"
                         >
-                          {stat.time}
+                          {moment(Number(stat.__createdtime__)).fromNow()}
                         </th>
                       </tr>
                     ))}

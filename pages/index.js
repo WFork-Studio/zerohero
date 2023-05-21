@@ -102,7 +102,7 @@ export default function Home() {
                           </div>
                           <div>
                             <button
-                              className="w-full py-4 px-10 bg-primary-800 rounded-lg text-black font-bold"
+                              className="w-full py-4 px-4 md:px-10 bg-primary-800 rounded-lg text-black font-bold"
                               style={{ minWidth: "max-content" }}
                             >
                               Shop Now
