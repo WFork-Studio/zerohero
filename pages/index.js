@@ -3,6 +3,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import MediaQuery from "react-responsive";
 import { useEffect, useState } from "react";
+import Footer from "../components/Footer";
 import Link from "next/link";
 import {
   getAllHistories,
@@ -10,6 +11,7 @@ import {
   getAllHistoriesTotalWager,
 } from "./api/db_services";
 import moment from "moment/moment";
+import LoadingSpinner from "../components/Spinner";
 
 export default function Home() {
   const [domLoaded, setDomLoaded] = useState(false);
@@ -19,7 +21,7 @@ export default function Home() {
   const [countHistories, setCountHistories] = useState([]);
   const [totalWager, setTotalWager] = useState([]);
   const getHistories = async (e) => {
-    const resp = await getAllHistories(null, 3);
+    const resp = await getAllHistories(null, 5);
     const count = await getAllHistoriesCount();
     const wager = await getAllHistoriesTotalWager();
 
@@ -42,7 +44,7 @@ export default function Home() {
   useEffect(() => {
     setDomLoaded(true);
   }, []);
-  if (isLoad)
+  if (isLoad) {
     return (
       <>
         {domLoaded && (
@@ -349,7 +351,12 @@ export default function Home() {
                           {moment(Number(stat.__createdtime__)).fromNow()}
                         </td>
                         <td className="px-6 text-center">
-                          {stat.walletAddress}
+                          {stat.walletAddress.substr(0, 4) +
+                            "....." +
+                            stat.walletAddress.substr(
+                              stat.walletAddress.length - 4,
+                              stat.walletAddress.length
+                            )}{" "}
                         </td>
                         <td className="px-6">
                           <div className="flex items-center justify-center">
@@ -389,7 +396,7 @@ export default function Home() {
                 aria-label="Table navigation"
               >
                 <span className="text-sm font-normal text-white dark:text-gray-400 pl-2">
-                  Showing{" "}
+                  {/* Showing{" "}
                   <span className="font-semibold text-white dark:text-white">
                     3
                   </span>{" "}
@@ -397,7 +404,7 @@ export default function Home() {
                   <span className="font-semibold text-white dark:text-white">
                     {countHistories[0].numberOfHistories}
                   </span>{" "}
-                  statistics data
+                  statistics data */}
                 </span>
                 <Link
                   className="inline-flex items-center -space-x-px text-white pr-2"
@@ -479,6 +486,10 @@ export default function Home() {
             </div>
           </section>
         )}
+        <Footer />
       </>
     );
+  } else {
+    return <LoadingSpinner />
+  }
 }

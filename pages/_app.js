@@ -1,6 +1,5 @@
 import "../styles/globals.css";
 import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import Head from "next/head";
 import Chatbox from "../components/Chatbox";
 import * as React from "react";
@@ -40,8 +39,6 @@ function MyApp({ Component, pageProps }) {
           <Navbar />
         </header>
         <Component {...pageProps} />
-
-        <Footer />
 
         <Chatbox />
       </WalletProvider>

@@ -218,8 +218,8 @@ a {
   position: fixed;
   bottom: 10px;
   right: 10px;
-  width: 40px;
-  height: 40px;
+  width: 70px;
+  height: 70px;
   transform: translateY(70px);
   transition: all 250ms ease-out;
   border-radius: 50%;

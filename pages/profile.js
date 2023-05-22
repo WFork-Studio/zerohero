@@ -1,5 +1,6 @@
 import { useMediaQuery } from 'react-responsive';
 import { useState, useEffect } from 'react';
+import Footer from "../components/Footer";
 
 export default function profile() {
 
@@ -117,6 +118,7 @@ export default function profile() {
 
                 </div>
             </div>
+            <Footer/>
         </>
     )
 }

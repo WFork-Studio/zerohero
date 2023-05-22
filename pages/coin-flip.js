@@ -8,6 +8,7 @@ import MediaQuery from "react-responsive";
 import { useMediaQuery } from "react-responsive";
 import { useState, useEffect } from "react";
 import moment from "moment/moment";
+import Footer from "../components/Footer";
 import {
   JsonRpcProvider,
   testnetConnection,
@@ -17,6 +18,8 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import Confetti from "react-confetti";
 import { storeHistory, getAllHistories } from "./api/db_services";
+import Sound from 'react-sound';
+import LoadingSpinner from "../components/Spinner";
 const provider = new JsonRpcProvider(testnetConnection);
 
 export async function getStaticProps() {
@@ -45,7 +48,9 @@ export default function CoinFlip(statsDatas) {
   const [StatusGame, setStatusGame] = useState("ready");
   const [IsWin, setIsWin] = useState(false);
   const [FlipResult, setFlipResult] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const stats = statsDatas.statistics;
+  const [isLoad, setisLoad] = useState();
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const isTabletOrMobile = useMediaQuery({ maxWidth: 991.9 });
 
@@ -166,6 +171,7 @@ export default function CoinFlip(statsDatas) {
   const getHistories = async (e) => {
     const resp = await getAllHistories('Coin Flip', 10);
     setRecentlyPlay(resp);
+    setisLoad(true);
   };
 
   useEffect(() => {
@@ -188,422 +194,434 @@ export default function CoinFlip(statsDatas) {
     return () => clearInterval(intervalId);
   }, [IsConfetti]);
 
-  return (
-    <>
-      {domLoaded && (
-        <div className="px-4 lg:px-10 py-10 lg:py-24 lg:grid lg:grid-cols-5">
-          {isTabletOrMobile && (
-            <div className="pb-6">
-              <h1 className="text-center text-4xl font-bold text-primary-800">
-                Coin Flip
-              </h1>
-              <h3 className="text-center text-2xl font-bold">Game</h3>
-            </div>
-          )}
-          {isDesktop && (
-            <div className="col-span-2 px-4">
+  if (isLoad) {
+    return (
+      <>
+        {domLoaded && (
+          <div className="px-4 lg:px-10 py-10 lg:py-24 lg:grid lg:grid-cols-5">
+            {isTabletOrMobile && (
               <div className="pb-6">
                 <h1 className="text-center text-4xl font-bold text-primary-800">
                   Coin Flip
                 </h1>
                 <h3 className="text-center text-2xl font-bold">Game</h3>
               </div>
-              <h1
-                className="px-6 py-3 text-center text-lg font-bold rounded-t-lg"
-                style={{ backgroundColor: "#2F3030" }}
-              >
-                Recently Play
-              </h1>
-              <div className="relative overflow-x-auto shadow-md rounded-b-lg">
-                <table className="w-full text-base text-left text-gray-500 dark:text-gray-400 font-coolvetica">
-                  <tbody>
-                    {RecentlyPlay?.map((stat, index) => (
-                      <tr
-                        key={index}
-                        className="border-b border-[#2F3030] dark:border-[#2F3030] text-white"
-                        style={{ backgroundColor: "#262626" }}
-                      >
-                        <th
-                          scope="row"
-                          className="px-6 py-2 font-medium whitespace-nowrap dark:text-white inline-flex"
-                        >
-                          {stat.walletAddress.substr(0, 4) +
-                            "....." +
-                            stat.walletAddress.substr(
-                              stat.walletAddress.length - 4,
-                              stat.walletAddress.length
-                            )}{" "}
-                          choose{" "}
-                          {stat.gameData?.choice?.charAt(0).toUpperCase() + stat.gameData?.choice?.slice(1)}{" "}
-                          with result
-                          {stat.result === "lose" ? (
-                            <div
-                              className="flex items-center justify-center"
-                              style={{ color: "red" }}
-                            >
-                              <img
-                                width={25}
-                                src="/images/sui_brand.png"
-                                alt="Sui Brand"
-                              />
-                              -
-                              {(Number(stat.wager)).toFixed(2)}
-                            </div>
-                          ) : (
-                            <div
-                              className="flex items-center justify-center"
-                              style={{ color: "green" }}
-                            >
-                              <img
-                                width={25}
-                                src="/images/sui_brand.png"
-                                alt="Sui Brand"
-                              />
-                              +{(Number(stat.wager)).toFixed(2)}
-                            </div>
-                          )}
-                        </th>
-                        <th
-                          scope="row"
-                          className="px-6 py-2 font-medium whitespace-nowrap text-end dark:text-white"
-                        >
-                          {moment(Number(stat.__createdtime__)).fromNow()}
-                        </th>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-          <div className="col-span-3 w-1/3 h-full w-full mr-4 h-60 bg-gradient-to-r p-[6px] from-[#6002BF] via-[#C74CDB] to-[#4C6BDB] rounded-lg">
-            {StatusGame === "ready" ? (
-              <div className="lg:grid lg:grid-cols-5 justify-center h-full bg-[#2F3030] text-white p-4 rounded-lg">
-                <div className="col-span-2 xl:px-2 2xl:px-8 self-center">
-                  {Picked ? (
-                    <img className="mx-auto" src="/images/tail-coin.png" />
-                  ) : (
-                    <img className="mx-auto" src="/images/head-coin.png" />
-                  )}
-                </div>
-                <div className="col-span-3 lg:px-10 self-center">
-                  <h1 className="text-center text-xl font-bold">
-                    Set Your Bet
+            )}
+            {isDesktop && (
+              <div className="col-span-2 px-4">
+                <div className="pb-6">
+                  <h1 className="text-center text-4xl font-bold text-primary-800">
+                    Coin Flip
                   </h1>
-                  <div className="2xl:px-10">
-                    <div className="flow-root">
-                      <div className="grid grid-cols-2">
-                        <label className="block mb-2 text-sm font-medium text-white text-start">
-                          Wager
-                        </label>
-                        <label className="block mb-2 text-sm font-medium text-white text-end">
-                          Min {MinBet}
-                        </label>
-                      </div>
-                      <input
-                        value={Wager}
-                        onChange={(e) => {
-                          const inputValue = e.target.value;
-                          const sanitizedValue = inputValue.replace(
-                            /[^0-9.]/g,
-                            ""
-                          );
-                          setWager(sanitizedValue);
-                        }}
-                        type="text"
-                        className="bg-black border border-primary-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-2.5"
-                        placeholder=""
-                      />
-                      <label className="block mb-2 text-sm font-bold text-primary-500 bg-primary-800 w-fit float-right p-1 rounded-md text-end mt-1.5">
-                        Max {MaxBet}
-                      </label>
-                    </div>
-                    <div>
-                      <label className="block mb-2 text-sm font-medium text-white">
-                        Multiple Bets
-                      </label>
-                      <input
-                        value={MultipleBets}
-                        disabled
-                        type="text"
-                        className="bg-black border border-primary-500 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-2.5"
-                        placeholder=""
-                      />
-                      <input
-                        value={MultipleBets}
-                        onChange={(e) => {
-                          setMultipleBets(e.target.value);
-                        }}
-                        type="range"
-                        min={1}
-                        max={5}
-                        step={1}
-                        className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
-                      />
-                    </div>
-                    <div className="mt-4 grid grid-cols-2 space-x-4">
-                      <div>
-                        <label className="block mb-2 text-sm font-medium text-white">
-                          Max Payout
-                        </label>
-                        <input
-                          value={MaxPayout}
-                          onChange={(e) => {
-                            setMaxPayout(e.target.value);
-                          }}
-                          type="text"
-                          disabled
-                          className="bg-black border border-primary-500 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-2.5"
-                          placeholder=""
-                        />
-                      </div>
-                      <div>
-                        <label className="block mb-2 text-sm font-medium text-white text-end">
-                          Total Wager
-                        </label>
-                        <input
-                          value={TotalWager}
-                          onChange={(e) => {
-                            setTotalWager(e.target.value);
-                          }}
-                          type="text"
-                          disabled
-                          className="bg-black border border-primary-500 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-2.5"
-                          placeholder=""
-                        />
-                      </div>
-                    </div>
-                    <div className="mt-4">
-                      <label className="block mb-2 text-sm font-medium text-white">
-                        Pick a Side
-                      </label>
-                      <div className="grid grid-cols-2 space-x-4">
-                        <div>
-                          <input
-                            type="radio"
-                            id="heads"
-                            name="pick"
-                            value="heads"
-                            className="hidden peer"
-                            defaultChecked
-                            onClick={() => {
-                              setPicked(false);
-                            }}
-                          />
-                          <label
-                            htmlFor="heads"
-                            className="justify-center inline-flex items-center w-full py-2 text-white bg-black border border-primary-500 rounded-lg cursor-pointer peer-checked:bg-primary-500 hover:text-white hover:bg-primary-500"
-                          >
-                            <div className="block">
-                              <div className="w-full text-lg font-semibold">
-                                HEADS
-                              </div>
-                            </div>
-                          </label>
-                        </div>
-                        <div>
-                          <input
-                            type="radio"
-                            id="tails"
-                            name="pick"
-                            value="tails"
-                            className="hidden peer"
-                            onClick={() => {
-                              setPicked(true);
-                            }}
-                          />
-                          <label
-                            htmlFor="tails"
-                            className="justify-center inline-flex items-center w-full py-2 text-white bg-black border border-primary-500 rounded-lg cursor-pointer peer-checked:bg-primary-500 hover:text-white hover:bg-primary-500"
-                          >
-                            <div className="block">
-                              <div className="w-full text-lg font-semibold">
-                                TAILS
-                              </div>
-                            </div>
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="mt-6 play-wrapper">
-                      {wallet?.connected ? (
-                        <>
-                          {Number(TotalWager) <= Number(MaxBet) &&
-                            Number(TotalWager) >= Number(MinBet) ? (
-                            <button
-                              onClick={playGame}
-                              className="w-full py-2 bg-primary-800 rounded-lg text-black font-bold"
-                            >
-                              PLAY
-                            </button>
-                          ) : (
-                            <button
-                              disabled
-                              className="w-full py-2 bg-gray-500 rounded-lg text-gray-300 text-sm font-bold"
-                            >
-                              Total Bet doesn't meet min/max requirements.
-                            </button>
-                          )}
-                        </>
-                      ) : (
-                        <ConnectButton label="Connect Wallet" />
-                      )}
-                    </div>
-                  </div>
+                  <h3 className="text-center text-2xl font-bold">Game</h3>
                 </div>
-              </div>
-            ) : (
-              <div className="justify-center h-full bg-[#2F3030] text-white p-4 rounded-lg grid">
-                <div className="lg:px-10 self-center">
-                  <div className="2xl:px-14">
-                    {IsWin ? (
-                      <div className="text-center">
-                        <label className="block mb-2 text-5xl font-bold text-white">
-                          WIN
-                        </label>
-                        <label
-                          className="block mb-2 text-3xl font-medium"
-                          style={{ color: "green" }}
+                <h1
+                  className="px-6 py-3 text-center text-lg font-bold rounded-t-lg"
+                  style={{ backgroundColor: "#2F3030" }}
+                >
+                  Recently Play
+                </h1>
+                <div className="relative overflow-x-auto shadow-md rounded-b-lg">
+                  <table className="w-full text-base text-left text-gray-500 dark:text-gray-400 font-coolvetica">
+                    <tbody>
+                      {RecentlyPlay?.map((stat, index) => (
+                        <tr
+                          key={index}
+                          className="border-b border-[#2F3030] dark:border-[#2F3030] text-white"
+                          style={{ backgroundColor: "#262626" }}
                         >
-                          +{MaxPayout}
-                        </label>
-                        {FlipResult === "head" ? (
-                          <img
-                            className="mx-auto"
-                            style={{ width: "15em" }}
-                            src="/images/head-coin.png"
-                          />
-                        ) : (
-                          <img
-                            className="mx-auto"
-                            style={{ width: "15em" }}
-                            src="/images/tail-coin.png"
-                          />
-                        )}
-                      </div>
-                    ) : (
-                      <div className="text-center">
-                        <label className="block mb-2 text-5xl font-bold text-white">
-                          LOSE
-                        </label>
-                        <label
-                          className="block mb-2 text-3xl font-medium"
-                          style={{ color: "red" }}
-                        >
-                          -{TotalWager}
-                        </label>
-                        {FlipResult !== "head" ? (
-                          <img
-                            className="mx-auto"
-                            style={{ width: "15em" }}
-                            src="/images/head-coin.png"
-                          />
-                        ) : (
-                          <img
-                            className="mx-auto"
-                            style={{ width: "15em" }}
-                            src="/images/tail-coin.png"
-                          />
-                        )}
-                      </div>
-                    )}
-                    <div className="mt-6 play-wrapper text-center">
-                      <button
-                        onClick={() => {
-                          setStatusGame("ready");
-                          getHistories();
-                        }}
-                        className="w-full py-2 bg-primary-800 rounded-lg text-black font-bold"
-                      >
-                        Try Again
-                      </button>
-                    </div>
-                  </div>
+                          <th
+                            scope="row"
+                            className="px-6 py-2 font-medium whitespace-nowrap dark:text-white inline-flex"
+                          >
+                            {stat.walletAddress.substr(0, 4) +
+                              "....." +
+                              stat.walletAddress.substr(
+                                stat.walletAddress.length - 4,
+                                stat.walletAddress.length
+                              )}{" "}
+                            choose{" "}
+                            {stat.gameData?.choice?.charAt(0).toUpperCase() + stat.gameData?.choice?.slice(1)}{" "}
+                            with result
+                            {stat.result === "lose" ? (
+                              <div
+                                className="flex items-center justify-center"
+                                style={{ color: "red" }}
+                              >
+                                <img
+                                  width={25}
+                                  src="/images/sui_brand.png"
+                                  alt="Sui Brand"
+                                />
+                                -
+                                {(Number(stat.wager)).toFixed(2)}
+                              </div>
+                            ) : (
+                              <div
+                                className="flex items-center justify-center"
+                                style={{ color: "green" }}
+                              >
+                                <img
+                                  width={25}
+                                  src="/images/sui_brand.png"
+                                  alt="Sui Brand"
+                                />
+                                +{(Number(stat.wager)).toFixed(2)}
+                              </div>
+                            )}
+                          </th>
+                          <th
+                            scope="row"
+                            className="px-6 py-2 font-medium whitespace-nowrap text-end dark:text-white"
+                          >
+                            {moment(Number(stat.__createdtime__)).fromNow()}
+                          </th>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             )}
-          </div>
-          {isTabletOrMobile && (
-            <div className="col-span- mt-6">
-              <h1
-                className="px-6 py-3 text-center text-lg font-bold rounded-t-lg"
-                style={{ backgroundColor: "#2F3030" }}
-              >
-                Recently Play
-              </h1>
-              <div className="relative overflow-x-auto shadow-md rounded-b-lg">
-                <table className="w-full text-base text-left text-gray-500 dark:text-gray-400 font-coolvetica">
-                  <tbody>
-                    {RecentlyPlay?.map((stat, index) => (
-                      <tr
-                        key={index}
-                        className="border-b border-[#2F3030] dark:border-[#2F3030] text-white"
-                        style={{ backgroundColor: "#262626" }}
-                      >
-                        <th
-                          scope="row"
-                          className="px-6 py-2 font-medium whitespace-nowrap dark:text-white inline-flex"
-                        >
-                          {stat.walletAddress.substr(0, 4) +
-                            "....." +
-                            stat.walletAddress.substr(
-                              stat.walletAddress.length - 4,
-                              stat.walletAddress.length
-                            )}{" "}
-                          choose{" "}
-                          {stat.gameData?.choice?.charAt(0).toUpperCase() + stat.gameData?.choice?.slice(1)}{" "}
-                          with result
-                          {stat.result === "lose" ? (
-                            <div
-                              className="flex items-center justify-center"
-                              style={{ color: "red" }}
+            <div className="col-span-3 w-1/3 h-full w-full mr-4 h-60 bg-gradient-to-r p-[6px] from-[#6002BF] via-[#C74CDB] to-[#4C6BDB] rounded-lg">
+              {StatusGame === "ready" ? (
+                <div className="lg:grid lg:grid-cols-5 justify-center h-full bg-[#2F3030] text-white p-4 rounded-lg">
+                  <div className="col-span-2 xl:px-2 2xl:px-8 self-center">
+                    {Picked ? (
+                      <img className="mx-auto" src="/images/tail-coin.png" />
+                    ) : (
+                      <img className="mx-auto" src="/images/head-coin.png" />
+                    )}
+                  </div>
+                  <div className="col-span-3 lg:px-10 self-center">
+                    <h1 className="text-center text-xl font-bold">
+                      Set Your Bet
+                    </h1>
+                    <div className="2xl:px-10">
+                      <div className="flow-root">
+                        <div className="grid grid-cols-2">
+                          <label className="block mb-2 text-sm font-medium text-white text-start">
+                            Wager
+                          </label>
+                          <label className="block mb-2 text-sm font-medium text-white text-end">
+                            Min {MinBet}
+                          </label>
+                        </div>
+                        <input
+                          value={Wager}
+                          onChange={(e) => {
+                            const inputValue = e.target.value;
+                            const sanitizedValue = inputValue.replace(
+                              /[^0-9.]/g,
+                              ""
+                            );
+                            setWager(sanitizedValue);
+                          }}
+                          type="text"
+                          className="bg-black border border-primary-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-2.5"
+                          placeholder=""
+                        />
+                        <button onClick={() => { setWager(MaxBet) }} className="block mb-2 text-sm font-bold text-primary-500 bg-primary-800 w-fit float-right p-1 rounded-md text-end mt-1.5">
+                          Max {MaxBet}
+                        </button>
+                      </div>
+                      <div>
+                        <label className="block mb-2 text-sm font-medium text-white">
+                          Multiple Bets
+                        </label>
+                        <input
+                          value={MultipleBets}
+                          disabled
+                          type="text"
+                          className="bg-black border border-primary-500 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-2.5"
+                          placeholder=""
+                        />
+                        <input
+                          value={MultipleBets}
+                          onChange={(e) => {
+                            setMultipleBets(e.target.value);
+                          }}
+                          type="range"
+                          min={1}
+                          max={5}
+                          step={1}
+                          className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                        />
+                      </div>
+                      <div className="mt-4 grid grid-cols-2 space-x-4">
+                        <div>
+                          <label className="block mb-2 text-sm font-medium text-white">
+                            Max Payout
+                          </label>
+                          <input
+                            value={MaxPayout}
+                            onChange={(e) => {
+                              setMaxPayout(e.target.value);
+                            }}
+                            type="text"
+                            disabled
+                            className="bg-black border border-primary-500 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-2.5"
+                            placeholder=""
+                          />
+                        </div>
+                        <div>
+                          <label className="block mb-2 text-sm font-medium text-white text-end">
+                            Total Wager
+                          </label>
+                          <input
+                            value={TotalWager}
+                            onChange={(e) => {
+                              setTotalWager(e.target.value);
+                            }}
+                            type="text"
+                            disabled
+                            className="bg-black border border-primary-500 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-2.5"
+                            placeholder=""
+                          />
+                        </div>
+                      </div>
+                      <div className="mt-4">
+                        <label className="block mb-2 text-sm font-medium text-white">
+                          Pick a Side
+                        </label>
+                        <div className="grid grid-cols-2 space-x-4">
+                          <div>
+                            <input
+                              type="radio"
+                              id="heads"
+                              name="pick"
+                              value="heads"
+                              className="hidden peer"
+                              defaultChecked
+                              onClick={() => {
+                                setPicked(false);
+                                setIsPlaying(true);
+                              }}
+                            />
+                            <label
+                              htmlFor="heads"
+                              className="justify-center inline-flex items-center w-full py-2 text-white bg-black border border-primary-500 rounded-lg cursor-pointer peer-checked:bg-primary-500 hover:text-white hover:bg-primary-500"
                             >
-                              <img
-                                width={25}
-                                src="/images/sui_brand.png"
-                                alt="Sui Brand"
-                              />
-                              -
-                              {(Number(stat.wager)).toFixed(2)}
-                            </div>
+                              <div className="block">
+                                <div className="w-full text-lg font-semibold">
+                                  HEADS
+                                </div>
+                              </div>
+                            </label>
+                          </div>
+                          <div>
+                            <input
+                              type="radio"
+                              id="tails"
+                              name="pick"
+                              value="tails"
+                              className="hidden peer"
+                              onClick={() => {
+                                setPicked(true);
+                                setIsPlaying(true);
+                              }}
+                            />
+                            <label
+                              htmlFor="tails"
+                              className="justify-center inline-flex items-center w-full py-2 text-white bg-black border border-primary-500 rounded-lg cursor-pointer peer-checked:bg-primary-500 hover:text-white hover:bg-primary-500"
+                            >
+                              <div className="block">
+                                <div className="w-full text-lg font-semibold">
+                                  TAILS
+                                </div>
+                              </div>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="mt-6 play-wrapper">
+                        {wallet?.connected ? (
+                          <>
+                            {Number(TotalWager) <= Number(MaxBet) &&
+                              Number(TotalWager) >= Number(MinBet) ? (
+                              <button
+                                onClick={playGame}
+                                className="w-full py-2 bg-primary-800 rounded-lg text-black font-bold"
+                              >
+                                PLAY
+                              </button>
+                            ) : (
+                              <button
+                                disabled
+                                className="w-full py-2 bg-gray-500 rounded-lg text-gray-300 text-sm font-bold"
+                              >
+                                Total Bet doesn't meet min/max requirements.
+                              </button>
+                            )}
+                          </>
+                        ) : (
+                          <ConnectButton label="Connect Wallet" />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="justify-center h-full bg-[#2F3030] text-white p-4 rounded-lg grid">
+                  <div className="lg:px-10 self-center">
+                    <div className="2xl:px-14">
+                      {IsWin ? (
+                        <div className="text-center">
+                          <label className="block mb-2 text-5xl font-bold text-white">
+                            WIN
+                          </label>
+                          <label
+                            className="block mb-2 text-3xl font-medium"
+                            style={{ color: "green" }}
+                          >
+                            +{MaxPayout}
+                          </label>
+                          {FlipResult === "head" ? (
+                            <img
+                              className="mx-auto"
+                              style={{ width: "15em" }}
+                              src="/images/head-coin.png"
+                            />
                           ) : (
-                            <div
-                              className="flex items-center justify-center"
-                              style={{ color: "green" }}
-                            >
-                              <img
-                                width={25}
-                                src="/images/sui_brand.png"
-                                alt="Sui Brand"
-                              />
-                              +{(Number(stat.wager)).toFixed(2)}
-                            </div>
+                            <img
+                              className="mx-auto"
+                              style={{ width: "15em" }}
+                              src="/images/tail-coin.png"
+                            />
                           )}
-                        </th>
-                        <th
-                          scope="row"
-                          className="px-6 py-2 font-medium whitespace-nowrap text-end dark:text-white"
+                        </div>
+                      ) : (
+                        <div className="text-center">
+                          <label className="block mb-2 text-5xl font-bold text-white">
+                            LOSE
+                          </label>
+                          <label
+                            className="block mb-2 text-3xl font-medium"
+                            style={{ color: "red" }}
+                          >
+                            -{TotalWager}
+                          </label>
+                          {FlipResult !== "head" ? (
+                            <img
+                              className="mx-auto"
+                              style={{ width: "15em" }}
+                              src="/images/head-coin.png"
+                            />
+                          ) : (
+                            <img
+                              className="mx-auto"
+                              style={{ width: "15em" }}
+                              src="/images/tail-coin.png"
+                            />
+                          )}
+                        </div>
+                      )}
+                      <div className="mt-6 play-wrapper text-center">
+                        <button
+                          onClick={() => {
+                            setStatusGame("ready");
+                            getHistories();
+                          }}
+                          className="w-full py-2 bg-primary-800 rounded-lg text-black font-bold"
                         >
-                          {moment(Number(stat.__createdtime__)).fromNow()}
-                        </th>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                          Try Again
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
-          )}
-          <div>
-            <ToastContainer
-              toastClassName={({ type }) =>
-                contextClass[type || "default"] +
-                " relative flex p-1 min-h-10 rounded-md justify-between overflow-hidden cursor-pointer font-bold w-max"
-              }
+            {isTabletOrMobile && (
+              <div className="col-span- mt-6">
+                <h1
+                  className="px-6 py-3 text-center text-lg font-bold rounded-t-lg"
+                  style={{ backgroundColor: "#2F3030" }}
+                >
+                  Recently Play
+                </h1>
+                <div className="relative overflow-x-auto shadow-md rounded-b-lg">
+                  <table className="w-full text-base text-left text-gray-500 dark:text-gray-400 font-coolvetica">
+                    <tbody>
+                      {RecentlyPlay?.map((stat, index) => (
+                        <tr
+                          key={index}
+                          className="border-b border-[#2F3030] dark:border-[#2F3030] text-white"
+                          style={{ backgroundColor: "#262626" }}
+                        >
+                          <th
+                            scope="row"
+                            className="px-6 py-2 font-medium whitespace-nowrap dark:text-white inline-flex"
+                          >
+                            {stat.walletAddress.substr(0, 4) +
+                              "....." +
+                              stat.walletAddress.substr(
+                                stat.walletAddress.length - 4,
+                                stat.walletAddress.length
+                              )}{" "}
+                            choose{" "}
+                            {stat.gameData?.choice?.charAt(0).toUpperCase() + stat.gameData?.choice?.slice(1)}{" "}
+                            with result
+                            {stat.result === "lose" ? (
+                              <div
+                                className="flex items-center justify-center"
+                                style={{ color: "red" }}
+                              >
+                                <img
+                                  width={25}
+                                  src="/images/sui_brand.png"
+                                  alt="Sui Brand"
+                                />
+                                -
+                                {(Number(stat.wager)).toFixed(2)}
+                              </div>
+                            ) : (
+                              <div
+                                className="flex items-center justify-center"
+                                style={{ color: "green" }}
+                              >
+                                <img
+                                  width={25}
+                                  src="/images/sui_brand.png"
+                                  alt="Sui Brand"
+                                />
+                                +{(Number(stat.wager)).toFixed(2)}
+                              </div>
+                            )}
+                          </th>
+                          <th
+                            scope="row"
+                            className="px-6 py-2 font-medium whitespace-nowrap text-end dark:text-white"
+                          >
+                            {moment(Number(stat.__createdtime__)).fromNow()}
+                          </th>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+            <div>
+              <ToastContainer
+                toastClassName={({ type }) =>
+                  contextClass[type || "default"] +
+                  " relative flex p-1 min-h-10 rounded-md justify-between overflow-hidden cursor-pointer font-bold w-max"
+                }
+              />
+            </div>
+            {IsConfetti && <Confetti />}
+            <Sound
+              url="/sound/coin.mp3"
+              playStatus={isPlaying ? Sound.status.PLAYING : Sound.status.STOPPED}
+              onFinishedPlaying={() => { setIsPlaying(false); }}
             />
           </div>
-          {IsConfetti && <Confetti />}
-        </div>
-      )}
-    </>
-  );
+        )}
+        <Footer />
+      </>
+    );
+  } else {
+    return <LoadingSpinner />
+  }
 }

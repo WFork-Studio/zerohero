@@ -190,7 +190,7 @@ export default function Chatbox() {
   }
   return (
     <div className="floating-chat">
-      <i className="fa fa-comments" aria-hidden="true"></i>
+      <i className="fa fa-comments" style={{fontSize:'1.25em'}} aria-hidden="true"></i>
       <div className="chat">
         <div className="header">
           <span className="title font-coolvetica">
