@@ -222,7 +222,29 @@ export default function CoinFlip(statsDatas) {
                   Recently Play
                 </h1>
                 <div className="relative overflow-x-auto shadow-md rounded-b-lg">
-                  <table className="w-full text-base text-left text-gray-500 dark:text-gray-400 font-coolvetica">
+                  <table className="w-full text-base text-left text-gray-500 font-coolvetica">
+                    <thead class="text-lg text-white" style={{ backgroundColor: "#2F3030" }}>
+                      <tr>
+                        <th scope="col" class="px-6 py-3">
+                          Player
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                          Choice
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                          Result
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                          Wager
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                          Profit
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                          Time
+                        </th>
+                      </tr>
+                    </thead>
                     <tbody>
                       {RecentlyPlay?.map((stat, index) => (
                         <tr
@@ -232,7 +254,7 @@ export default function CoinFlip(statsDatas) {
                         >
                           <th
                             scope="row"
-                            className="px-6 py-2 font-medium whitespace-nowrap dark:text-white inline-flex"
+                            className="px-6 py-2 font-medium whitespace-nowrap text-start dark:text-white"
                           >
                             {stat.walletAddress.substr(0, 4) +
                               "....." +
@@ -240,12 +262,41 @@ export default function CoinFlip(statsDatas) {
                                 stat.walletAddress.length - 4,
                                 stat.walletAddress.length
                               )}{" "}
-                            choose{" "}
+                          </th>
+                          <th
+                            scope="row"
+                            className="px-6 py-2 font-medium whitespace-nowrap text-start dark:text-white"
+                          >
                             {stat.gameData?.choice?.charAt(0).toUpperCase() + stat.gameData?.choice?.slice(1)}{" "}
-                            with result
+                          </th>
+                          <th
+                            scope="row"
+                            className="px-6 py-2 font-medium whitespace-nowrap text-start dark:text-white"
+                          >
+                            {stat.gameData?.flipResult?.charAt(0).toUpperCase() + stat.gameData?.flipResult?.slice(1)}{" "}
+                          </th>
+                          <th
+                            scope="row"
+                            className="px-6 py-2 font-medium whitespace-nowrap text-start dark:text-white"
+                          >
+                            <div
+                              className="flex items-center"
+                            >
+                              <img
+                                width={25}
+                                src="/images/sui_brand.png"
+                                alt="Sui Brand"
+                              />
+                              {(Number(stat.wager)).toFixed(2)}
+                            </div>
+                          </th>
+                          <th
+                            scope="row"
+                            className="px-6 py-2 font-medium whitespace-nowrap dark:text-white inline-flex"
+                          >
                             {stat.result === "lose" ? (
                               <div
-                                className="flex items-center justify-center"
+                                className="flex items-center"
                                 style={{ color: "red" }}
                               >
                                 <img
@@ -258,7 +309,7 @@ export default function CoinFlip(statsDatas) {
                               </div>
                             ) : (
                               <div
-                                className="flex items-center justify-center"
+                                className="flex items-center"
                                 style={{ color: "green" }}
                               >
                                 <img
@@ -272,7 +323,7 @@ export default function CoinFlip(statsDatas) {
                           </th>
                           <th
                             scope="row"
-                            className="px-6 py-2 font-medium whitespace-nowrap text-end dark:text-white"
+                            className="px-6 py-2 font-medium whitespace-nowrap text-start dark:text-white"
                           >
                             {moment(Number(stat.__createdtime__)).fromNow()}
                           </th>
@@ -288,9 +339,15 @@ export default function CoinFlip(statsDatas) {
                 <div className="lg:grid lg:grid-cols-5 justify-center h-full bg-[#2F3030] text-white p-4 rounded-lg">
                   <div className="col-span-2 xl:px-2 2xl:px-8 self-center">
                     {Picked ? (
-                      <img className="mx-auto" src="/images/tail-coin.png" />
+                      <img onClick={() => {
+                        setPicked(false);
+                        setIsPlaying(true);
+                      }} className="mx-auto" src="/images/tail-coin.png" />
                     ) : (
-                      <img className="mx-auto" src="/images/head-coin.png" />
+                      <img onClick={() => {
+                        setPicked(true);
+                        setIsPlaying(true);
+                      }} className="mx-auto" src="/images/head-coin.png" />
                     )}
                   </div>
                   <div className="col-span-3 lg:px-10 self-center">
@@ -542,6 +599,28 @@ export default function CoinFlip(statsDatas) {
                 </h1>
                 <div className="relative overflow-x-auto shadow-md rounded-b-lg">
                   <table className="w-full text-base text-left text-gray-500 dark:text-gray-400 font-coolvetica">
+                    <thead class="text-lg text-white" style={{ backgroundColor: "#2F3030" }}>
+                      <tr>
+                        <th scope="col" class="px-6 py-3">
+                          Player
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                          Choice
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                          Result
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                          Wager
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                          Profit
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                          Time
+                        </th>
+                      </tr>
+                    </thead>
                     <tbody>
                       {RecentlyPlay?.map((stat, index) => (
                         <tr
@@ -551,7 +630,7 @@ export default function CoinFlip(statsDatas) {
                         >
                           <th
                             scope="row"
-                            className="px-6 py-2 font-medium whitespace-nowrap dark:text-white inline-flex"
+                            className="px-6 py-2 font-medium whitespace-nowrap text-start dark:text-white"
                           >
                             {stat.walletAddress.substr(0, 4) +
                               "....." +
@@ -559,12 +638,41 @@ export default function CoinFlip(statsDatas) {
                                 stat.walletAddress.length - 4,
                                 stat.walletAddress.length
                               )}{" "}
-                            choose{" "}
+                          </th>
+                          <th
+                            scope="row"
+                            className="px-6 py-2 font-medium whitespace-nowrap text-start dark:text-white"
+                          >
                             {stat.gameData?.choice?.charAt(0).toUpperCase() + stat.gameData?.choice?.slice(1)}{" "}
-                            with result
+                          </th>
+                          <th
+                            scope="row"
+                            className="px-6 py-2 font-medium whitespace-nowrap text-start dark:text-white"
+                          >
+                            {stat.gameData?.flipResult?.charAt(0).toUpperCase() + stat.gameData?.flipResult?.slice(1)}{" "}
+                          </th>
+                          <th
+                            scope="row"
+                            className="px-6 py-2 font-medium whitespace-nowrap text-start dark:text-white"
+                          >
+                            <div
+                              className="flex items-center"
+                            >
+                              <img
+                                width={25}
+                                src="/images/sui_brand.png"
+                                alt="Sui Brand"
+                              />
+                              {(Number(stat.wager)).toFixed(2)}
+                            </div>
+                          </th>
+                          <th
+                            scope="row"
+                            className="px-6 py-2 font-medium whitespace-nowrap dark:text-white inline-flex"
+                          >
                             {stat.result === "lose" ? (
                               <div
-                                className="flex items-center justify-center"
+                                className="flex items-center"
                                 style={{ color: "red" }}
                               >
                                 <img
@@ -577,7 +685,7 @@ export default function CoinFlip(statsDatas) {
                               </div>
                             ) : (
                               <div
-                                className="flex items-center justify-center"
+                                className="flex items-center"
                                 style={{ color: "green" }}
                               >
                                 <img
@@ -591,7 +699,7 @@ export default function CoinFlip(statsDatas) {
                           </th>
                           <th
                             scope="row"
-                            className="px-6 py-2 font-medium whitespace-nowrap text-end dark:text-white"
+                            className="px-6 py-2 font-medium whitespace-nowrap text-start dark:text-white"
                           >
                             {moment(Number(stat.__createdtime__)).fromNow()}
                           </th>
@@ -612,12 +720,13 @@ export default function CoinFlip(statsDatas) {
             </div>
             {IsConfetti && <Confetti />}
             <Sound
-              url="/sound/coin.mp3"
+              url="/sound/coin-sound.mp3"
               playStatus={isPlaying ? Sound.status.PLAYING : Sound.status.STOPPED}
               onFinishedPlaying={() => { setIsPlaying(false); }}
             />
-          </div>
-        )}
+          </div >
+        )
+        }
         <Footer />
       </>
     );

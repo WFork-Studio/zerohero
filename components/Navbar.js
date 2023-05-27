@@ -40,9 +40,8 @@ export default function Navbar() {
         </button>
       </div>
       <div
-        className={`w-full block flex-grow lg:flex lg:items-center lg:w-auto ${
-          isOpen ? "block" : "hidden"
-        }`}
+        className={`w-full block flex-grow lg:flex lg:items-center lg:w-auto ${isOpen ? "block" : "hidden"
+          }`}
       >
         <div className="text-sm text-center lg:flex-grow font-coolveticaCondensed text-white text-xl/8">
           <Link
@@ -72,21 +71,50 @@ export default function Navbar() {
             Connect Wallet
           </button> */}
           <ConnectButton label="Connect Wallet" />
-          <Link
-            href="/profile"
-            className="mx-4 rounded-full border-4 p-2 hover:border-[#00f0ff] transition-all duration-200"
-          >
-            <svg
-              className="w-6 h-6"
-              viewBox="0 0 1024 1024"
-              xmlns="http://www.w3.org/2000/svg"
+          {wallet?.connected &&
+            <Link
+              href="/profile"
+              className="mx-4 rounded-full border-4 p-2 hover:border-[#00f0ff] transition-all duration-200"
             >
-              <path
-                fill="white"
-                d="M288 320a224 224 0 1 0 448 0 224 224 0 1 0-448 0zm544 608H160a32 32 0 0 1-32-32v-96a160 160 0 0 1 160-160h448a160 160 0 0 1 160 160v96a32 32 0 0 1-32 32z"
-              ></path>
-            </svg>
-          </Link>
+              <svg
+                className="w-6 h-6"
+                viewBox="0 0 1024 1024"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill="white"
+                  d="M288 320a224 224 0 1 0 448 0 224 224 0 1 0-448 0zm544 608H160a32 32 0 0 1-32-32v-96a160 160 0 0 1 160-160h448a160 160 0 0 1 160 160v96a32 32 0 0 1-32 32z"
+                ></path>
+              </svg>
+            </Link>
+          }
+          
+<button id="dropdownUserAvatarButton" data-dropdown-toggle="dropdownAvatar" class="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" type="button">
+    <span class="sr-only">Open user menu</span>
+    <img class="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-1.jpg" alt="user photo"/>
+</button>
+
+<div id="dropdownAvatar" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+    <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
+      <div>Bonnie Green</div>
+      <div class="font-medium truncate">name@flowbite.com</div>
+    </div>
+    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownUserAvatarButton">
+      <li>
+        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
+      </li>
+      <li>
+        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
+      </li>
+      <li>
+        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
+      </li>
+    </ul>
+    <div class="py-2">
+      <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</a>
+    </div>
+</div>
+
         </div>
       </div>
     </nav>

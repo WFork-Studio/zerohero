@@ -205,6 +205,25 @@ export default function CatchemAll(statsDatas) {
                 </h1>
                 <div className="relative overflow-x-auto shadow-md rounded-b-lg">
                   <table className="w-full text-base text-left text-gray-500 dark:text-gray-400 font-coolvetica">
+                    <thead class="text-lg text-white" style={{ backgroundColor: "#2F3030" }}>
+                      <tr>
+                        <th scope="col" class="px-6 py-3">
+                          Player
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                          Result
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                          Wager
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                          Profit
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                          Time
+                        </th>
+                      </tr>
+                    </thead>
                     <tbody>
                       {RecentlyPlay?.map((stat, index) => (
                         <tr
@@ -214,18 +233,43 @@ export default function CatchemAll(statsDatas) {
                         >
                           <th
                             scope="row"
-                            className="px-6 py-2 font-medium whitespace-nowrap dark:text-white inline-flex"
+                            className="px-6 py-2 font-medium whitespace-nowrap text-start dark:text-white"
                           >
-
                             {stat.walletAddress.substr(0, 4) +
                               "....." +
                               stat.walletAddress.substr(
                                 stat.walletAddress.length - 4,
                                 stat.walletAddress.length
-                              )}{" "} attempted to catch but {stat.result}{" "}
+                              )}{" "}
+                          </th>
+                          <th
+                            scope="row"
+                            className="px-6 py-2 font-medium whitespace-nowrap text-start dark:text-white"
+                          >
+                            {stat?.result.charAt(0).toUpperCase() + stat?.result.slice(1)}{" "}
+                          </th>
+                          <th
+                            scope="row"
+                            className="px-6 py-2 font-medium whitespace-nowrap text-start dark:text-white"
+                          >
+                            <div
+                              className="flex items-center"
+                            >
+                              <img
+                                width={25}
+                                src="/images/sui_brand.png"
+                                alt="Sui Brand"
+                              />
+                              {(Number(stat.wager)).toFixed(2)}
+                            </div>
+                          </th>
+                          <th
+                            scope="row"
+                            className="px-6 py-2 font-medium whitespace-nowrap dark:text-white inline-flex"
+                          >
                             {stat.result === "lose" ? (
                               <div
-                                className="ml-3 flex items-center justify-center"
+                                className="flex items-center"
                                 style={{ color: "red" }}
                               >
                                 <img
@@ -238,7 +282,7 @@ export default function CatchemAll(statsDatas) {
                               </div>
                             ) : (
                               <div
-                                className="ml-3 flex items-center justify-center"
+                                className="flex items-center"
                                 style={{ color: "green" }}
                               >
                                 <img
@@ -252,7 +296,7 @@ export default function CatchemAll(statsDatas) {
                           </th>
                           <th
                             scope="row"
-                            className="px-6 py-2 font-medium whitespace-nowrap text-end dark:text-white"
+                            className="px-6 py-2 font-medium whitespace-nowrap text-start dark:text-white"
                           >
                             {moment(Number(stat.__createdtime__)).fromNow()}
                           </th>
@@ -452,6 +496,25 @@ export default function CatchemAll(statsDatas) {
                 </h1>
                 <div className="relative overflow-x-auto shadow-md rounded-b-lg">
                   <table className="w-full text-base text-left text-gray-500 dark:text-gray-400 font-coolvetica">
+                    <thead class="text-lg text-white" style={{ backgroundColor: "#2F3030" }}>
+                      <tr>
+                        <th scope="col" class="px-6 py-3">
+                          Player
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                          Result
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                          Wager
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                          Profit
+                        </th>
+                        <th scope="col" class="px-6 py-3">
+                          Time
+                        </th>
+                      </tr>
+                    </thead>
                     <tbody>
                       {RecentlyPlay?.map((stat, index) => (
                         <tr
@@ -461,18 +524,43 @@ export default function CatchemAll(statsDatas) {
                         >
                           <th
                             scope="row"
-                            className="px-6 py-2 font-medium whitespace-nowrap dark:text-white inline-flex"
+                            className="px-6 py-2 font-medium whitespace-nowrap text-start dark:text-white"
                           >
-
                             {stat.walletAddress.substr(0, 4) +
                               "....." +
                               stat.walletAddress.substr(
                                 stat.walletAddress.length - 4,
                                 stat.walletAddress.length
-                              )}{" "} attempted to catch but {stat.result}{" "}
+                              )}{" "}
+                          </th>
+                          <th
+                            scope="row"
+                            className="px-6 py-2 font-medium whitespace-nowrap text-start dark:text-white"
+                          >
+                            {stat?.result.charAt(0).toUpperCase() + stat?.result.slice(1)}{" "}
+                          </th>
+                          <th
+                            scope="row"
+                            className="px-6 py-2 font-medium whitespace-nowrap text-start dark:text-white"
+                          >
+                            <div
+                              className="flex items-center"
+                            >
+                              <img
+                                width={25}
+                                src="/images/sui_brand.png"
+                                alt="Sui Brand"
+                              />
+                              {(Number(stat.wager)).toFixed(2)}
+                            </div>
+                          </th>
+                          <th
+                            scope="row"
+                            className="px-6 py-2 font-medium whitespace-nowrap dark:text-white inline-flex"
+                          >
                             {stat.result === "lose" ? (
                               <div
-                                className="ml-3 flex items-center justify-center"
+                                className="flex items-center"
                                 style={{ color: "red" }}
                               >
                                 <img
@@ -485,7 +573,7 @@ export default function CatchemAll(statsDatas) {
                               </div>
                             ) : (
                               <div
-                                className="ml-3 flex items-center justify-center"
+                                className="flex items-center"
                                 style={{ color: "green" }}
                               >
                                 <img
@@ -499,7 +587,7 @@ export default function CatchemAll(statsDatas) {
                           </th>
                           <th
                             scope="row"
-                            className="px-6 py-2 font-medium whitespace-nowrap text-end dark:text-white"
+                            className="px-6 py-2 font-medium whitespace-nowrap text-start dark:text-white"
                           >
                             {moment(Number(stat.__createdtime__)).fromNow()}
                           </th>
