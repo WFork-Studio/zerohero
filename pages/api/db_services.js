@@ -300,6 +300,35 @@ export async function getPlayerBets(walletAddress) {
   }
 }
 
+export async function getPlayerBiggestBet(walletAddress) {
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", authKey);
+
+  var raw = JSON.stringify({
+    operation: "sql",
+    sql: `SELECT MAX(CAST(wager as float)) AS biggestBet FROM zerohero_app.histories WHERE walletAddress = "${walletAddress}"`,
+  });
+
+  var requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow",
+  };
+
+  try {
+    const response = await fetch(
+      "https://zerohero-wfs.harperdbcloud.com",
+      requestOptions
+    );
+    const result_1 = await response.text();
+    return JSON.parse(result_1);
+  } catch (error) {
+    return console.log("error", error);
+  }
+}
+
 export async function getPlayerFavoriteGame(walletAddress) {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");

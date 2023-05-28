@@ -2,7 +2,7 @@ import { useMediaQuery } from 'react-responsive';
 import { useState, useEffect } from 'react';
 import Footer from "../components/Footer";
 import { useWallet } from '@suiet/wallet-kit';
-import { getPlayerHistories, getPlayerWager, getPlayerProfit, getPlayerWins, getPlayerBets, getPlayerFavoriteGame } from './api/db_services';
+import { getPlayerHistories, getPlayerWager, getPlayerProfit, getPlayerWins, getPlayerBets, getPlayerFavoriteGame, getPlayerBiggestBet } from './api/db_services';
 import LoadingSpinner from '../components/Spinner';
 import moment from 'moment';
 import { useTranslation } from 'next-i18next'
@@ -23,6 +23,7 @@ export default function profile() {
     const [totalProfit, setTotalProfit] = useState();
     const [totalWins, setTotalWins] = useState();
     const [totalBets, setTotalBets] = useState();
+    const [totalBiggestBet, setTotalBiggestBet] = useState();
     const [totalFavoriteGame, setTotalFavoriteGame] = useState();
 
     const getHistories = async (e) => {
@@ -32,12 +33,14 @@ export default function profile() {
         const wins = await getPlayerWins(wallet.address);
         const bets = await getPlayerBets(wallet.address);
         const fav = await getPlayerFavoriteGame(wallet.address);
+        const biggest_bet = await getPlayerBiggestBet(wallet.address);
         setPlayerHistories(resp);
         setTotalWager(wager[0]?.totalWager);
         setTotalProfit(profit[0]?.totalProfit);
         setTotalWins(wins[0]?.totalWins);
         setTotalBets(bets[0]?.totalBets);
         setTotalFavoriteGame(fav[0]?.gameName);
+        setTotalBiggestBet(biggest_bet[0].biggestBet);
         setisLoad(true);
     };
 
@@ -76,7 +79,7 @@ export default function profile() {
                                     </div>
                                     <div className='py-4 rounded-lg' style={{ backgroundColor: "#262626" }}>
                                         <div className='flex justify-center items-center'>
-                                            <p class="font-bold text-white text-xl pl-4">10</p>
+                                            <p class="font-bold text-white text-xl pl-4">{totalBiggestBet.toFixed(2)}</p>
                                             <img
                                                 src="/images/sui_brand.png"
                                                 alt="Sui Brand"
