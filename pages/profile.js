@@ -10,7 +10,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from "next/router";
 
 export function configureMoment(langauge) {
-  moment.locale(langauge);
+    moment.locale(langauge);
 }
 
 export default function profile() {
@@ -52,7 +52,7 @@ export default function profile() {
     }, [wallet]);
 
     useEffect(() => {
-      configureMoment(locale);
+        configureMoment(locale);
     }, [locale]);
 
     useEffect(() => {
@@ -96,9 +96,7 @@ export default function profile() {
                                 </div>
                                 <div class="relative">
                                     <div class="w-48 h-48 bg-gray-400 mx-auto rounded-full shadow-2xl absolute inset-x-0 top-0 -mt-24 flex items-center justify-center text-white">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
-                                        </svg>
+                                        <img className='rounded-full' src='/images/badges/bronze-1.png' alt='badges'/>
                                     </div>
                                 </div>
 
@@ -131,8 +129,15 @@ export default function profile() {
                             </div>
 
                             <div class="mt-10 md:mt-20 text-center border-b border-[#8b8b8b] pb-12">
-                                <h1 class="text-4xl font-medium text-white">0x9a76....e64aef</h1>
-                                <p class="font-medium text-white mt-3">Beginner Player</p>
+                                <h1 class="text-4xl font-medium text-white">
+                                    {wallet?.address.substr(0, 4) +
+                                        "....." +
+                                        wallet?.address.substr(
+                                            wallet?.address.length - 4,
+                                            wallet?.address.length
+                                        )}{" "}
+                                </h1>
+                                <p class="font-medium text-2xl text-white mt-3" style={{color: '#d18b47'}}>Bronze 1</p>
 
 
                                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -143,19 +148,19 @@ export default function profile() {
                                         >
                                             <tr className="text-lg 2xl:text-xl">
                                                 <th scope="col" className="px-6 py-3">
-                                                {t('profile_content.game')}
+                                                    {t('profile_content.game')}
                                                 </th>
                                                 <th scope="col" className="px-6 py-3">
-                                                {t('profile_content.time')}
+                                                    {t('profile_content.time')}
                                                 </th>
                                                 <th scope="col" className="px-6 py-3">
-                                                {t('profile_content.player')}
+                                                    {t('profile_content.player')}
                                                 </th>
                                                 <th scope="col" className="px-6 py-3">
-                                                {t('profile_content.wager')}
+                                                    {t('profile_content.wager')}
                                                 </th>
                                                 <th scope="col" className="px-6 py-3">
-                                                {t('profile_content.profit')}
+                                                    {t('profile_content.profit')}
                                                 </th>
                                             </tr>
                                         </thead>
@@ -238,9 +243,9 @@ export default function profile() {
 }
 
 export async function getStaticProps({ locale }) {
-  return {
-    props: {
-      ...(await serverSideTranslations(locale, ['global']))
-    }
-  };
+    return {
+        props: {
+            ...(await serverSideTranslations(locale, ['global']))
+        }
+    };
 }
