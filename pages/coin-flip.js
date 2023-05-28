@@ -20,19 +20,20 @@ import Confetti from "react-confetti";
 import { storeHistory, getAllHistories } from "./api/db_services";
 import Sound from 'react-sound';
 import LoadingSpinner from "../components/Spinner";
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useRouter } from "next/router";
+import 'moment/locale/de';
+import 'moment/locale/es';
 const provider = new JsonRpcProvider(testnetConnection);
 
-export async function getStaticProps() {
-  const filePath = path.join(process.cwd(), "dummy.json");
-  const jsonData = await fsPromises.readFile(filePath);
-  const objectData = JSON.parse(jsonData);
-
-  return {
-    props: objectData,
-  };
+export function configureMoment(langauge) {
+  moment.locale(langauge);
 }
 
 export default function CoinFlip(statsDatas) {
+  const { t } = useTranslation('global');
+  const { locale } = useRouter();
   const wallet = useWallet();
   const { balance: walletBalance } = useAccountBalance();
   const [domLoaded, setDomLoaded] = useState(false);
@@ -181,6 +182,10 @@ export default function CoinFlip(statsDatas) {
   }, []);
 
   useEffect(() => {
+    configureMoment(locale);
+  }, [locale]);
+
+  useEffect(() => {
     calculateBet();
   }, [MultipleBets, Wager]);
 
@@ -204,7 +209,7 @@ export default function CoinFlip(statsDatas) {
                 <h1 className="text-center text-4xl font-bold text-primary-800">
                   Coin Flip
                 </h1>
-                <h3 className="text-center text-2xl font-bold">Game</h3>
+                <h3 className="text-center text-2xl font-bold">{t('game_content.game')}</h3>
               </div>
             )}
             {isDesktop && (
@@ -213,35 +218,35 @@ export default function CoinFlip(statsDatas) {
                   <h1 className="text-center text-4xl font-bold text-primary-800">
                     Coin Flip
                   </h1>
-                  <h3 className="text-center text-2xl font-bold">Game</h3>
+                  <h3 className="text-center text-2xl font-bold">{t('game_content.game')}</h3>
                 </div>
                 <h1
                   className="px-6 py-3 text-center text-lg font-bold rounded-t-lg"
                   style={{ backgroundColor: "#2F3030" }}
                 >
-                  Recently Play
+                  {t('game_content.recently_play')}
                 </h1>
                 <div className="relative overflow-x-auto shadow-md rounded-b-lg">
                   <table className="w-full text-base text-left text-gray-500 font-coolvetica">
                     <thead class="text-lg text-white" style={{ backgroundColor: "#2F3030" }}>
                       <tr>
                         <th scope="col" class="px-6 py-3">
-                          Player
+                          {t('game_content.player')}
                         </th>
                         <th scope="col" class="px-6 py-3">
-                          Choice
+                          {t('game_content.choice')}
                         </th>
                         <th scope="col" class="px-6 py-3">
-                          Result
+                          {t('game_content.result')}
                         </th>
                         <th scope="col" class="px-6 py-3">
-                          Wager
+                          {t('game_content.wager')}
                         </th>
                         <th scope="col" class="px-6 py-3">
-                          Profit
+                          {t('game_content.profit')}
                         </th>
                         <th scope="col" class="px-6 py-3">
-                          Time
+                          {t('game_content.time')}
                         </th>
                       </tr>
                     </thead>
@@ -352,13 +357,13 @@ export default function CoinFlip(statsDatas) {
                   </div>
                   <div className="col-span-3 lg:px-10 self-center">
                     <h1 className="text-center text-xl font-bold">
-                      Set Your Bet
+                      {t('game_content.set_your_bet')}
                     </h1>
                     <div className="2xl:px-10">
                       <div className="flow-root">
                         <div className="grid grid-cols-2">
                           <label className="block mb-2 text-sm font-medium text-white text-start">
-                            Wager
+                            {t('game_content.wager')}
                           </label>
                           <label className="block mb-2 text-sm font-medium text-white text-end">
                             Min {MinBet}
@@ -379,12 +384,12 @@ export default function CoinFlip(statsDatas) {
                           placeholder=""
                         />
                         <button onClick={() => { setWager(MaxBet) }} className="block mb-2 text-sm font-bold text-primary-500 bg-primary-800 w-fit float-right p-1 rounded-md text-end mt-1.5">
-                          Max {MaxBet}
+                        {t('game_content.max')} {MaxBet}
                         </button>
                       </div>
                       <div>
                         <label className="block mb-2 text-sm font-medium text-white">
-                          Multiple Bets
+                          {t('game_content.multiple_bets')}
                         </label>
                         <input
                           value={MultipleBets}
@@ -408,7 +413,7 @@ export default function CoinFlip(statsDatas) {
                       <div className="mt-4 grid grid-cols-2 space-x-4">
                         <div>
                           <label className="block mb-2 text-sm font-medium text-white">
-                            Max Payout
+                            {t('game_content.max_payout')}
                           </label>
                           <input
                             value={MaxPayout}
@@ -423,7 +428,7 @@ export default function CoinFlip(statsDatas) {
                         </div>
                         <div>
                           <label className="block mb-2 text-sm font-medium text-white text-end">
-                            Total Wager
+                            {t('game_content.total_wager')}
                           </label>
                           <input
                             value={TotalWager}
@@ -439,7 +444,7 @@ export default function CoinFlip(statsDatas) {
                       </div>
                       <div className="mt-4">
                         <label className="block mb-2 text-sm font-medium text-white">
-                          Pick a Side
+                          {t('game_content.pick_a_side')}
                         </label>
                         <div className="grid grid-cols-2 space-x-4">
                           <div>
@@ -461,7 +466,7 @@ export default function CoinFlip(statsDatas) {
                             >
                               <div className="block">
                                 <div className="w-full text-lg font-semibold">
-                                  HEADS
+                                  {t('game_content.HEADS')}
                                 </div>
                               </div>
                             </label>
@@ -484,7 +489,7 @@ export default function CoinFlip(statsDatas) {
                             >
                               <div className="block">
                                 <div className="w-full text-lg font-semibold">
-                                  TAILS
+                                  {t('game_content.TAILS')}
                                 </div>
                               </div>
                             </label>
@@ -500,14 +505,14 @@ export default function CoinFlip(statsDatas) {
                                 onClick={playGame}
                                 className="w-full py-2 bg-primary-800 rounded-lg text-black font-bold"
                               >
-                                PLAY
+                                {t('game_content.play')}
                               </button>
                             ) : (
                               <button
                                 disabled
                                 className="w-full py-2 bg-gray-500 rounded-lg text-gray-300 text-sm font-bold"
                               >
-                                Total Bet doesn't meet min/max requirements.
+                                {t('game_content.alert_bet')}
                               </button>
                             )}
                           </>
@@ -525,7 +530,7 @@ export default function CoinFlip(statsDatas) {
                       {IsWin ? (
                         <div className="text-center">
                           <label className="block mb-2 text-5xl font-bold text-white">
-                            WIN
+                            {t('game_content.win')}
                           </label>
                           <label
                             className="block mb-2 text-3xl font-medium"
@@ -550,7 +555,7 @@ export default function CoinFlip(statsDatas) {
                       ) : (
                         <div className="text-center">
                           <label className="block mb-2 text-5xl font-bold text-white">
-                            LOSE
+                            {t('game_content.lose')}
                           </label>
                           <label
                             className="block mb-2 text-3xl font-medium"
@@ -581,7 +586,7 @@ export default function CoinFlip(statsDatas) {
                           }}
                           className="w-full py-2 bg-primary-800 rounded-lg text-black font-bold"
                         >
-                          Try Again
+                          {t('game_content.try_again')}
                         </button>
                       </div>
                     </div>
@@ -595,29 +600,29 @@ export default function CoinFlip(statsDatas) {
                   className="px-6 py-3 text-center text-lg font-bold rounded-t-lg"
                   style={{ backgroundColor: "#2F3030" }}
                 >
-                  Recently Play
+                  {t('game_content.recently_play')}
                 </h1>
                 <div className="relative overflow-x-auto shadow-md rounded-b-lg">
                   <table className="w-full text-base text-left text-gray-500 dark:text-gray-400 font-coolvetica">
                     <thead class="text-lg text-white" style={{ backgroundColor: "#2F3030" }}>
                       <tr>
                         <th scope="col" class="px-6 py-3">
-                          Player
+                          {t('game_content.player')}
                         </th>
                         <th scope="col" class="px-6 py-3">
-                          Choice
+                          {t('game_content.choice')}
                         </th>
                         <th scope="col" class="px-6 py-3">
-                          Result
+                          {t('game_content.result')}
                         </th>
                         <th scope="col" class="px-6 py-3">
-                          Wager
+                          {t('game_content.wager')}
                         </th>
                         <th scope="col" class="px-6 py-3">
-                          Profit
+                          {t('game_content.profit')}
                         </th>
                         <th scope="col" class="px-6 py-3">
-                          Time
+                          {t('game_content.time')}
                         </th>
                       </tr>
                     </thead>
@@ -733,4 +738,12 @@ export default function CoinFlip(statsDatas) {
   } else {
     return <LoadingSpinner />
   }
+}
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['global']))
+    }
+  };
 }

@@ -12,8 +12,19 @@ import {
 } from "./api/db_services";
 import moment from "moment/moment";
 import LoadingSpinner from "../components/Spinner";
+import { useRouter } from "next/router";
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import 'moment/locale/de';
+import 'moment/locale/es';
+
+export function configureMoment(langauge) {
+  moment.locale(langauge);
+}
 
 export default function Home() {
+  const { t } = useTranslation('global');
+  const { locale, locales, push } = useRouter();
   const [domLoaded, setDomLoaded] = useState(false);
 
   const [isLoad, setisLoad] = useState();
@@ -31,15 +42,13 @@ export default function Home() {
     setisLoad(true);
   };
 
+  useEffect(() => {
+    configureMoment(locale);
+  }, [locale]);
+
   useState(() => {
     getHistories();
   }, []);
-
-  const images = [
-    { url: "images/nft1.JPG" },
-    { url: "images/nft2.JPG" },
-    { url: "images/nft3.JPG" },
-  ];
 
   useEffect(() => {
     setDomLoaded(true);
@@ -99,15 +108,15 @@ export default function Home() {
                         <div className="flex mb-4">
                           <div className="w-full">
                             <h2 className="text-xl">
-                              Buy ZeroHero NFTs on the market now!
+                              {t('landing_content.buy_nft')}
                             </h2>
                           </div>
-                          <div>
+                          <div className="grid items-center">
                             <button
                               className="w-full py-4 px-4 md:px-10 bg-primary-800 rounded-lg text-black font-bold"
                               style={{ minWidth: "max-content" }}
                             >
-                              Shop Now
+                              {t('landing_content.shop_now')}
                             </button>
                           </div>
                         </div>
@@ -150,7 +159,7 @@ export default function Home() {
                         <div className="mb-4">
                           <div className="w-full mb-2">
                             <h2 className="text-xl">
-                              Buy ZeroHero NFTs on the market now!
+                              {t('landing_content.buy_nft')}
                             </h2>
                           </div>
                           <div>
@@ -158,7 +167,7 @@ export default function Home() {
                               className="w-full py-4 px-10 bg-primary-800 rounded-lg text-black font-bold"
                               style={{ minWidth: "max-content" }}
                             >
-                              Shop Now
+                              {t('landing_content.shop_now')}
                             </button>
                           </div>
                         </div>
@@ -212,14 +221,14 @@ export default function Home() {
                                 className="flex flex-col w-full h-full bg-[#2f3030] p-3 items-center justify-center [clip-path:polygon(0_0,65%_0,71%_18%,100%_18%,100%_100%,0_100%)]"
                                 style={{ alignItems: "self-start" }}
                               >
-                                <h2 className="mt-2 lg:text-xl xl:text-2xl 2xl:text-5xl">
-                                  Buy ZeroHero NFTs on the market now!
+                                <h2 className={`${locale === 'es' ? 'lg:text-base xl:text-xl 2xl:text-4xl' : 'lg:text-xl xl:text-2xl 2xl:text-5xl'} mt-2`}>
+                                  {t('landing_content.buy_nft')}
                                 </h2>
                                 <button
                                   className="mt-2 w-1/3 py-4 px-10 bg-primary-800 rounded-lg text-black font-bold"
                                   style={{ minWidth: "max-content" }}
                                 >
-                                  Shop Now
+                                  {t('landing_content.shop_now')}
                                 </button>
                               </div>
                             </div>
@@ -242,12 +251,10 @@ export default function Home() {
                           <tr>
                             <th
                               scope="col"
-                              className="px-6 py-1 text-sm lg:text-lg"
+                              className="px-2 md:px-6 py-1 text-sm lg:text-lg"
                               style={{ color: "#00F0FF" }}
                             >
-                              Total
-                              <br />
-                              Wagered
+                              {t('landing_content.total_wagered')}
                             </th>
                           </tr>
                         </thead>
@@ -279,12 +286,10 @@ export default function Home() {
                           <tr>
                             <th
                               scope="col"
-                              className="px-6 py-1 text-sm lg:text-lg"
+                              className="px-2 md:px-6 py-1 text-sm lg:text-lg"
                               style={{ color: "#00F0FF" }}
                             >
-                              Total
-                              <br />
-                              Bets
+                              {t('landing_content.total_bets')}
                             </th>
                           </tr>
                         </thead>
@@ -316,21 +321,21 @@ export default function Home() {
                     className="text-xs text-white dark:text-white tracking-widest"
                     style={{ backgroundColor: "#2F3030" }}
                   >
-                    <tr className="text-lg 2xl:text-2xl">
+                    <tr className="text-lg 2xl:text-xl">
                       <th scope="col" className="px-6 py-3">
-                        Game
+                        {t('landing_content.game')}
                       </th>
                       <th scope="col" className="px-6 py-3">
-                        Time
+                        {t('landing_content.time')}
                       </th>
                       <th scope="col" className="px-6 py-3 text-center">
-                        Player
+                        {t('landing_content.player')}
                       </th>
                       <th scope="col" className="px-6 py-3 text-center">
-                        Wager
+                        {t('landing_content.wager')}
                       </th>
                       <th scope="col" className="px-6 py-3 text-center">
-                        Profit
+                        {t('landing_content.profit')}
                       </th>
                     </tr>
                   </thead>
@@ -410,11 +415,11 @@ export default function Home() {
                   className="inline-flex items-center -space-x-px text-white pr-2"
                   href="/statistics"
                 >
-                  Show more
+                  {t('landing_content.show_more')}
                 </Link>
               </nav>
               <div className="pt-8 lg:pt-12 2xl:pt-20 font-coolvetica text-2xl 2xl:text-3xl text-white">
-                Game List
+                {t('landing_content.game_list')}
               </div>
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 2xl:grid-cols-6 items-center pt-3 gap-2">
                 <Link href="/coin-flip">
@@ -492,4 +497,12 @@ export default function Home() {
   } else {
     return <LoadingSpinner />
   }
+}
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['global']))
+    }
+  };
 }

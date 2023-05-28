@@ -1,11 +1,17 @@
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import Image from 'next/image';
+
 export default function Footer() {
+  const { t } = useTranslation('global');
+
   return (
     <div className="font-coolvetica w-screen pl-8 md:pl-32 pt-8 pb-8 bg-[#2F3030] self-stretch [clip-path:polygon(0%_0,100%_0,100%_100%,0_100%)] lg:[clip-path:polygon(7em_0,100%_0,100%_100%,0_100%)]">
       <div className="lg:grid lg:grid-cols-4 items-start">
         <div className="w-full self-center pl-7 pb-2">
           <img className="img-alert" src="/images/begamble.png" alt="Be Gamble" />
           <div className="mt-1 text-base md:text-xl pl-1 text-white">
-            Our Community and Social
+            {t('footer_content.community_social')}
           </div>
           <div className="flex flex-row pl-1 pt-1">
             <a href="#">
@@ -45,7 +51,7 @@ export default function Footer() {
           </div>
 
           <div className="w-full pl-7 lg:pl-32 self-center">
-            <div className="mt-1 text-2xl lg:text-4xl text-white">Support</div>
+            <div className="mt-1 text-2xl lg:text-4xl text-white">{t('footer_content.support')}</div>
             <a href="#">
               <div className="text-xs lg:text-base text-[#A5A5A5]">Buy Lucky Charm</div>
             </a>
@@ -64,15 +70,23 @@ export default function Footer() {
         <div className="pl-7 self-center">
           <div className="flex items-center">
             <div className="mt-1 text-2xl font-coolveticaCondensed pr-3 text-white">
-              AVAILABLE ON:
+              {t('footer_content.available_on')}:
             </div>
-            <img className="h-5" src="images/sui_brand_text.png" />
+            <Image className="w-10" width={100} height={100} src="/images/sui_brand_text.png" />
           </div>
           <div className="text-xs lg:text-base text-[#A5A5A5] font-coolvetica">
-            Made with love by WFS
+            {t('footer_content.mwlb')} WFS
           </div>
         </div>
       </div>
     </div>
   );
+}
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['global']))
+    }
+  };
 }

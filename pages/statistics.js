@@ -1,11 +1,22 @@
 import styles from "../styles/Home.module.css";
 import { getAllHistories, getAllHistoriesCount } from "./api/db_services";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import moment from "moment/moment";
 import Footer from "../components/Footer";
 import LoadingSpinner from "../components/Spinner";
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useRouter } from "next/router";
+import 'moment/locale/de';
+import 'moment/locale/es';
+
+export function configureMoment(langauge) {
+  moment.locale(langauge);
+}
 
 export default function Statistics(statsDatas) {
+  const { t } = useTranslation('global');
+  const { locale } = useRouter();
   const [isLoad, setisLoad] = useState();
   const [allHistories, setAllHistories] = useState([]);
   const [countHistories, setCountHistories] = useState([]);
@@ -28,6 +39,10 @@ export default function Statistics(statsDatas) {
     getHistories();
   }, []);
 
+  useEffect(() => {
+    configureMoment(locale);
+  }, [locale]);
+
   if (isLoad) {
     return (
       <>
@@ -35,8 +50,7 @@ export default function Statistics(statsDatas) {
           <div className={styles.container}>
             <div className="lg:flex mb-4 items-center pt-3 justify-between lg:overflow-x-auto lg:space-x-4">
               <div className="text-white text-6xl py-5">
-                All
-                <br /> Statistics
+                {t('statistics_content.statistics_title')}
               </div>
               <div className="flex items-center pt-3">
                 <div className="relative overflow-x-auto shadow-md rounded-lg w-[250px] mr-2">
@@ -47,7 +61,7 @@ export default function Statistics(statsDatas) {
                     >
                       <tr>
                         <th scope="col" className="px-2 md:px-6 py-1">
-                          Total Bets
+                          {t('statistics_content.total_bets')}
                         </th>
                       </tr>
                     </thead>
@@ -78,7 +92,7 @@ export default function Statistics(statsDatas) {
                     >
                       <tr>
                         <th scope="col" className="px-2 md:px-6 py-1">
-                          Wins
+                          {t('statistics_content.wins')}
                         </th>
                       </tr>
                     </thead>
@@ -109,7 +123,7 @@ export default function Statistics(statsDatas) {
                     >
                       <tr>
                         <th scope="col" className="px-2 md:px-6 py-1">
-                          Loses
+                          {t('statistics_content.loses')}
                         </th>
                       </tr>
                     </thead>
@@ -142,19 +156,19 @@ export default function Statistics(statsDatas) {
                 >
                   <tr className="text-lg">
                     <th scope="col" className="px-6 py-3">
-                      Game
+                      {t('statistics_content.game')}
                     </th>
                     <th scope="col" className="px-6 py-3">
-                      Time
+                      {t('statistics_content.time')}
                     </th>
                     <th scope="col" className="px-6 py-3 text-center">
-                      Player
+                      {t('statistics_content.player')}
                     </th>
                     <th scope="col" className="px-6 py-3 text-center">
-                      Wager
+                      {t('statistics_content.wager')}
                     </th>
                     <th scope="col" className="px-6 py-3 text-center">
-                      Profit
+                      {t('statistics_content.profit')}
                     </th>
                   </tr>
                 </thead>
@@ -263,4 +277,12 @@ export default function Statistics(statsDatas) {
   } else {
     return <LoadingSpinner />
   }
-} 
+}
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['global']))
+    }
+  };
+}

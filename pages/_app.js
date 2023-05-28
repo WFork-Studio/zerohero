@@ -6,6 +6,7 @@ import * as React from "react";
 import { WalletProvider } from "@suiet/wallet-kit";
 import "@suiet/wallet-kit/style.css";
 import 'react-toastify/dist/ReactToastify.css';
+import { appWithTranslation } from 'next-i18next'
 // import fsPromises from "fs/promises";
 // import path from "path";
 
@@ -34,6 +35,7 @@ function MyApp({ Component, pageProps }) {
             rel="stylesheet"
             href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
           ></link>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
         </Head>
         <header>
           <Navbar />
@@ -46,4 +48,4 @@ function MyApp({ Component, pageProps }) {
   );
 }
 
-export default MyApp;
+export default appWithTranslation(MyApp);

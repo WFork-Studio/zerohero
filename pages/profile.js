@@ -5,8 +5,17 @@ import { useWallet } from '@suiet/wallet-kit';
 import { getPlayerHistories, getPlayerWager, getPlayerProfit, getPlayerWins, getPlayerBets, getPlayerFavoriteGame } from './api/db_services';
 import LoadingSpinner from '../components/Spinner';
 import moment from 'moment';
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useRouter } from "next/router";
+
+export function configureMoment(langauge) {
+  moment.locale(langauge);
+}
 
 export default function profile() {
+    const { t } = useTranslation('global');
+    const { locale } = useRouter();
     const wallet = useWallet();
     const [playerHistories, setPlayerHistories] = useState([]);
     const [isLoad, setisLoad] = useState();
@@ -40,6 +49,10 @@ export default function profile() {
     }, [wallet]);
 
     useEffect(() => {
+      configureMoment(locale);
+    }, [locale]);
+
+    useEffect(() => {
         console.log(playerHistories);
     }, [playerHistories]);
 
@@ -53,13 +66,13 @@ export default function profile() {
                                 <div class="grid grid-cols-3 text-center order-last md:order-first mt-4 md:mt-0 gap-2 md:gap-4">
                                     <div className='py-4 rounded-lg' style={{ backgroundColor: "#262626" }}>
                                         <div className='flex justify-center items-center'>
-                                            <p class="font-bold text-white text-xl pl-4">{totalWager}</p>
+                                            <p class="font-bold text-white text-xl pl-4">{totalWager.toFixed(2)}</p>
                                             <img
                                                 src="/images/sui_brand.png"
                                                 alt="Sui Brand"
                                             />
                                         </div>
-                                        <p class="text-gray-400">Wagered</p>
+                                        <p class="text-gray-400">{t('profile_content.wagered')}</p>
                                     </div>
                                     <div className='py-4 rounded-lg' style={{ backgroundColor: "#262626" }}>
                                         <div className='flex justify-center items-center'>
@@ -69,12 +82,12 @@ export default function profile() {
                                                 alt="Sui Brand"
                                             />
                                         </div>
-                                        <p class="text-gray-400">Biggest Bet</p>
+                                        <p class="text-gray-400">{t('profile_content.biggest_bet')}</p>
                                     </div>
                                     <div className='py-4 rounded-lg flex justify-center items-center' style={{ backgroundColor: "#262626" }}>
                                         <div>
                                             <p class="font-bold text-white text-xl">{totalBets}</p>
-                                            <p class="text-gray-400">Bets</p>
+                                            <p class="text-gray-400">{t('profile_content.bets')}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -90,25 +103,25 @@ export default function profile() {
                                     <div className='py-4 rounded-lg flex justify-center items-center' style={{ backgroundColor: "#262626" }}>
                                         <div>
                                             <div className='flex justify-center items-center'>
-                                                <p class="font-bold text-xl pl-4 text-green-500">+{totalProfit}</p>
+                                                <p class="font-bold text-xl pl-4 text-green-500">+{totalProfit.toFixed(2)}</p>
                                                 <img
                                                     src="/images/sui_brand.png"
                                                     alt="Sui Brand"
                                                 />
                                             </div>
-                                            <p class="text-gray-400">Profit +</p>
+                                            <p class="text-gray-400">{t('profile_content.profit')} +</p>
                                         </div>
                                     </div>
                                     <div className='py-4 rounded-lg flex justify-center items-center' style={{ backgroundColor: "#262626" }}>
                                         <div>
                                             <p class="font-bold text-white text-xl">{totalWins}</p>
-                                            <p class="text-gray-400">Wins</p>
+                                            <p class="text-gray-400">{t('profile_content.wins')}</p>
                                         </div>
                                     </div>
                                     <div className='py-4 rounded-lg flex justify-center items-center' style={{ backgroundColor: "#262626" }}>
                                         <div>
                                             <p class="font-bold text-white text-xl px-2">{totalFavoriteGame}</p>
-                                            <p class="text-gray-400">Favorite Game</p>
+                                            <p class="text-gray-400">{t('profile_content.favorite_game')}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -127,19 +140,19 @@ export default function profile() {
                                         >
                                             <tr className="text-lg 2xl:text-xl">
                                                 <th scope="col" className="px-6 py-3">
-                                                    Game
+                                                {t('profile_content.game')}
                                                 </th>
                                                 <th scope="col" className="px-6 py-3">
-                                                    Time
+                                                {t('profile_content.time')}
                                                 </th>
                                                 <th scope="col" className="px-6 py-3">
-                                                    Player
+                                                {t('profile_content.player')}
                                                 </th>
                                                 <th scope="col" className="px-6 py-3">
-                                                    Wager
+                                                {t('profile_content.wager')}
                                                 </th>
                                                 <th scope="col" className="px-6 py-3">
-                                                    Profit
+                                                {t('profile_content.profit')}
                                                 </th>
                                             </tr>
                                         </thead>
@@ -199,13 +212,13 @@ export default function profile() {
                             <div class="mt-12 flex flex-col justify-center mb-6">
                                 <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
                                     <div className="text-center">
-                                        <p className="text-2xl font-medium">Buy ZeroHero NFTs on the market now!</p>
+                                        <p className="text-2xl font-medium">{t('profile_content.buy_nft')}</p>
 
                                         <div className="flex flex-col items-center justify-center px-16 mt-8 space-y-4 sm:space-y-0 sm:space-x-4 sm:flex-row sm:px-0">
-                                            <a href="#" title="" className="className='w-full py-4 px-10 bg-primary-800 rounded-lg text-black font-bold" role="button"> Shop Now </a>
+                                            <a href="#" title="" className="className='w-full py-4 px-10 bg-primary-800 rounded-lg text-black font-bold" role="button"> {t('profile_content.shop_now')} </a>
                                         </div>
 
-                                        <p className="mt-6 text-base text-gray-300">Visit our official website? <a href="#" title="" className="text-primary-800 transition-all duration-200 hover:text-blue-700 focus:text-blue-700 hover:underline">Here</a></p>
+                                        <p className="mt-6 text-base text-gray-300">{t('profile_content.visit_website')}? <a href="#" title="" className="text-primary-800 transition-all duration-200 hover:text-blue-700 focus:text-blue-700 hover:underline">{t('profile_content.here')}</a></p>
                                     </div>
                                 </div>
                             </div>
@@ -219,4 +232,12 @@ export default function profile() {
     } else {
         return <LoadingSpinner />
     }
+}
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['global']))
+    }
+  };
 }
