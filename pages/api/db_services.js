@@ -159,10 +159,10 @@ export async function getPlayerHistories(walletAddress, limit = null) {
 
   var raw = JSON.stringify({
     operation: "sql",
-    sql: limit !== null ?
-      `SELECT * FROM ${schema}.histories WHERE walletAddress = "${walletAddress}" ORDER BY __createdtime__ DESC LIMIT ${limit}`
-      :
-      `SELECT * FROM ${schema}.histories WHERE walletAddress = "${walletAddress}" ORDER BY __createdtime__ DESC`
+    sql:
+      limit !== null
+        ? `SELECT * FROM ${schema}.histories WHERE walletAddress = "${walletAddress}" ORDER BY __createdtime__ DESC LIMIT ${limit}`
+        : `SELECT * FROM ${schema}.histories WHERE walletAddress = "${walletAddress}" ORDER BY __createdtime__ DESC`,
   });
 
   var requestOptions = {
@@ -184,6 +184,36 @@ export async function getPlayerHistories(walletAddress, limit = null) {
   }
 }
 
+export async function getAllLevels() {
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", authKey);
+
+  var raw = JSON.stringify({
+    operation: "sql",
+    sql: `SELECT *, CAST(threshold as float) levelThreshold FROM ${schema}.levels ORDER BY levelThreshold`,
+  });
+
+  var requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow",
+  };
+
+  try {
+    const response = await fetch(
+      "https://zerohero-wfs.harperdbcloud.com",
+      requestOptions
+    );
+    const result_1 = await response.text();
+    console.log(JSON.parse(result_1));
+    return JSON.parse(result_1);
+  } catch (error) {
+    return console.log("error", error);
+  }
+}
+
 export async function getPlayerWager(walletAddress) {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
@@ -191,7 +221,7 @@ export async function getPlayerWager(walletAddress) {
 
   var raw = JSON.stringify({
     operation: "sql",
-    sql: `SELECT SUM(CAST(wager as float)) as totalWager FROM zerohero_app.histories WHERE walletAddress = "${walletAddress}"`
+    sql: `SELECT SUM(CAST(wager as float)) as totalWager FROM zerohero_app.histories WHERE walletAddress = "${walletAddress}"`,
   });
 
   var requestOptions = {
@@ -220,7 +250,7 @@ export async function getPlayerProfit(walletAddress) {
 
   var raw = JSON.stringify({
     operation: "sql",
-    sql: `SELECT SUM(CAST(profit as float)) as totalProfit FROM zerohero_app.histories WHERE walletAddress = "${walletAddress}"`
+    sql: `SELECT SUM(CAST(profit as float)) as totalProfit FROM zerohero_app.histories WHERE walletAddress = "${walletAddress}"`,
   });
 
   var requestOptions = {
@@ -339,23 +369,23 @@ export async function getPlayerFavoriteGame(walletAddress) {
     sql: `SELECT gameName, COUNT(gameName) AS totalFavGame FROM zerohero_app.histories GROUP BY gameName ORDER BY totalFavGame DESC LIMIT 1`,
   });
 
-var requestOptions = {
-  method: "POST",
-  headers: myHeaders,
-  body: raw,
-  redirect: "follow",
-};
+  var requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow",
+  };
 
-try {
-  const response = await fetch(
-    "https://zerohero-wfs.harperdbcloud.com",
-    requestOptions
-  );
-  const result_1 = await response.text();
-  return JSON.parse(result_1);
-} catch (error) {
-  return console.log("error", error);
-}
+  try {
+    const response = await fetch(
+      "https://zerohero-wfs.harperdbcloud.com",
+      requestOptions
+    );
+    const result_1 = await response.text();
+    return JSON.parse(result_1);
+  } catch (error) {
+    return console.log("error", error);
+  }
 }
 
 export async function getAllHistories(game = null, limit = 10) {
