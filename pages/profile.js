@@ -1,5 +1,5 @@
 import { useMediaQuery } from "react-responsive";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Footer from "../components/Footer";
 import { useWallet } from "@suiet/wallet-kit";
 import {
@@ -17,6 +17,7 @@ import moment from "moment";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
+import { AppContext } from "../utils/AppContext";
 
 export function configureMoment(langauge) {
   moment.locale(langauge);
@@ -38,6 +39,8 @@ export default function profile() {
   const [totalBets, setTotalBets] = useState();
   const [totalBiggestBet, setTotalBiggestBet] = useState();
   const [totalFavoriteGame, setTotalFavoriteGame] = useState();
+  const { state, setUserData } = useContext(AppContext);
+  const { userData } = state;
 
   const getHistories = async (e) => {
     const resp = await getPlayerHistories(wallet.address, 10);
@@ -61,6 +64,9 @@ export default function profile() {
     // getLevelProgressBar(levels, wager[0]?.totalWager);
     //For Testing Only
     getLevelProgressBar(levels, 4100);
+    if (userData) {
+      console.log("User Profile Data " + userData);
+    }
     setisLoad(true);
   };
 

@@ -5,11 +5,9 @@ import Chatbox from "../components/Chatbox";
 import * as React from "react";
 import { WalletProvider } from "@suiet/wallet-kit";
 import "@suiet/wallet-kit/style.css";
-import 'react-toastify/dist/ReactToastify.css';
-import { appWithTranslation } from 'next-i18next'
-import { useWallet } from "@suiet/wallet-kit";
-import { useEffect, useState } from "react";
-import AppContext from "../utils/AppContext";
+import "react-toastify/dist/ReactToastify.css";
+import { appWithTranslation } from "next-i18next";
+import { AppDataProvider } from "../utils/AppContext";
 // import fsPromises from "fs/promises";
 // import path from "path";
 
@@ -24,26 +22,10 @@ import AppContext from "../utils/AppContext";
 // }
 
 function MyApp({ Component, pageProps }) {
-  const [walletData, setWalletData] = useState();
-  const wallet = useWallet();
-
-  useEffect(() => {
-    if (wallet?.connected) {
-
-    }
-  }, [wallet]);
-
   return (
     <>
       <WalletProvider>
-        <AppContext.Provider
-        value={{
-          state: {
-            walletData
-          },
-          setWalletData
-        }}
-        >
+        <AppDataProvider>
           <Head>
             <title>Zero Hero</title>
             <meta name="description" content="Zero Hero Official Website" />
@@ -63,7 +45,7 @@ function MyApp({ Component, pageProps }) {
           <Component {...pageProps} />
 
           <Chatbox />
-        </AppContext.Provider>
+        </AppDataProvider>
       </WalletProvider>
     </>
   );
