@@ -55,7 +55,7 @@ export default function profile() {
     setTotalFavoriteGame(fav[0]?.gameName);
     setTotalBiggestBet(biggest_bet[0].biggestBet);
     setLevelThresholds(levels);
-    getLevelProgressBar(levels);
+    getLevelProgressBar(levels, wager[0]?.totalWager);
     setisLoad(true);
   };
 
@@ -88,7 +88,7 @@ export default function profile() {
     return levelThresholds[0]; // Default level if no threshold is met
   };
 
-  const getLevelProgressBar = (levelThresholds) => {
+  const getLevelProgressBar = (levelThresholds, totalWgr) => {
     const calculatedLevel = calculateLevel(4900, levelThresholds);
     setPlayerCurrentLevel(calculatedLevel);
 
@@ -97,7 +97,7 @@ export default function profile() {
     );
 
     setProgressPercentage(
-      (totalWager / levelThresholds[i + 1].threshold) * 100
+      (totalWgr / levelThresholds[i + 1].threshold) * 100
     );
   };
 
@@ -217,13 +217,23 @@ export default function profile() {
                   {playerCurrentLevel ? playerCurrentLevel.levelName : "-"}
                 </p>
 
-                <div className="w-full h-4 mb-4 bg-gray-200 rounded-full dark:bg-gray-700">
+                <div className="w-full h-6 mb-4 bg-gray-200 rounded-full dark:bg-gray-700 mt-2">
                   <div
-                    className="h-4 bg-blue-600 rounded-full dark:bg-blue-500"
+                    className="h-6 bg-blue-600 rounded-full dark:bg-blue-500 text-center"
                     style={{
                       width: `${progressPercentage ? progressPercentage : 0}%`,
                     }}
-                  ></div>
+                  >{`${progressPercentage ? progressPercentage.toFixed(3) : 0}%`}</div>
+                  <div className="grid grid-cols-2 mt-2">
+                    <div className="text-start">
+                        <p className="text-base font-medium">Bronze</p>
+                        <p className="text-xs font-light">0.00</p>
+                    </div>
+                    <div className="text-end">
+                        <p className="text-base font-medium">Silver</p>
+                        <p className="text-xs font-light">100.00</p>
+                    </div>
+                  </div>
                 </div>
 
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
