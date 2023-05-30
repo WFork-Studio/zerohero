@@ -207,7 +207,6 @@ export async function getAllLevels() {
       requestOptions
     );
     const result_1 = await response.text();
-    console.log(JSON.parse(result_1));
     return JSON.parse(result_1);
   } catch (error) {
     return console.log("error", error);

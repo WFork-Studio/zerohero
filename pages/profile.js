@@ -29,6 +29,7 @@ export default function profile() {
   const [playerHistories, setPlayerHistories] = useState([]);
   const [levelThresholds, setLevelThresholds] = useState([]);
   const [playerCurrentLevel, setPlayerCurrentLevel] = useState();
+  const [playerNextLevel, setPlayerNextLevel] = useState();
   const [progressPercentage, setProgressPercentage] = useState();
   const [isLoad, setisLoad] = useState();
   const [totalWager, setTotalWager] = useState();
@@ -48,14 +49,18 @@ export default function profile() {
     const biggest_bet = await getPlayerBiggestBet(wallet.address);
     const levels = await getAllLevels();
     setPlayerHistories(resp);
-    setTotalWager(wager[0]?.totalWager);
+    // setTotalWager(wager[0]?.totalWager);
+    //For Testing Only
+    setTotalWager(4100);
     setTotalProfit(profit[0]?.totalProfit);
     setTotalWins(wins[0]?.totalWins);
     setTotalBets(bets[0]?.totalBets);
     setTotalFavoriteGame(fav[0]?.gameName);
     setTotalBiggestBet(biggest_bet[0].biggestBet);
     setLevelThresholds(levels);
-    getLevelProgressBar(levels, wager[0]?.totalWager);
+    // getLevelProgressBar(levels, wager[0]?.totalWager);
+    //For Testing Only
+    getLevelProgressBar(levels, 4100);
     setisLoad(true);
   };
 
@@ -89,16 +94,18 @@ export default function profile() {
   };
 
   const getLevelProgressBar = (levelThresholds, totalWgr) => {
-    const calculatedLevel = calculateLevel(4900, levelThresholds);
+    // const calculatedLevel = calculateLevel(totalWgr, levelThresholds);
+    //For Testing only
+    const calculatedLevel = calculateLevel(4100, levelThresholds);
     setPlayerCurrentLevel(calculatedLevel);
 
     const i = levelThresholds.findIndex(
       (item) => item.levelName === calculatedLevel.levelName
     );
 
-    setProgressPercentage(
-      (totalWgr / levelThresholds[i + 1].threshold) * 100
-    );
+    setPlayerNextLevel(levelThresholds[i + 1]);
+
+    setProgressPercentage((totalWgr / levelThresholds[i + 1].threshold) * 100);
   };
 
   if (isLoad) {
@@ -212,26 +219,69 @@ export default function profile() {
                 </h1>
                 <p
                   class="font-medium text-2xl text-white mt-3"
-                  style={{ color: "#d18b47" }}
+                  style={{
+                    color: `#${
+                      playerCurrentLevel
+                        ? playerCurrentLevel.colorHex
+                        : "FFFFFF"
+                    }`,
+                  }}
                 >
                   {playerCurrentLevel ? playerCurrentLevel.levelName : "-"}
                 </p>
 
                 <div className="w-full h-6 mb-4 bg-gray-200 rounded-full dark:bg-gray-700 mt-2">
                   <div
-                    className="h-6 bg-blue-600 rounded-full dark:bg-blue-500 text-center"
+                    className="h-6 rounded-full dark:bg-blue-500 text-center"
                     style={{
                       width: `${progressPercentage ? progressPercentage : 0}%`,
+                      backgroundColor: `#${
+                        playerCurrentLevel
+                          ? playerCurrentLevel.colorHex
+                          : "FFFFFF"
+                      }`,
                     }}
-                  >{`${progressPercentage ? progressPercentage.toFixed(3) : 0}%`}</div>
+                  >{`${
+                    progressPercentage ? progressPercentage.toFixed(2) : 0
+                  }%`}</div>
                   <div className="grid grid-cols-2 mt-2">
                     <div className="text-start">
-                        <p className="text-base font-medium">Bronze</p>
-                        <p className="text-xs font-light">0.00</p>
+                      <p
+                        className="text-base font-medium"
+                        style={{
+                          color: `#${
+                            playerCurrentLevel
+                              ? playerCurrentLevel.colorHex
+                              : "FFFFFF"
+                          }`,
+                        }}
+                      >
+                        {playerCurrentLevel
+                          ? playerCurrentLevel.levelName
+                          : "-"}
+                      </p>
+                      <p className="text-xs font-light">
+                        {totalWager ? totalWager.toFixed(2) : "0.00"}
+                      </p>
                     </div>
                     <div className="text-end">
-                        <p className="text-base font-medium">Silver</p>
-                        <p className="text-xs font-light">100.00</p>
+                      <p
+                        className="text-base font-medium"
+                        style={{
+                          color: `#${
+                            playerNextLevel
+                              ? playerNextLevel.colorHex
+                              : "FFFFFF"
+                          }`,
+                        }}
+                      >
+                        {playerNextLevel ? playerNextLevel.levelName : "-"}
+                      </p>
+                      <p className="text-xs font-light">
+                        {playerNextLevel
+                          ? playerNextLevel.levelThreshold.toFixed(2)
+                          : "0.00"}
+                      </p>
                     </div>
                   </div>
                 </div>
