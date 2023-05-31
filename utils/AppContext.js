@@ -12,7 +12,10 @@ export const AppDataProvider = ({ children }) => {
   useEffect(() => {
     if (wallet?.connected) {
       console.log("wallet connected");
-      fetchUserData();
+      fetchUserData().then((value) => {
+        console.log("Data User: " + value[0]);
+        setUserData(value[0]);
+      });
     }
   }, [wallet]);
 
@@ -25,9 +28,7 @@ export const AppDataProvider = ({ children }) => {
         await createUserData(wallet.address);
       }
 
-      const userTempDataAfterReg = await getUserData(wallet.address);
-      console.log("User data After Register: ", userTempDataAfterReg[0]);
-      setUserData(userTempDataAfterReg[0]);
+      return await getUserData(wallet.address);
     } catch (error) {
       console.error("Error fetching user data: ", error);
     }
