@@ -106,6 +106,37 @@ export async function getAllHistoriesCount(result = null) {
   }
 }
 
+export function createUserData(walletAddress) {
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", authKey);
+
+  var raw = JSON.stringify({
+    operation: "insert",
+    schema: schema,
+    table: "users",
+    records: [
+      {
+        walletAddress: walletAddress,
+        isFirstTimePlay: null,
+        username: null,
+      },
+    ],
+  });
+
+  var requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow",
+  };
+
+  fetch("https://zerohero-wfs.harperdbcloud.com", requestOptions)
+    .then((response) => response.text())
+    .then((result) => console.log(result))
+    .catch((error) => console.log("error", error));
+}
+
 export async function getUserData(walletAddress) {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");

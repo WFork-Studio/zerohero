@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 import { useWallet } from "@suiet/wallet-kit";
-import { getUserData } from "../pages/api/db_services";
+import { getUserData, createUserData } from "../pages/api/db_services";
 
 export const AppContext = createContext();
 
@@ -20,7 +20,14 @@ export const AppDataProvider = ({ children }) => {
     try {
       const userTempData = await getUserData(wallet.address);
       console.log("User data: ", userTempData[0]);
-      setUserData(userTempData[0]);
+
+      if (userTempData[0] === undefined) {
+        await createUserData(wallet.address);
+      }
+
+      const userTempDataAfterReg = await getUserData(wallet.address);
+      console.log("User data After Register: ", userTempDataAfterReg[0]);
+      setUserData(userTempDataAfterReg[0]);
     } catch (error) {
       console.error("Error fetching user data: ", error);
     }
