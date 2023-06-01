@@ -43,6 +43,7 @@ export const AppDataProvider = ({ children }) => {
         },
         setWalletData,
         setUserData,
+        fetchUserData,
       }}
     >
       {children}

@@ -114,7 +114,7 @@ export function createUserData(walletAddress) {
   var raw = JSON.stringify({
     operation: "insert",
     schema: schema,
-    table: "users",
+    table: "players",
     records: [
       {
         walletAddress: walletAddress,
@@ -144,7 +144,7 @@ export async function getUserData(walletAddress) {
 
   var raw = JSON.stringify({
     operation: "sql",
-    sql: `SELECT * FROM ${schema}.users WHERE walletAddress = "${walletAddress}"`,
+    sql: `SELECT * FROM ${schema}.players WHERE walletAddress = "${walletAddress}"`,
   });
 
   var requestOptions = {
@@ -166,14 +166,17 @@ export async function getUserData(walletAddress) {
   }
 }
 
-export function updateUserData({ walletAddress, query }) {
+export async function updateUserData(walletAddress, query) {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("Authorization", authKey);
 
   var raw = JSON.stringify({
     operation: "sql",
-    sql: query + ` WHERE walletAddress = ${walletAddress}`,
+    sql:
+      `UPDATE ${schema}.players SET ` +
+      query +
+      ` WHERE walletAddress = '${walletAddress}'`,
   });
 
   var requestOptions = {
@@ -183,10 +186,16 @@ export function updateUserData({ walletAddress, query }) {
     redirect: "follow",
   };
 
-  fetch("https://zerohero-wfs.harperdbcloud.com", requestOptions)
-    .then((response) => response.text())
-    .then((result) => console.log(result))
-    .catch((error) => console.log("error", error));
+  try {
+    const response = await fetch(
+      "https://zerohero-wfs.harperdbcloud.com",
+      requestOptions
+    );
+    const result_1 = await response.text();
+    return JSON.parse(result_1);
+  } catch (error) {
+    return console.log("error", error);
+  }
 }
 
 export async function getPlayerHistories(walletAddress, limit = null) {

@@ -11,6 +11,7 @@ import {
   getPlayerFavoriteGame,
   getPlayerBiggestBet,
   getAllLevels,
+  updateUserData,
 } from "./api/db_services";
 import LoadingSpinner from "../components/Spinner";
 import moment from "moment";
@@ -39,8 +40,34 @@ export default function profile() {
   const [totalBets, setTotalBets] = useState();
   const [totalBiggestBet, setTotalBiggestBet] = useState();
   const [totalFavoriteGame, setTotalFavoriteGame] = useState();
+  const [editingMode, setEditingMode] = useState(false);
   const { state, setUserData } = useContext(AppContext);
   const { userData } = state;
+  const [inputData, setInputData] = useState("");
+
+  const handleInputChange = (event) => {
+    setInputData(event.target.value);
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (inputData) {
+      console.log("Input field has data:", inputData);
+      // Perform further actions with the input data
+      var resp = await updateUserData(
+        userData.walletAddress,
+        `username = '${inputData}'`
+      );
+      console.log(resp);
+      //   fetchUserData();
+
+      setEditingMode(!editingMode);
+    } else {
+      console.log("Input field is empty, change username cancelled");
+      setEditingMode(!editingMode);
+    }
+  };
 
   const getHistories = async (e) => {
     const resp = await getPlayerHistories(wallet.address, 10);
@@ -64,9 +91,9 @@ export default function profile() {
     // getLevelProgressBar(levels, wager[0]?.totalWager);
     //For Testing Only
     getLevelProgressBar(levels, 4100);
-    if (userData) {
-      console.log("User Profile Data " + userData);
-    }
+    // if (userData) {
+    console.log("User Profile Data " + userData);
+    // }
     setisLoad(true);
   };
 
@@ -223,6 +250,71 @@ export default function profile() {
                       wallet?.address.length
                     )}{" "}
                 </h1>
+                <div className="flex items-center justify-center space-x-2">
+                  {!editingMode ? (
+                    <p
+                      className="text-2xl font-light"
+                      style={{ color: `${"#" + "d18b47"}` }}
+                    >
+                      {userData?.username == null ? "-" : userData.username}
+                    </p>
+                  ) : (
+                    <input
+                      type="text"
+                      id="username"
+                      value={inputData}
+                      onChange={handleInputChange}
+                      class="bg-transparent w-fit border-b-2 border-gray-600 text-gray-100 text-sm focus:border-gray-400 focus:outline-none block p-1.5"
+                      placeholder=""
+                    />
+                  )}
+
+                  <button
+                    className="bg-gray-600 rounded-full p-1"
+                    onClick={
+                      editingMode === true
+                        ? handleSubmit
+                        : () => {
+                            setEditingMode(!editingMode);
+                          }
+                    }
+                  >
+                    {editingMode ? (
+                      <svg
+                        viewBox="0 0 24 24"
+                        width="15"
+                        height="15"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="feather feather-check"
+                      >
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                    ) : (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="15"
+                        height="15"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="feather feather-edit-3"
+                      >
+                        <path d="M12 20h9" fill="white"></path>
+                        <path
+                          d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"
+                          fill="white"
+                        ></path>
+                      </svg>
+                    )}
+                  </button>
+                </div>
                 <p
                   class="font-medium text-2xl text-white mt-3"
                   style={{
