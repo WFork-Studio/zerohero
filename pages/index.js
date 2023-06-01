@@ -2,43 +2,40 @@ import styles from "../styles/Home.module.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 import MediaQuery from "react-responsive";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import Footer from "../components/Footer";
 import Link from "next/link";
-import {
-  getAllHistories,
-  getAllHistoriesCount,
-  getAllHistoriesTotalWager,
-} from "./api/db_services";
+import { getAllHistories, getStatsData } from "./api/db_services";
 import moment from "moment/moment";
 import LoadingSpinner from "../components/Spinner";
 import { useRouter } from "next/router";
-import { useTranslation } from 'next-i18next'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import 'moment/locale/de';
-import 'moment/locale/es';
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import "moment/locale/de";
+import "moment/locale/es";
+import { AppContext } from "../utils/AppContext";
 
 export function configureMoment(langauge) {
   moment.locale(langauge);
 }
 
 export default function Home() {
-  const { t } = useTranslation('global');
+  const { t } = useTranslation("global");
   const { locale, locales, push } = useRouter();
   const [domLoaded, setDomLoaded] = useState(false);
 
   const [isLoad, setisLoad] = useState();
   const [allHistories, setAllHistories] = useState([]);
-  const [countHistories, setCountHistories] = useState([]);
-  const [totalWager, setTotalWager] = useState([]);
-  const getHistories = async (e) => {
-    const resp = await getAllHistories(null, 5);
-    const count = await getAllHistoriesCount();
-    const wager = await getAllHistoriesTotalWager();
+  const [statsData, setStatsData] = useState([]);
 
-    setCountHistories(count);
+  const { state } = useContext(AppContext);
+  const { supabase } = state;
+  const getHistories = async (e) => {
+    const resp = await getAllHistories(null, 3);
+    const statsDatas = await getStatsData();
+
     setAllHistories(resp);
-    setTotalWager(wager);
+    setStatsData(statsDatas);
     setisLoad(true);
   };
 
@@ -48,6 +45,33 @@ export default function Home() {
 
   useState(() => {
     getHistories();
+
+    const subsHistories = supabase
+      .channel("schema-db-changes")
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+        },
+        (payload) => {
+          console.log(payload);
+          setAllHistories((prevData) => {
+            const newData = [...prevData.records, payload.new];
+            return {
+              records: newData
+                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                .slice(0, 3),
+              count: prevData.count + 1,
+            };
+          });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      subsHistories.unsubscribe();
+    };
   }, []);
 
   useEffect(() => {
@@ -108,7 +132,7 @@ export default function Home() {
                         <div className="flex mb-4">
                           <div className="w-full">
                             <h2 className="text-xl">
-                              {t('landing_content.buy_nft')}
+                              {t("landing_content.buy_nft")}
                             </h2>
                           </div>
                           <div className="grid items-center">
@@ -116,7 +140,7 @@ export default function Home() {
                               className="w-full py-4 px-4 md:px-10 bg-primary-800 rounded-lg text-black font-bold"
                               style={{ minWidth: "max-content" }}
                             >
-                              {t('landing_content.shop_now')}
+                              {t("landing_content.shop_now")}
                             </button>
                           </div>
                         </div>
@@ -159,7 +183,7 @@ export default function Home() {
                         <div className="mb-4">
                           <div className="w-full mb-2">
                             <h2 className="text-xl">
-                              {t('landing_content.buy_nft')}
+                              {t("landing_content.buy_nft")}
                             </h2>
                           </div>
                           <div>
@@ -167,7 +191,7 @@ export default function Home() {
                               className="w-full py-4 px-10 bg-primary-800 rounded-lg text-black font-bold"
                               style={{ minWidth: "max-content" }}
                             >
-                              {t('landing_content.shop_now')}
+                              {t("landing_content.shop_now")}
                             </button>
                           </div>
                         </div>
@@ -221,14 +245,20 @@ export default function Home() {
                                 className="flex flex-col w-full h-full bg-[#2f3030] p-3 items-center justify-center [clip-path:polygon(0_0,65%_0,71%_18%,100%_18%,100%_100%,0_100%)]"
                                 style={{ alignItems: "self-start" }}
                               >
-                                <h2 className={`${locale === 'es' ? 'lg:text-base xl:text-xl 2xl:text-4xl' : 'lg:text-xl xl:text-2xl 2xl:text-5xl'} mt-2`}>
-                                  {t('landing_content.buy_nft')}
+                                <h2
+                                  className={`${
+                                    locale === "es"
+                                      ? "lg:text-base xl:text-xl 2xl:text-4xl"
+                                      : "lg:text-xl xl:text-2xl 2xl:text-5xl"
+                                  } mt-2`}
+                                >
+                                  {t("landing_content.buy_nft")}
                                 </h2>
                                 <button
                                   className="mt-2 w-1/3 py-4 px-10 bg-primary-800 rounded-lg text-black font-bold"
                                   style={{ minWidth: "max-content" }}
                                 >
-                                  {t('landing_content.shop_now')}
+                                  {t("landing_content.shop_now")}
                                 </button>
                               </div>
                             </div>
@@ -254,7 +284,7 @@ export default function Home() {
                               className="px-2 md:px-6 py-1 text-sm lg:text-lg"
                               style={{ color: "#00F0FF" }}
                             >
-                              {t('landing_content.total_wagered')}
+                              {t("landing_content.total_wagered")}
                             </th>
                           </tr>
                         </thead>
@@ -267,7 +297,7 @@ export default function Home() {
                               scope="row"
                               className="text-xl lg:text-3xl lg:px-6 py-2 pb-2 font-medium whitespace-nowrap dark:text-white"
                             >
-                              {totalWager[0].totalWager.toFixed(2)}
+                              {statsData[0].total_wagered}
                               <br />
                               {/* <div className="text-[#8C8888] text-sm">
                                 Gamble sum: 30,219
@@ -289,7 +319,7 @@ export default function Home() {
                               className="px-2 md:px-6 py-1 text-sm lg:text-lg"
                               style={{ color: "#00F0FF" }}
                             >
-                              {t('landing_content.total_bets')}
+                              {t("landing_content.total_bets")}
                             </th>
                           </tr>
                         </thead>
@@ -302,7 +332,7 @@ export default function Home() {
                               scope="row"
                               className="text-xl lg:text-3xl lg:px-6 py-2 pb-2 font-medium whitespace-nowrap dark:text-white"
                             >
-                              {countHistories[0].numberOfHistories}
+                              {allHistories.count}
                               <br />
                               {/* <div className="text-[#8C8888] text-sm">
                                 Gamble sum: 30,219
@@ -323,24 +353,24 @@ export default function Home() {
                   >
                     <tr className="text-lg 2xl:text-xl">
                       <th scope="col" className="px-6 py-3">
-                        {t('landing_content.game')}
+                        {t("landing_content.game")}
                       </th>
                       <th scope="col" className="px-6 py-3">
-                        {t('landing_content.time')}
+                        {t("landing_content.time")}
                       </th>
                       <th scope="col" className="px-6 py-3 text-center">
-                        {t('landing_content.player')}
+                        {t("landing_content.player")}
                       </th>
                       <th scope="col" className="px-6 py-3 text-center">
-                        {t('landing_content.wager')}
+                        {t("landing_content.wager")}
                       </th>
                       <th scope="col" className="px-6 py-3 text-center">
-                        {t('landing_content.profit')}
+                        {t("landing_content.profit")}
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {allHistories.map((stat, index) => (
+                    {allHistories.records.map((stat, index) => (
                       <tr
                         key={index}
                         className="border-b border-[#2F3030] 2xl:text-lg dark:border-[#2F3030] text-white"
@@ -353,7 +383,7 @@ export default function Home() {
                           {stat.gameName}
                         </th>
                         <td className="px-6">
-                          {moment(Number(stat.__createdtime__)).fromNow()}
+                          {moment(Number(Date.parse(stat.createdAt))).fromNow()}
                         </td>
                         <td className="px-6 text-center">
                           {stat.walletAddress.substr(0, 4) +
@@ -415,11 +445,11 @@ export default function Home() {
                   className="inline-flex items-center -space-x-px text-white pr-2"
                   href="/statistics"
                 >
-                  {t('landing_content.show_more')}
+                  {t("landing_content.show_more")}
                 </Link>
               </nav>
               <div className="pt-8 lg:pt-12 2xl:pt-20 font-coolvetica text-2xl 2xl:text-3xl text-white">
-                {t('landing_content.game_list')}
+                {t("landing_content.game_list")}
               </div>
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 2xl:grid-cols-6 items-center pt-3 gap-2">
                 <Link href="/coin-flip">
@@ -495,14 +525,14 @@ export default function Home() {
       </>
     );
   } else {
-    return <LoadingSpinner />
+    return <LoadingSpinner />;
   }
 }
 
 export async function getStaticProps({ locale }) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['global']))
-    }
+      ...(await serverSideTranslations(locale, ["global"])),
+    },
   };
 }

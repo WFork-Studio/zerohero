@@ -4,14 +4,8 @@ import Footer from "../components/Footer";
 import { useWallet } from "@suiet/wallet-kit";
 import {
   getPlayerHistories,
-  getPlayerWager,
-  getPlayerProfit,
-  getPlayerWins,
-  getPlayerBets,
-  getPlayerFavoriteGame,
-  getPlayerBiggestBet,
   getAllLevels,
-  updateUserData,
+  updateUsernameData,
 } from "./api/db_services";
 import LoadingSpinner from "../components/Spinner";
 import moment from "moment";
@@ -34,12 +28,6 @@ export default function profile() {
   const [playerNextLevel, setPlayerNextLevel] = useState();
   const [progressPercentage, setProgressPercentage] = useState();
   const [isLoad, setisLoad] = useState();
-  const [totalWager, setTotalWager] = useState();
-  const [totalProfit, setTotalProfit] = useState();
-  const [totalWins, setTotalWins] = useState();
-  const [totalBets, setTotalBets] = useState();
-  const [totalBiggestBet, setTotalBiggestBet] = useState();
-  const [totalFavoriteGame, setTotalFavoriteGame] = useState();
   const [editingMode, setEditingMode] = useState(false);
   const { state, setUserData } = useContext(AppContext);
   const { userData } = state;
@@ -55,12 +43,8 @@ export default function profile() {
     if (inputData) {
       console.log("Input field has data:", inputData);
       // Perform further actions with the input data
-      var resp = await updateUserData(
-        userData.walletAddress,
-        `username = '${inputData}'`
-      );
-      console.log(resp);
-      //   fetchUserData();
+      var resp = await updateUsernameData(userData.walletAddress, inputData);
+      setUserData(resp);
 
       setEditingMode(!editingMode);
     } else {
@@ -71,29 +55,13 @@ export default function profile() {
 
   const getHistories = async (e) => {
     const resp = await getPlayerHistories(wallet.address, 10);
-    const wager = await getPlayerWager(wallet.address);
-    const profit = await getPlayerProfit(wallet.address);
-    const wins = await getPlayerWins(wallet.address);
-    const bets = await getPlayerBets(wallet.address);
-    const fav = await getPlayerFavoriteGame(wallet.address);
-    const biggest_bet = await getPlayerBiggestBet(wallet.address);
     const levels = await getAllLevels();
     setPlayerHistories(resp);
-    // setTotalWager(wager[0]?.totalWager);
     //For Testing Only
-    setTotalWager(4100);
-    setTotalProfit(profit[0]?.totalProfit);
-    setTotalWins(wins[0]?.totalWins);
-    setTotalBets(bets[0]?.totalBets);
-    setTotalFavoriteGame(fav[0]?.gameName);
-    setTotalBiggestBet(biggest_bet[0].biggestBet);
     setLevelThresholds(levels);
-    // getLevelProgressBar(levels, wager[0]?.totalWager);
+    getLevelProgressBar(levels, resp.totalWager);
     //For Testing Only
-    getLevelProgressBar(levels, 4100);
-    // if (userData) {
-    console.log("User Profile Data " + userData);
-    // }
+    // getLevelProgressBar(levels, 4100);
     setisLoad(true);
   };
 
@@ -112,10 +80,6 @@ export default function profile() {
     configureMoment(locale);
   }, [locale]);
 
-  useEffect(() => {
-    console.log(playerHistories);
-  }, [playerHistories]);
-
   const calculateLevel = (userExp, levelThresholds) => {
     for (let i = levelThresholds.length - 1; i >= 0; i--) {
       if (userExp >= levelThresholds[i].threshold) {
@@ -127,9 +91,9 @@ export default function profile() {
   };
 
   const getLevelProgressBar = (levelThresholds, totalWgr) => {
-    // const calculatedLevel = calculateLevel(totalWgr, levelThresholds);
+    const calculatedLevel = calculateLevel(totalWgr, levelThresholds);
     //For Testing only
-    const calculatedLevel = calculateLevel(4100, levelThresholds);
+    // const calculatedLevel = calculateLevel(4100, levelThresholds);
     setPlayerCurrentLevel(calculatedLevel);
 
     const i = levelThresholds.findIndex(
@@ -155,7 +119,7 @@ export default function profile() {
                   >
                     <div className="flex justify-center items-center">
                       <p class="font-bold text-white text-xl pl-4">
-                        {totalWager.toFixed(2)}
+                        {playerHistories.totalWager.toFixed(2)}
                       </p>
                       <img src="/images/sui_brand.png" alt="Sui Brand" />
                     </div>
@@ -167,7 +131,10 @@ export default function profile() {
                   >
                     <div className="flex justify-center items-center">
                       <p class="font-bold text-white text-xl pl-4">
-                        {!totalBiggestBet ? "0.00" : totalBiggestBet.toFixed(2)}
+                        {!playerHistories.biggestWager ||
+                        playerHistories.biggestWager === -Infinity
+                          ? "0.00"
+                          : playerHistories.biggestWager.toFixed(2)}
                       </p>
                       <img src="/images/sui_brand.png" alt="Sui Brand" />
                     </div>
@@ -180,7 +147,9 @@ export default function profile() {
                     style={{ backgroundColor: "#262626" }}
                   >
                     <div>
-                      <p class="font-bold text-white text-xl">{totalBets}</p>
+                      <p class="font-bold text-white text-xl">
+                        {playerHistories.count ? playerHistories.count : "0"}
+                      </p>
                       <p class="text-gray-400">{t("profile_content.bets")}</p>
                     </div>
                   </div>
@@ -191,7 +160,7 @@ export default function profile() {
                       className="rounded-full"
                       src={
                         playerCurrentLevel
-                          ? "data:image/png;base64," + playerCurrentLevel.image
+                          ? playerCurrentLevel.image
                           : "/images/badges/bronze-1.png"
                       }
                       alt="badges"
@@ -207,7 +176,10 @@ export default function profile() {
                     <div>
                       <div className="flex justify-center items-center">
                         <p class="font-bold text-xl pl-4 text-green-500">
-                          +{totalProfit.toFixed(2)}
+                          +
+                          {!playerHistories.totalProfit
+                            ? "0.00"
+                            : playerHistories.totalProfit.toFixed(2)}
                         </p>
                         <img src="/images/sui_brand.png" alt="Sui Brand" />
                       </div>
@@ -221,7 +193,9 @@ export default function profile() {
                     style={{ backgroundColor: "#262626" }}
                   >
                     <div>
-                      <p class="font-bold text-white text-xl">{totalWins}</p>
+                      <p class="font-bold text-white text-xl">
+                        {playerHistories.wins ? playerHistories.wins : "0"}
+                      </p>
                       <p class="text-gray-400">{t("profile_content.wins")}</p>
                     </div>
                   </div>
@@ -231,7 +205,9 @@ export default function profile() {
                   >
                     <div>
                       <p class="font-bold text-white text-xl px-2">
-                        {totalFavoriteGame}
+                        {playerHistories.mostFavoriteGame
+                          ? playerHistories.mostFavoriteGame
+                          : "-"}
                       </p>
                       <p class="text-gray-400">
                         {t("profile_content.favorite_game")}
@@ -243,11 +219,11 @@ export default function profile() {
 
               <div class="mt-10 md:mt-20 text-center border-b border-[#8b8b8b] pb-12">
                 <h1 class="text-4xl font-medium text-white">
-                  {wallet?.address.substr(0, 4) +
+                  {userData.walletAddress.substr(0, 4) +
                     "....." +
-                    wallet?.address.substr(
-                      wallet?.address.length - 4,
-                      wallet?.address.length
+                    userData.walletAddress.substr(
+                      userData.walletAddress.length - 4,
+                      userData.walletAddress.length
                     )}{" "}
                 </h1>
                 <div className="flex items-center justify-center space-x-2">
@@ -359,7 +335,9 @@ export default function profile() {
                           : "-"}
                       </p>
                       <p className="text-xs font-light">
-                        {totalWager ? totalWager.toFixed(2) : "0.00"}
+                        {playerHistories.totalWager
+                          ? playerHistories.totalWager.toFixed(2)
+                          : "0.00"}
                       </p>
                     </div>
                     <div className="text-end">
@@ -377,7 +355,7 @@ export default function profile() {
                       </p>
                       <p className="text-xs font-light">
                         {playerNextLevel
-                          ? playerNextLevel.levelThreshold.toFixed(2)
+                          ? playerNextLevel.threshold.toFixed(2)
                           : "0.00"}
                       </p>
                     </div>
@@ -409,7 +387,7 @@ export default function profile() {
                       </tr>
                     </thead>
                     <tbody>
-                      {playerHistories.map((stat, index) => (
+                      {playerHistories.records.map((stat, index) => (
                         <tr
                           class="border-b border-[#2F3030] 2xl:text-lg dark:border-[#2F3030] text-white"
                           style={{ backgroundColor: "#262626" }}
@@ -421,7 +399,7 @@ export default function profile() {
                             {stat.gameName}
                           </th>
                           <td class="px-6 py-4">
-                            {moment(stat.__createdtime__).fromNow()}
+                            {moment(Date.parse(stat.createdAt)).fromNow()}
                           </td>
                           <td class="px-6 py-4">
                             {stat.walletAddress.substr(0, 4) +

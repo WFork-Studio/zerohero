@@ -1,42 +1,66 @@
 import styles from "../styles/Home.module.css";
-import { getAllHistories, getAllHistoriesCount } from "./api/db_services";
-import { useState, useEffect } from "react";
+import { getAllHistories, getStatsData } from "./api/db_services";
+import { useState, useEffect, useContext } from "react";
 import moment from "moment/moment";
 import Footer from "../components/Footer";
 import LoadingSpinner from "../components/Spinner";
-import { useTranslation } from 'next-i18next'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
-import 'moment/locale/de';
-import 'moment/locale/es';
+import "moment/locale/de";
+import "moment/locale/es";
+import { AppContext } from "../utils/AppContext";
 
 export function configureMoment(langauge) {
   moment.locale(langauge);
 }
 
 export default function Statistics(statsDatas) {
-  const { t } = useTranslation('global');
+  const { t } = useTranslation("global");
   const { locale } = useRouter();
   const [isLoad, setisLoad] = useState();
   const [allHistories, setAllHistories] = useState([]);
-  const [countHistories, setCountHistories] = useState([]);
-  const [countWinHistories, setCountWinHistories] = useState([]);
-  const [countLoseHistories, setCountLoseHistories] = useState([]);
+  const [statsData, setStatsData] = useState();
 
+  const { state } = useContext(AppContext);
+  const { supabase } = state;
   const getHistories = async (e) => {
     const resp = await getAllHistories(null, 20);
-    const count = await getAllHistoriesCount();
-    const countWin = await getAllHistoriesCount("win");
-    const countLose = await getAllHistoriesCount("lose");
-    setCountHistories(count);
-    setCountWinHistories(countWin);
-    setCountLoseHistories(countLose);
+    const statDatas = await getStatsData();
+    setStatsData(statDatas);
     setAllHistories(resp);
     setisLoad(true);
   };
 
   useState(() => {
     getHistories();
+
+    const subsHistories = supabase
+      .channel("schema-db-changes")
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+        },
+        (payload) => {
+          console.log(payload);
+          setAllHistories((prevData) => {
+            const newData = [...prevData.records, payload.new];
+            return {
+              records: newData
+                .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                .slice(0, 20),
+              count: prevData.count + 1,
+            };
+          });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      subsHistories.unsubscribe();
+    };
   }, []);
 
   useEffect(() => {
@@ -50,7 +74,7 @@ export default function Statistics(statsDatas) {
           <div className={styles.container}>
             <div className="lg:flex mb-4 items-center pt-3 justify-between lg:overflow-x-auto lg:space-x-4">
               <div className="text-white text-6xl py-5">
-                {t('statistics_content.statistics_title')}
+                {t("statistics_content.statistics_title")}
               </div>
               <div className="flex items-center pt-3">
                 <div className="relative overflow-x-auto shadow-md rounded-lg w-[250px] mr-2">
@@ -61,7 +85,7 @@ export default function Statistics(statsDatas) {
                     >
                       <tr>
                         <th scope="col" className="px-2 md:px-6 py-1">
-                          {t('statistics_content.total_bets')}
+                          {t("statistics_content.total_bets")}
                         </th>
                       </tr>
                     </thead>
@@ -74,7 +98,7 @@ export default function Statistics(statsDatas) {
                           scope="row"
                           className="text-base md:text-3xl md:px-6 py-2 pb-2 font-medium md:whitespace-nowrap dark:text-white"
                         >
-                          {countHistories[0].numberOfHistories}
+                          {allHistories.count}
                           <br />
                           {/* <div className="text-[#8C8888] text-sm">
                           Gamble sum: 71,419,291
@@ -92,7 +116,7 @@ export default function Statistics(statsDatas) {
                     >
                       <tr>
                         <th scope="col" className="px-2 md:px-6 py-1">
-                          {t('statistics_content.wins')}
+                          {t("statistics_content.wins")}
                         </th>
                       </tr>
                     </thead>
@@ -105,7 +129,7 @@ export default function Statistics(statsDatas) {
                           scope="row"
                           className="text-base md:text-3xl md:px-6 py-2 pb-2 font-medium md:whitespace-nowrap dark:text-white"
                         >
-                          {countWinHistories[0].numberOfHistories}
+                          {statsData[0].total_wins}
                           <br />
                           {/* <div className="text-[#8C8888] text-sm">
                           Gamble sum: 46,419,123
@@ -123,7 +147,7 @@ export default function Statistics(statsDatas) {
                     >
                       <tr>
                         <th scope="col" className="px-2 md:px-6 py-1">
-                          {t('statistics_content.loses')}
+                          {t("statistics_content.loses")}
                         </th>
                       </tr>
                     </thead>
@@ -136,7 +160,7 @@ export default function Statistics(statsDatas) {
                           scope="row"
                           className="text-base md:text-3xl md:px-6 py-2 pb-2 font-medium md:whitespace-nowrap dark:text-white"
                         >
-                          {countLoseHistories[0].numberOfHistories}
+                          {statsData[0].total_losses}
                           <br />
                           {/* <div className="text-[#8C8888] text-sm">
                           Gamble sum: 30,219,291
@@ -156,24 +180,24 @@ export default function Statistics(statsDatas) {
                 >
                   <tr className="text-lg">
                     <th scope="col" className="px-6 py-3">
-                      {t('statistics_content.game')}
+                      {t("statistics_content.game")}
                     </th>
                     <th scope="col" className="px-6 py-3">
-                      {t('statistics_content.time')}
+                      {t("statistics_content.time")}
                     </th>
                     <th scope="col" className="px-6 py-3 text-center">
-                      {t('statistics_content.player')}
+                      {t("statistics_content.player")}
                     </th>
                     <th scope="col" className="px-6 py-3 text-center">
-                      {t('statistics_content.wager')}
+                      {t("statistics_content.wager")}
                     </th>
                     <th scope="col" className="px-6 py-3 text-center">
-                      {t('statistics_content.profit')}
+                      {t("statistics_content.profit")}
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {allHistories.map((stat, index) => (
+                  {allHistories.records.map((stat, index) => (
                     <tr
                       key={index}
                       className="border-b border-[#2F3030] dark:border-[#2F3030] text-white"
@@ -186,7 +210,7 @@ export default function Statistics(statsDatas) {
                         {stat.gameName}
                       </th>
                       <td className="px-6">
-                        {moment(Number(stat.__createdtime__)).fromNow()}
+                        {moment(Number(Date.parse(stat.createdAt))).fromNow()}
                       </td>
                       <td className="px-6 text-center">
                         {stat.walletAddress.substr(0, 4) +
@@ -275,14 +299,14 @@ export default function Statistics(statsDatas) {
       </>
     );
   } else {
-    return <LoadingSpinner />
+    return <LoadingSpinner />;
   }
 }
 
 export async function getStaticProps({ locale }) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['global']))
-    }
+      ...(await serverSideTranslations(locale, ["global"])),
+    },
   };
 }

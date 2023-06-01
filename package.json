@@ -11,6 +11,7 @@
   "dependencies": {
     "@mysten/sui.js": "^0.34.1",
     "@suiet/wallet-kit": "^0.2.11",
+    "@supabase/supabase-js": "^2.24.0",
     "country-flag-icons": "^1.5.7",
     "fs": "^0.0.1-security",
     "i18next": "^22.5.0",
