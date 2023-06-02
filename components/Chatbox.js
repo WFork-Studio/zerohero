@@ -1,79 +1,20 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useWallet, ConnectButton } from "@suiet/wallet-kit";
-import socketIOClient from "socket.io-client";
+import { AppContext } from "../utils/AppContext";
+import { sendMessage } from "../pages/api/db_services";
 
 export default function Chatbox() {
-  const [messagesRecieved, setMessagesReceived] = useState([]);
   const messagesColumnRef = useRef(null);
   const [message, setMessage] = useState("");
-  const [socket, setSocket] = useState(null);
-  const [walletAddress, setWalletAddress] = useState(null);
-  const [isConnected, setIsConnected] = useState(false);
+  const { chatbox, state } = useContext(AppContext);
+  const { messagesReceived } = chatbox;
+  const { userData } = state;
   const wallet = useWallet();
 
-  useEffect(() => {
-    const socketId = localStorage.getItem("socketId");
-
-    if (!walletAddress && !socket && !isConnected) {
-      console.log(`Socket isn't connected`);
-      const newSocket = socketIOClient("http://192.168.49.21:4000", {
-        auth: { walletAddress: wallet.address },
-        query: { socketId },
-        autoConnect: true,
-      });
-
-      setSocket(newSocket);
-
-      newSocket.on("connect", () => {
-        setIsConnected(true);
-      });
-
-      newSocket.on("disconnect", () => {
-        setIsConnected(false);
-      });
-
-      newSocket.on("connect_error", () => {
-        setIsConnected(false);
-      });
-
-      newSocket.on("chat message", (data) => {
-        setMessagesReceived((messagesRecieved) => [
-          ...messagesRecieved,
-          {
-            message: data.message,
-            walletAddress: data.walletAddress,
-          },
-        ]);
-      });
-
-      newSocket.on("load messages", (messages) => {
-        setMessagesReceived(messages);
-      });
-
-      // newSocket.on("system message", (message) => {
-      //   setMessages((messagesRecieved) => [
-      //     ...messagesRecieved,
-      //     { systemMessage: message.message },
-      //   ]);
-      // });
-    }
-
-    return () => {
-      if (socket) {
-        socket.disconnect();
-        setSocket(null);
-      }
-      setIsConnected(false);
-    };
-  }, [wallet]);
-
-  const sendMessage = () => {
+  const sendMessageHandle = async () => {
     const trimmedMessage = message.trim();
-    if (trimmedMessage && socket) {
-      socket.emit("chat message", {
-        message: trimmedMessage,
-        walletAddress: wallet.address,
-      });
+    if (trimmedMessage) {
+      await sendMessage(userData.id, trimmedMessage);
       setMessage("");
     }
   };
@@ -86,12 +27,14 @@ export default function Chatbox() {
       <div className="w-full rounded-[8px] rounded-bl-[0px] bg-gradient-to-r from-[#6002BF] via-[#C74CDB] to-[#4C6BDB] p-0.5">
         <div className="rounded-[8px] rounded-bl-[0px] h-auto break-all w-full bg-[#121212] back p-2">
           <span className="text-blue-500">
-            {message.walletAddress.substr(0, 12) +
-              "....." +
-              message.walletAddress.substr(
-                message.walletAddress.length - 12,
-                message.walletAddress.length
-              )}
+            {message.username === null
+              ? message.walletAddress.substr(0, 12) +
+                "....." +
+                message.walletAddress.substr(
+                  message.walletAddress.length - 12,
+                  message.walletAddress.length
+                )
+              : message.username}
             :
           </span>{" "}
           <span>{message.message}</span>
@@ -105,18 +48,7 @@ export default function Chatbox() {
       messagesColumnRef.current.scrollTop =
         messagesColumnRef.current.scrollHeight;
     }
-  }, [messagesRecieved]);
-
-  function sortMessagesByDate(messages) {
-    return messages.sort(
-      (a, b) => parseInt(a.__createdtime__) - parseInt(b.__createdtime__)
-    );
-  }
-
-  function formatDateFromTimestamp(timestamp) {
-    const date = new Date(timestamp);
-    return date.toLocaleString();
-  }
+  }, [messagesReceived]);
 
   //Animation And Etc
   useEffect(() => {
@@ -182,7 +114,7 @@ export default function Chatbox() {
             className="messages font-coolvetica text-sm"
             ref={messagesColumnRef}
           >
-            {messagesRecieved.map((msg, i) => (
+            {messagesReceived.map((msg, i) => (
               <ChatBubble message={msg} key={i} />
             ))}
           </ul>
@@ -207,10 +139,10 @@ export default function Chatbox() {
               // disabled={true}
             ></input>
             <button
-              id="sendMessage"
+              id="sendMessageHandle"
               className="font-coolvetica"
               onClick={() => {
-                sendMessage();
+                sendMessageHandle();
               }}
             >
               <i className="fa fa-paper-plane pl-2 pr-2"></i>

@@ -195,6 +195,37 @@ export async function getAllLevels() {
   }
 }
 
+export async function sendMessage(userid, message) {
+  try {
+    const { error } = await supabase
+      .from("messages")
+      .insert([{ message: message, userId: userid }]);
+
+    if (error) {
+      throw error;
+    }
+  } catch (error) {
+    console.error("Error inserting data into Supabase:", error.message);
+  }
+}
+
+export async function getAllMessages() {
+  try {
+    const { data: records, error } = await supabase
+      .from("messages")
+      .select("*, users!fk_messages_users(walletAddress, username)")
+      .order("createdAt", { ascending: true });
+
+    if (error) {
+      throw error;
+    }
+    return records;
+  } catch (error) {
+    console.error("Error fetching data from Supabase:", error.message);
+    return null;
+  }
+}
+
 export async function getPlayerProfit(walletAddress) {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
