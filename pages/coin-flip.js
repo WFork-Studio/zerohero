@@ -138,7 +138,7 @@ export default function CoinFlip(statsDatas) {
             setIsWin(false);
           }
           //Storing Result to Database
-          storeHistory(
+          await storeHistory(
             result.events[0].parsedJson?.sender,
             `${parseFloat(result.events[0].parsedJson?.profit) / 1000000000}`,
             `${parseFloat(result.events[0].parsedJson?.bet_amount) / 1000000000}`,
