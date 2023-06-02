@@ -100,9 +100,17 @@ export default function profile() {
       (item) => item.levelName === calculatedLevel.levelName
     );
 
-    setPlayerNextLevel(levelThresholds[i + 1]);
+    if (i !== levelThresholds.length - 1) {
+      setPlayerNextLevel(levelThresholds[i + 1]);
 
-    setProgressPercentage((totalWgr / levelThresholds[i + 1].threshold) * 100);
+      setProgressPercentage(
+        (totalWgr / levelThresholds[i + 1].threshold) * 100
+      );
+    } else {
+      setPlayerNextLevel(levelThresholds[i]);
+
+      setProgressPercentage(100);
+    }
   };
 
   if (isLoad) {
@@ -230,7 +238,7 @@ export default function profile() {
                   {!editingMode ? (
                     <p
                       className="text-2xl font-light"
-                      style={{ color: `${"#" + "d18b47"}` }}
+                      style={{ color: `${"#" + playerCurrentLevel.colorHex}` }}
                     >
                       {userData?.username == null ? "-" : userData.username}
                     </p>
@@ -351,10 +359,18 @@ export default function profile() {
                           }`,
                         }}
                       >
-                        {playerNextLevel ? playerNextLevel.levelName : "-"}
+                        {playerCurrentLevel.levelName ===
+                        playerNextLevel.levelName
+                          ? "MAX LEVEL"
+                          : playerNextLevel
+                          ? playerNextLevel.levelName
+                          : "-"}
                       </p>
                       <p className="text-xs font-light">
-                        {playerNextLevel
+                        {playerCurrentLevel.levelName ===
+                        playerNextLevel.levelName
+                          ? "REACHED"
+                          : playerNextLevel
                           ? playerNextLevel.threshold.toFixed(2)
                           : "0.00"}
                       </p>
