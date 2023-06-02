@@ -8,45 +8,32 @@ const supabase = createClient(
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmZWx3bnlsc21kcXVlbnR5bmliIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODU2MjMxNTQsImV4cCI6MjAwMTE5OTE1NH0.NMUn8xqjit6NdPKYTPOVAMMUDRbeEiez_vM-17lqg60"
 );
 
-export function storeHistory(
+export async function storeHistory(
   walletAddress,
   profit,
   wager,
-  data,
+  gameData,
   result,
-  gameName
+  gameName,
+  playerLv,
+  username
 ) {
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-  myHeaders.append("Authorization", authKey);
+  try {
+    const { error } = await supabase
+      .from("histories")
+      .insert([
+        { gameData: gameData, gameName: gameName, profit: profit, result: result, wager: wager, walletAddress: walletAddress, playerLv: playerLv, username: username },
+      ]);
 
-  var raw = JSON.stringify({
-    operation: "insert",
-    schema: schema,
-    table: "histories",
-    records: [
-      {
-        gameName: gameName,
-        walletAddress: walletAddress,
-        profit: profit,
-        wager: wager,
-        result: result,
-        gameData: data,
-      },
-    ],
-  });
+    if (error) {
+      throw error;
+    }
 
-  var requestOptions = {
-    method: "POST",
-    headers: myHeaders,
-    body: raw,
-    redirect: "follow",
-  };
-
-  fetch("https://zerohero-wfs.harperdbcloud.com", requestOptions)
-    .then((response) => response.text())
-    .then((result) => console.log(result))
-    .catch((error) => console.log("error", error));
+    console.log("Data inserted.");
+    return "Data inserted.";
+  } catch (error) {
+    console.error("Error inserting data into Supabase:", error.message);
+  }
 }
 
 export async function createUserData(walletAddress) {
@@ -225,151 +212,6 @@ export async function getAllMessages() {
   }
 }
 
-export async function getPlayerProfit(walletAddress) {
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-  myHeaders.append("Authorization", authKey);
-
-  var raw = JSON.stringify({
-    operation: "sql",
-    sql: `SELECT SUM(CAST(profit as float)) as totalProfit FROM zerohero_app.histories WHERE walletAddress = "${walletAddress}"`,
-  });
-
-  var requestOptions = {
-    method: "POST",
-    headers: myHeaders,
-    body: raw,
-    redirect: "follow",
-  };
-
-  try {
-    const response = await fetch(
-      "https://zerohero-wfs.harperdbcloud.com",
-      requestOptions
-    );
-    const result_1 = await response.text();
-    return JSON.parse(result_1);
-  } catch (error) {
-    return console.log("error", error);
-  }
-}
-
-export async function getPlayerWins(walletAddress) {
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-  myHeaders.append("Authorization", authKey);
-
-  var raw = JSON.stringify({
-    operation: "sql",
-    sql: `SELECT COUNT(result) AS totalWins FROM zerohero_app.histories WHERE result = "win" AND walletAddress = "${walletAddress}"`,
-  });
-
-  var requestOptions = {
-    method: "POST",
-    headers: myHeaders,
-    body: raw,
-    redirect: "follow",
-  };
-
-  try {
-    const response = await fetch(
-      "https://zerohero-wfs.harperdbcloud.com",
-      requestOptions
-    );
-    const result_1 = await response.text();
-    return JSON.parse(result_1);
-  } catch (error) {
-    return console.log("error", error);
-  }
-}
-
-export async function getPlayerBets(walletAddress) {
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-  myHeaders.append("Authorization", authKey);
-
-  var raw = JSON.stringify({
-    operation: "sql",
-    sql: `SELECT COUNT(id) AS totalBets FROM zerohero_app.histories WHERE walletAddress = "${walletAddress}"`,
-  });
-
-  var requestOptions = {
-    method: "POST",
-    headers: myHeaders,
-    body: raw,
-    redirect: "follow",
-  };
-
-  try {
-    const response = await fetch(
-      "https://zerohero-wfs.harperdbcloud.com",
-      requestOptions
-    );
-    const result_1 = await response.text();
-    return JSON.parse(result_1);
-  } catch (error) {
-    return console.log("error", error);
-  }
-}
-
-export async function getPlayerBiggestBet(walletAddress) {
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-  myHeaders.append("Authorization", authKey);
-
-  var raw = JSON.stringify({
-    operation: "sql",
-    sql: `SELECT MAX(CAST(wager as float)) AS biggestBet FROM zerohero_app.histories WHERE walletAddress = "${walletAddress}"`,
-  });
-
-  var requestOptions = {
-    method: "POST",
-    headers: myHeaders,
-    body: raw,
-    redirect: "follow",
-  };
-
-  try {
-    const response = await fetch(
-      "https://zerohero-wfs.harperdbcloud.com",
-      requestOptions
-    );
-    const result_1 = await response.text();
-    return JSON.parse(result_1);
-  } catch (error) {
-    return console.log("error", error);
-  }
-}
-
-export async function getPlayerFavoriteGame(walletAddress) {
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-  myHeaders.append("Authorization", authKey);
-
-  var raw = JSON.stringify({
-    operation: "sql",
-    sql: `SELECT gameName, COUNT(gameName) AS totalFavGame FROM zerohero_app.histories GROUP BY gameName ORDER BY totalFavGame DESC LIMIT 1`,
-  });
-
-  var requestOptions = {
-    method: "POST",
-    headers: myHeaders,
-    body: raw,
-    redirect: "follow",
-  };
-
-  try {
-    const response = await fetch(
-      "https://zerohero-wfs.harperdbcloud.com",
-      requestOptions
-    );
-    const result_1 = await response.text();
-    return JSON.parse(result_1);
-  } catch (error) {
-    return console.log("error", error);
-  }
-}
-
 export async function getStatsData() {
   try {
     const { data: records, error } = await supabase
@@ -394,13 +236,13 @@ export async function getAllHistories(game = null, limit = 10) {
       count,
       error,
     } = game !== null
-      ? await supabase
+        ? await supabase
           .from("histories")
           .select("*", { count: "exact" })
           .eq("gameName", game)
           .limit(limit)
           .order("createdAt", { ascending: false })
-      : await supabase
+        : await supabase
           .from("histories")
           .select("*", { count: "exact" })
           .limit(limit)

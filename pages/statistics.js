@@ -200,27 +200,39 @@ export default function Statistics(statsDatas) {
                   {allHistories.records.map((stat, index) => (
                     <tr
                       key={index}
-                      className="border-b border-[#2F3030] dark:border-[#2F3030] text-white"
+                      className="border-b border-[#2F3030] dark:border-[#2F3030]"
                       style={{ backgroundColor: "#262626" }}
                     >
                       <th
                         scope="row"
-                        className="px-6 font-medium whitespace-nowrap dark:text-white"
+                        className="px-6 font-medium whitespace-nowrap text-white"
                       >
                         {stat.gameName}
                       </th>
-                      <td className="px-6">
+                      <td className="px-6 text-white">
                         {moment(Number(Date.parse(stat.createdAt))).fromNow()}
                       </td>
-                      <td className="px-6 text-center">
-                        {stat.walletAddress.substr(0, 4) +
-                          "....." +
-                          stat.walletAddress.substr(
-                            stat.walletAddress.length - 4,
-                            stat.walletAddress.length
-                          )}{" "}
-                      </td>
-                      <td className="px-6">
+                      {stat.username !== null ?
+                        <td
+                          scope="row"
+                          className="px-6 text-center truncate" style={{ color: "#" + stat?.playerLv?.hex, maxWidth: '1px' }}
+                        >
+                          {stat.username}
+                        </td>
+                        :
+                        <td
+                          scope="row"
+                          className="px-6 text-center" style={{ color: "#" + stat?.playerLv?.hex }}
+                        >
+                          {stat.walletAddress.substr(0, 4) +
+                            "....." +
+                            stat.walletAddress.substr(
+                              stat.walletAddress.length - 4,
+                              stat.walletAddress.length
+                            )}{" "}
+                        </td>
+                      }
+                      <td className="px-6 text-white">
                         <div className="flex items-center justify-center">
                           <img src="/images/sui_brand.png" alt="Sui Brand" />
                           {stat.wager}

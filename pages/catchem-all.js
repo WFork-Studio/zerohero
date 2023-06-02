@@ -1,11 +1,7 @@
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
-import Link from "next/link";
 import LoadingSpinner from "../components/Spinner";
-import path from "path";
-import fsPromises from "fs/promises";
 import { useMediaQuery } from "react-responsive";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { AppContext } from "../utils/AppContext";
 import { useWallet, useAccountBalance, ConnectButton } from "@suiet/wallet-kit";
 import {
   JsonRpcProvider,
@@ -15,7 +11,7 @@ import {
 } from "@mysten/sui.js";
 import { ToastContainer, toast } from "react-toastify";
 import Confetti from "react-confetti";
-import { storeHistory, getAllHistories } from "./api/db_services";
+import { storeHistory, getAllHistories, getAllLevels, getPlayerHistories } from "./api/db_services";
 import moment from "moment";
 import Footer from "../components/Footer";
 import { useTranslation } from 'next-i18next'
@@ -47,12 +43,33 @@ export default function CatchemAll(statsDatas) {
   const [IsLoadResult, setIsLoadResult] = useState(false);
   const [StatusGame, setStatusGame] = useState("ready");
   const [IsWin, setIsWin] = useState(false);
+  const [playerCurrentLevel, setPlayerCurrentLevel] = useState();
+  const { state, setUserData } = useContext(AppContext);
+  const { userData } = state;
   const stats = statsDatas.statistics;
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const isTabletOrMobile = useMediaQuery({ maxWidth: 991.9 });
 
   const contextClass = {
     info: "bg-[#6103bf]",
+  };
+
+  const levelPlayer = async (e) => {
+    const resp = await getPlayerHistories(wallet.address, null);
+    const levels = await getAllLevels();
+    const calculatedLevel = calculateLevel(resp.totalWager, levels);
+
+    setPlayerCurrentLevel(calculatedLevel);
+  };
+
+  const calculateLevel = (userExp, levelThresholds) => {
+    for (let i = levelThresholds.length - 1; i >= 0; i--) {
+      if (userExp >= levelThresholds[i].threshold) {
+        return levelThresholds[i];
+      }
+    }
+
+    return levelThresholds[0]; // Default level if no threshold is met
   };
 
   const calculateBet = async () => {
@@ -135,7 +152,12 @@ export default function CatchemAll(statsDatas) {
             `${parseFloat(result.events[0].parsedJson?.bet_amount) / 1000000000}`,
             {},
             result.events[0].parsedJson?.winning,
-            "Catchem All"
+            "Catchem All",
+            {
+              level: playerCurrentLevel.levelName,
+              hex: playerCurrentLevel.colorHex
+            },
+            userData?.username
           );
 
           setIsLoadResult(false);
@@ -161,7 +183,7 @@ export default function CatchemAll(statsDatas) {
 
   const getHistories = async (e) => {
     const resp = await getAllHistories('Catchem All', 10);
-    setRecentlyPlay(resp);
+    setRecentlyPlay(resp.records);
     setisLoad(true);
   };
 
@@ -169,6 +191,7 @@ export default function CatchemAll(statsDatas) {
     setDomLoaded(true);
     getMinMax();
     getHistories();
+    levelPlayer();
   }, []);
 
   useEffect(() => {
@@ -247,20 +270,29 @@ export default function CatchemAll(statsDatas) {
                       {RecentlyPlay?.map((stat, index) => (
                         <tr
                           key={index}
-                          className="border-b border-[#2F3030] dark:border-[#2F3030] text-white"
+                          className="border-b border-[#2F3030] dark:border-[#2F3030]"
                           style={{ backgroundColor: "#262626" }}
                         >
-                          <th
-                            scope="row"
-                            className="px-6 py-2 font-medium whitespace-nowrap text-start dark:text-white"
-                          >
-                            {stat.walletAddress.substr(0, 4) +
-                              "....." +
-                              stat.walletAddress.substr(
-                                stat.walletAddress.length - 4,
-                                stat.walletAddress.length
-                              )}{" "}
-                          </th>
+                          {stat.username !== null ?
+                            <th
+                              scope="row"
+                              className="px-6 py-2 font-medium whitespace-nowrap text-start truncate" style={{ color: "#" + stat?.playerLv?.hex, maxWidth: '1px' }}
+                            >
+                              {stat.username}
+                            </th>
+                            :
+                            <th
+                              scope="row"
+                              className="px-6 py-2 font-medium whitespace-nowrap text-start" style={{ color: "#" + stat?.playerLv?.hex }}
+                            >
+                              {stat.walletAddress.substr(0, 4) +
+                                "....." +
+                                stat.walletAddress.substr(
+                                  stat.walletAddress.length - 4,
+                                  stat.walletAddress.length
+                                )}{" "}
+                            </th>
+                          }
                           <th
                             scope="row"
                             className="px-6 py-2 font-medium whitespace-nowrap text-start dark:text-white"
@@ -317,7 +349,7 @@ export default function CatchemAll(statsDatas) {
                             scope="row"
                             className="px-6 py-2 font-medium whitespace-nowrap text-start dark:text-white"
                           >
-                            {moment(Number(stat.__createdtime__)).fromNow()}
+                            {moment(stat.createdAt).fromNow()}
                           </th>
                         </tr>
                       ))}
@@ -552,20 +584,29 @@ export default function CatchemAll(statsDatas) {
                       {RecentlyPlay?.map((stat, index) => (
                         <tr
                           key={index}
-                          className="border-b border-[#2F3030] dark:border-[#2F3030] text-white"
+                          className="border-b border-[#2F3030] dark:border-[#2F3030]"
                           style={{ backgroundColor: "#262626" }}
                         >
-                          <th
-                            scope="row"
-                            className="px-6 py-2 font-medium whitespace-nowrap text-start dark:text-white"
-                          >
-                            {stat.walletAddress.substr(0, 4) +
-                              "....." +
-                              stat.walletAddress.substr(
-                                stat.walletAddress.length - 4,
-                                stat.walletAddress.length
-                              )}{" "}
-                          </th>
+                          {stat.username !== null ?
+                            <th
+                              scope="row"
+                              className="px-6 py-2 font-medium whitespace-nowrap text-start truncate" style={{ color: "#" + stat?.playerLv?.hex, maxWidth: '1px' }}
+                            >
+                              {stat.username}
+                            </th>
+                            :
+                            <th
+                              scope="row"
+                              className="px-6 py-2 font-medium whitespace-nowrap text-start" style={{ color: "#" + stat?.playerLv?.hex }}
+                            >
+                              {stat.walletAddress.substr(0, 4) +
+                                "....." +
+                                stat.walletAddress.substr(
+                                  stat.walletAddress.length - 4,
+                                  stat.walletAddress.length
+                                )}{" "}
+                            </th>
+                          }
                           <th
                             scope="row"
                             className="px-6 py-2 font-medium whitespace-nowrap text-start dark:text-white"
@@ -622,7 +663,7 @@ export default function CatchemAll(statsDatas) {
                             scope="row"
                             className="px-6 py-2 font-medium whitespace-nowrap text-start dark:text-white"
                           >
-                            {moment(Number(stat.__createdtime__)).fromNow()}
+                            {moment(stat.createdAt).fromNow()}
                           </th>
                         </tr>
                       ))}

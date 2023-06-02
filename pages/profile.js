@@ -69,6 +69,7 @@ export default function profile() {
     if (wallet?.connected) {
       console.log("connected");
       getHistories();
+      console.log(userData);
     }
   }, [wallet]);
 
@@ -86,7 +87,7 @@ export default function profile() {
         return levelThresholds[i];
       }
     }
-
+    
     return levelThresholds[0]; // Default level if no threshold is met
   };
 
@@ -94,6 +95,7 @@ export default function profile() {
     const calculatedLevel = calculateLevel(totalWgr, levelThresholds);
     //For Testing only
     // const calculatedLevel = calculateLevel(4100, levelThresholds);
+    console.log(calculatedLevel);
     setPlayerCurrentLevel(calculatedLevel);
 
     const i = levelThresholds.findIndex(
@@ -381,7 +383,7 @@ export default function profile() {
                 <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                   <table className="mt-16 w-full text-base text-left text-gray-500 dark:text-gray-400 font-coolvetica">
                     <thead
-                      className="text-xs text-white dark:text-white tracking-widest"
+                      className="text-xs text-white text-white tracking-widest"
                       style={{ backgroundColor: "#404040" }}
                     >
                       <tr className="text-lg 2xl:text-xl">
@@ -405,19 +407,30 @@ export default function profile() {
                     <tbody>
                       {playerHistories.records.map((stat, index) => (
                         <tr
-                          class="border-b border-[#2F3030] 2xl:text-lg dark:border-[#2F3030] text-white"
+                          class="border-b border-[#2F3030] 2xl:text-lg dark:border-[#2F3030]"
                           style={{ backgroundColor: "#262626" }}
                         >
                           <th
                             scope="row"
-                            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap text-white"
                           >
                             {stat.gameName}
                           </th>
-                          <td class="px-6 py-4">
+                          <td class="px-6 py-4 text-white">
                             {moment(Date.parse(stat.createdAt)).fromNow()}
                           </td>
-                          <td class="px-6 py-4">
+                          {stat.username !== null ?
+                          <td
+                            scope="row"
+                            className="px-6 py-4 truncate" style={{ color: "#" + stat?.playerLv?.hex, maxWidth: '1px' }}
+                          >
+                            {stat.username}
+                          </td>
+                          :
+                          <td
+                            scope="row"
+                            className="px-6 py-4" style={{ color: "#" + stat?.playerLv?.hex }}
+                          >
                             {stat.walletAddress.substr(0, 4) +
                               "....." +
                               stat.walletAddress.substr(
@@ -425,7 +438,8 @@ export default function profile() {
                                 stat.walletAddress.length
                               )}{" "}
                           </td>
-                          <td class="px-6 py-4">
+                        }
+                          <td class="px-6 py-4 text-white">
                             <div className="flex items-center">
                               {stat.wager}
                               <img

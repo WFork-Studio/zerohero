@@ -32,8 +32,8 @@ export const AppDataProvider = ({ children }) => {
       ...messagesReceived,
       ...newMessages.map((message) => ({
         message: message.message,
-        walletAddress: message.users.walletAddress,
-        username: message.users.username,
+        walletAddress: message.users?.walletAddress,
+        username: message.users?.username,
       })),
     ]);
   };

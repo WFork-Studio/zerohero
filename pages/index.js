@@ -246,11 +246,10 @@ export default function Home() {
                                 style={{ alignItems: "self-start" }}
                               >
                                 <h2
-                                  className={`${
-                                    locale === "es"
-                                      ? "lg:text-base xl:text-xl 2xl:text-4xl"
-                                      : "lg:text-xl xl:text-2xl 2xl:text-5xl"
-                                  } mt-2`}
+                                  className={`${locale === "es"
+                                    ? "lg:text-base xl:text-xl 2xl:text-4xl"
+                                    : "lg:text-xl xl:text-2xl 2xl:text-5xl"
+                                    } mt-2`}
                                 >
                                   {t("landing_content.buy_nft")}
                                 </h2>
@@ -385,14 +384,26 @@ export default function Home() {
                         <td className="px-6">
                           {moment(Number(Date.parse(stat.createdAt))).fromNow()}
                         </td>
-                        <td className="px-6 text-center">
-                          {stat.walletAddress.substr(0, 4) +
-                            "....." +
-                            stat.walletAddress.substr(
-                              stat.walletAddress.length - 4,
-                              stat.walletAddress.length
-                            )}{" "}
-                        </td>
+                        {stat.username !== null ?
+                          <td
+                            scope="row"
+                            className="px-6 text-center truncate" style={{ color: "#" + stat?.playerLv?.hex, maxWidth: '1px' }}
+                          >
+                            {stat.username}
+                          </td>
+                          :
+                          <td
+                            scope="row"
+                            className="px-6 text-center" style={{ color: "#" + stat?.playerLv?.hex }}
+                          >
+                            {stat.walletAddress.substr(0, 4) +
+                              "....." +
+                              stat.walletAddress.substr(
+                                stat.walletAddress.length - 4,
+                                stat.walletAddress.length
+                              )}{" "}
+                          </td>
+                        }
                         <td className="px-6">
                           <div className="flex items-center justify-center">
                             <img src="/images/sui_brand.png" alt="Sui Brand" />
