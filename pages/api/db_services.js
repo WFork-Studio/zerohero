@@ -181,11 +181,11 @@ export async function getAllLevels() {
   }
 }
 
-export async function sendMessage(userid, message) {
+export async function sendMessage(userid, message, playerLv) {
   try {
     const { error } = await supabase
       .from("messages")
-      .insert([{ message: message, userId: userid }]);
+      .insert([{ message: message, userId: userid, playerLv: playerLv }]);
 
     if (error) {
       throw error;

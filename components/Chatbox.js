@@ -8,13 +8,21 @@ export default function Chatbox() {
   const [message, setMessage] = useState("");
   const { chatbox, state } = useContext(AppContext);
   const { messagesReceived } = chatbox;
-  const { userData } = state;
+  const { userData, playerCurrentLevel } = state;
   const wallet = useWallet();
 
   const sendMessageHandle = async () => {
     const trimmedMessage = message.trim();
     if (trimmedMessage) {
-      await sendMessage(userData.id, trimmedMessage);
+      await sendMessage(
+        userData.id,
+        trimmedMessage,
+        {
+          levelName: playerCurrentLevel.levelName,
+          colorHex: playerCurrentLevel.colorHex,
+          image: playerCurrentLevel.image
+        }
+      );
       setMessage("");
     }
   };
@@ -26,28 +34,26 @@ export default function Chatbox() {
     >
       <div className="w-full rounded-[8px] rounded-bl-[0px] bg-gradient-to-r from-[#6002BF] via-[#C74CDB] to-[#4C6BDB] p-0.5">
         <div className="rounded-[8px] rounded-bl-[0px] h-auto break-all w-full bg-[#121212] back p-2">
-          <span className="text-blue-500">
+          <span className="inline-block overflow-hidden whitespace-nowrap text-ellipsis align-bottom" style={{ color: "#" + message.colorHex, maxWidth: '7rem' }}>
             {message.username === null
-              ? message.walletAddress.substr(0, 12) +
-                "....." +
-                message.walletAddress.substr(
-                  message.walletAddress.length - 12,
-                  message.walletAddress.length
-                )
+              ? message.walletAddress.substr(0, 4) +
+              "....." +
+              message.walletAddress.substr(
+                message.walletAddress.length - 4,
+                message.walletAddress.length
+              )
               : message.username}
-            :
-          </span>{" "}
-          <span>{message.message}</span>
+          </span>
+          <img className="w-5 h-5 rounded-full inline mx-1" src={message.image} alt="badges" />
+          <span className="align-bottom mb-auto">: {message.message}</span>
         </div>
       </div>
     </div>
   );
 
   useEffect(() => {
-    if (wallet.address !== undefined) {
-      messagesColumnRef.current.scrollTop =
-        messagesColumnRef.current.scrollHeight;
-    }
+    messagesColumnRef.current.scrollTop =
+      messagesColumnRef.current.scrollHeight;
   }, [messagesReceived]);
 
   //Animation And Etc
@@ -87,12 +93,12 @@ export default function Chatbox() {
   function onMetaAndEnter(evt) {
     if (evt.keyCode === 13) {
       if (message !== "" || message !== null) {
-        sendMessage();
+        sendMessageHandle();
       }
     }
   }
   return (
-    <div className="floating-chat">
+    <div className="floating-chat" style={{ zIndex: '1000' }}>
       <i
         className="fa fa-comments"
         style={{ fontSize: "1.25em" }}
@@ -108,7 +114,14 @@ export default function Chatbox() {
           </button>
         </div>
         {wallet.address === undefined ? (
-          <div></div>
+          <ul
+            className="messages font-coolvetica text-sm"
+            ref={messagesColumnRef}
+          >
+            {messagesReceived.map((msg, i) => (
+              <ChatBubble message={msg} key={i} />
+            ))}
+          </ul>
         ) : (
           <ul
             className="messages font-coolvetica text-sm"
@@ -123,7 +136,7 @@ export default function Chatbox() {
         {wallet.address === undefined ? (
           <div className="footer">
             <div className="w-full">
-              <ConnectButton label="Connect Wallet" />
+              <ConnectButton label="Connect Wallet" style={{ textTransform: 'capitalize' }} />
             </div>
           </div>
         ) : (
@@ -136,7 +149,7 @@ export default function Chatbox() {
                 setMessage(e.target.value);
               }}
               onKeyDown={onMetaAndEnter}
-              // disabled={true}
+            // disabled={true}
             ></input>
             <button
               id="sendMessageHandle"
@@ -153,12 +166,12 @@ export default function Chatbox() {
           Connected as:
           {wallet.address != undefined
             ? " " +
-              wallet.address.substring(0, 12) +
-              "....." +
-              wallet.address.substring(
-                wallet.address.length - 12,
-                wallet.address.length
-              )
+            wallet.address.substring(0, 12) +
+            "....." +
+            wallet.address.substring(
+              wallet.address.length - 12,
+              wallet.address.length
+            )
             : "-"}
         </div>
       </div>

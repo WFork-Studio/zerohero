@@ -11,7 +11,7 @@ import {
 } from "@mysten/sui.js";
 import { ToastContainer, toast } from "react-toastify";
 import Confetti from "react-confetti";
-import { storeHistory, getAllHistories, getAllLevels, getPlayerHistories } from "./api/db_services";
+import { storeHistory, getAllHistories } from "./api/db_services";
 import moment from "moment";
 import Footer from "../components/Footer";
 import { useTranslation } from 'next-i18next'
@@ -43,33 +43,14 @@ export default function CatchemAll(statsDatas) {
   const [IsLoadResult, setIsLoadResult] = useState(false);
   const [StatusGame, setStatusGame] = useState("ready");
   const [IsWin, setIsWin] = useState(false);
-  const [playerCurrentLevel, setPlayerCurrentLevel] = useState();
   const { state, setUserData } = useContext(AppContext);
-  const { userData } = state;
+  const { userData, playerCurrentLevel } = state;
   const stats = statsDatas.statistics;
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const isTabletOrMobile = useMediaQuery({ maxWidth: 991.9 });
 
   const contextClass = {
     info: "bg-[#6103bf]",
-  };
-
-  const levelPlayer = async (e) => {
-    const resp = await getPlayerHistories(wallet.address, null);
-    const levels = await getAllLevels();
-    const calculatedLevel = calculateLevel(resp.totalWager, levels);
-
-    setPlayerCurrentLevel(calculatedLevel);
-  };
-
-  const calculateLevel = (userExp, levelThresholds) => {
-    for (let i = levelThresholds.length - 1; i >= 0; i--) {
-      if (userExp >= levelThresholds[i].threshold) {
-        return levelThresholds[i];
-      }
-    }
-
-    return levelThresholds[0]; // Default level if no threshold is met
   };
 
   const calculateBet = async () => {
@@ -191,7 +172,6 @@ export default function CatchemAll(statsDatas) {
     setDomLoaded(true);
     getMinMax();
     getHistories();
-    levelPlayer();
   }, []);
 
   useEffect(() => {

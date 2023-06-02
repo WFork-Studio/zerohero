@@ -55,7 +55,6 @@ export default function Home() {
           schema: "public",
         },
         (payload) => {
-          console.log(payload);
           setAllHistories((prevData) => {
             const newData = [...prevData.records, payload.new];
             return {

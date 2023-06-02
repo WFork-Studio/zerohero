@@ -4,6 +4,8 @@ import {
   getUserData,
   createUserData,
   getAllMessages,
+  getPlayerHistories,
+  getAllLevels
 } from "../pages/api/db_services";
 import { createClient } from "@supabase/supabase-js";
 
@@ -12,6 +14,7 @@ export const AppContext = createContext();
 export const AppDataProvider = ({ children }) => {
   const [walletData, setWalletData] = useState();
   const [userData, setUserData] = useState();
+  const [playerCurrentLevel, setPlayerCurrentLevel] = useState();
   const [messagesReceived, setMessagesReceived] = useState([]);
   const isEffectExecutedRef = useRef(false);
   const wallet = useWallet();
@@ -19,6 +22,24 @@ export const AppDataProvider = ({ children }) => {
     "https://ufelwnylsmdquentynib.supabase.co",
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmZWx3bnlsc21kcXVlbnR5bmliIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODU2MjMxNTQsImV4cCI6MjAwMTE5OTE1NH0.NMUn8xqjit6NdPKYTPOVAMMUDRbeEiez_vM-17lqg60"
   );
+
+  const levelPlayer = async (e) => {
+    const resp = await getPlayerHistories(wallet.address, null);
+    const levels = await getAllLevels();
+    const calculatedLevel = calculateLevel(resp.totalWager, levels);
+
+    setPlayerCurrentLevel(calculatedLevel);
+  };
+
+  const calculateLevel = (userExp, levelThresholds) => {
+    for (let i = levelThresholds.length - 1; i >= 0; i--) {
+      if (userExp >= levelThresholds[i].threshold) {
+        return levelThresholds[i];
+      }
+    }
+
+    return levelThresholds[0]; // Default level if no threshold is met
+  };
 
   const getMessages = async () => {
     const messages = await getAllMessages();
@@ -34,6 +55,8 @@ export const AppDataProvider = ({ children }) => {
         message: message.message,
         walletAddress: message.users?.walletAddress,
         username: message.users?.username,
+        image: message.playerLv?.image,
+        colorHex: message.playerLv?.colorHex
       })),
     ]);
   };
@@ -79,6 +102,8 @@ export const AppDataProvider = ({ children }) => {
                 message: newMessage.message,
                 walletAddress: user.walletAddress,
                 username: user.username,
+                image: newMessage.playerLv?.image,
+                colorHex: newMessage.playerLv?.colorHex
               },
             ]);
           }
@@ -96,6 +121,7 @@ export const AppDataProvider = ({ children }) => {
       console.log("wallet connected");
       fetchUserData().then((value) => {
         setUserData(value);
+        levelPlayer();
       });
     }
   }, [wallet]);
@@ -119,6 +145,7 @@ export const AppDataProvider = ({ children }) => {
           walletData,
           userData,
           supabase,
+          playerCurrentLevel
         },
         chatbox: {
           messagesReceived,
@@ -126,6 +153,7 @@ export const AppDataProvider = ({ children }) => {
         setWalletData,
         setUserData,
         fetchUserData,
+        setPlayerCurrentLevel
       }}
     >
       {children}

@@ -12,7 +12,7 @@ import {
 } from "@mysten/sui.js";
 import { ToastContainer, toast } from "react-toastify";
 import Confetti from "react-confetti";
-import { storeHistory, getAllHistories, getAllLevels, getPlayerHistories } from "./api/db_services";
+import { storeHistory, getAllHistories } from "./api/db_services";
 import Sound from 'react-sound';
 import LoadingSpinner from "../components/Spinner";
 import { useTranslation } from 'next-i18next'
@@ -46,9 +46,8 @@ export default function CoinFlip(statsDatas) {
   const [IsWin, setIsWin] = useState(false);
   const [FlipResult, setFlipResult] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [playerCurrentLevel, setPlayerCurrentLevel] = useState();
   const { state, setUserData } = useContext(AppContext);
-  const { userData } = state;
+  const { userData, playerCurrentLevel } = state;
   const stats = statsDatas.statistics;
   const [isLoad, setisLoad] = useState();
   const isDesktop = useMediaQuery({ minWidth: 992 });
@@ -56,14 +55,6 @@ export default function CoinFlip(statsDatas) {
 
   const contextClass = {
     info: "bg-[#6103bf]",
-  };
-
-  const levelPlayer = async (e) => {
-    const resp = await getPlayerHistories(wallet.address, null);
-    const levels = await getAllLevels();
-    const calculatedLevel = calculateLevel(resp.totalWager, levels);
-
-    setPlayerCurrentLevel(calculatedLevel);
   };
 
   const calculateBet = async () => {
@@ -91,16 +82,6 @@ export default function CoinFlip(statsDatas) {
     let bank = Number(txn?.data?.content?.fields?.bank) / 1000000000;
     let max = (bank * txn?.data?.content?.fields?.max_bet) / 10000;
     setMaxBet(Number(max.toFixed(1)));
-  };
-
-  const calculateLevel = (userExp, levelThresholds) => {
-    for (let i = levelThresholds.length - 1; i >= 0; i--) {
-      if (userExp >= levelThresholds[i].threshold) {
-        return levelThresholds[i];
-      }
-    }
-
-    return levelThresholds[0]; // Default level if no threshold is met
   };
 
   const playGame = async (e) => {
@@ -205,7 +186,6 @@ export default function CoinFlip(statsDatas) {
     setDomLoaded(true);
     getMinMax();
     getHistories();
-    levelPlayer();
   }, []);
 
   useEffect(() => {

@@ -69,7 +69,6 @@ export default function profile() {
     if (wallet?.connected) {
       console.log("connected");
       getHistories();
-      console.log(userData);
     }
   }, [wallet]);
 
@@ -95,7 +94,6 @@ export default function profile() {
     const calculatedLevel = calculateLevel(totalWgr, levelThresholds);
     //For Testing only
     // const calculatedLevel = calculateLevel(4100, levelThresholds);
-    console.log(calculatedLevel);
     setPlayerCurrentLevel(calculatedLevel);
 
     const i = levelThresholds.findIndex(
