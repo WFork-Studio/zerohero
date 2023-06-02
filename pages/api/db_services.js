@@ -89,7 +89,6 @@ export async function getUserData(walletAddress) {
       throw error;
     }
 
-    console.log("User Data Supa: ", records[0]);
     return records[0];
   } catch (error) {
     console.error("Error fetching data from Supabase:", error.message);
