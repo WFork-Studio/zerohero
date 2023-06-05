@@ -38,7 +38,9 @@
         "buy_nft": "¡Compra los NFTs de ZeroHero en el mercado ahora mismo!",
         "shop_now": "Comprar ahora",
         "visit_website": "Visita nuestro sitio web oficial",
-        "here": "Aquí"
+        "here": "Aquí",
+        "max_level": "MÁXIMO NIVEL",
+        "max_level_reached": "ALCANZÓ"
     },
     "game_content": {
         "game": "Juego",
