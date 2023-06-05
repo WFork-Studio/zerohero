@@ -86,7 +86,7 @@ export default function profile() {
         return levelThresholds[i];
       }
     }
-    
+
     return levelThresholds[0]; // Default level if no threshold is met
   };
 
@@ -361,7 +361,7 @@ export default function profile() {
                       >
                         {playerCurrentLevel.levelName ===
                         playerNextLevel.levelName
-                          ? "MAX LEVEL"
+                          ? t("profile_content.max_level")
                           : playerNextLevel
                           ? playerNextLevel.levelName
                           : "-"}
@@ -369,7 +369,7 @@ export default function profile() {
                       <p className="text-xs font-light">
                         {playerCurrentLevel.levelName ===
                         playerNextLevel.levelName
-                          ? "REACHED"
+                          ? t("profile_content.max_level_reached")
                           : playerNextLevel
                           ? playerNextLevel.threshold.toFixed(2)
                           : "0.00"}
@@ -417,26 +417,31 @@ export default function profile() {
                           <td class="px-6 py-4 text-white">
                             {moment(Date.parse(stat.createdAt)).fromNow()}
                           </td>
-                          {stat.username !== null ?
-                          <td
-                            scope="row"
-                            className="px-6 py-4 truncate" style={{ color: "#" + stat?.playerLv?.hex, maxWidth: '1px' }}
-                          >
-                            {stat.username}
-                          </td>
-                          :
-                          <td
-                            scope="row"
-                            className="px-6 py-4" style={{ color: "#" + stat?.playerLv?.hex }}
-                          >
-                            {stat.walletAddress.substr(0, 4) +
-                              "....." +
-                              stat.walletAddress.substr(
-                                stat.walletAddress.length - 4,
-                                stat.walletAddress.length
-                              )}{" "}
-                          </td>
-                        }
+                          {stat.username !== null ? (
+                            <td
+                              scope="row"
+                              className="px-6 py-4 truncate"
+                              style={{
+                                color: "#" + stat?.playerLv?.hex,
+                                maxWidth: "1px",
+                              }}
+                            >
+                              {stat.username}
+                            </td>
+                          ) : (
+                            <td
+                              scope="row"
+                              className="px-6 py-4"
+                              style={{ color: "#" + stat?.playerLv?.hex }}
+                            >
+                              {stat.walletAddress.substr(0, 4) +
+                                "....." +
+                                stat.walletAddress.substr(
+                                  stat.walletAddress.length - 4,
+                                  stat.walletAddress.length
+                                )}{" "}
+                            </td>
+                          )}
                           <td class="px-6 py-4 text-white">
                             <div className="flex items-center">
                               {stat.wager}
