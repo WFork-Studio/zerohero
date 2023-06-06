@@ -13,13 +13,13 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import Confetti from "react-confetti";
 import { storeHistory, getAllHistories } from "./api/db_services";
-import Sound from 'react-sound';
+import Sound from "react-sound";
 import LoadingSpinner from "../components/Spinner";
-import { useTranslation } from 'next-i18next'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
-import 'moment/locale/de';
-import 'moment/locale/es';
+import "moment/locale/de";
+import "moment/locale/es";
 const provider = new JsonRpcProvider(testnetConnection);
 
 export function configureMoment(langauge) {
@@ -27,7 +27,7 @@ export function configureMoment(langauge) {
 }
 
 export default function CoinFlip(statsDatas) {
-  const { t } = useTranslation('global');
+  const { t } = useTranslation("global");
   const { locale } = useRouter();
   const wallet = useWallet();
   const { balance: walletBalance } = useAccountBalance();
@@ -141,7 +141,9 @@ export default function CoinFlip(statsDatas) {
           await storeHistory(
             result.events[0].parsedJson?.sender,
             `${parseFloat(result.events[0].parsedJson?.profit) / 1000000000}`,
-            `${parseFloat(result.events[0].parsedJson?.bet_amount) / 1000000000}`,
+            `${
+              parseFloat(result.events[0].parsedJson?.bet_amount) / 1000000000
+            }`,
             {
               choice: result.events[0].parsedJson?.bet,
               flipResult: result.events[0].parsedJson?.result,
@@ -150,7 +152,7 @@ export default function CoinFlip(statsDatas) {
             "Coin Flip",
             {
               level: playerCurrentLevel.levelName,
-              hex: playerCurrentLevel.colorHex
+              hex: playerCurrentLevel.colorHex,
             },
             userData?.username
           );
@@ -177,7 +179,7 @@ export default function CoinFlip(statsDatas) {
   };
 
   const getHistories = async (e) => {
-    const resp = await getAllHistories('Coin Flip', 10);
+    const resp = await getAllHistories("Coin Flip", 10);
     setRecentlyPlay(resp.records);
     setisLoad(true);
   };
@@ -189,7 +191,7 @@ export default function CoinFlip(statsDatas) {
   }, []);
 
   useEffect(() => {
-    if (StatusGame === 'over') {
+    if (StatusGame === "over") {
       getHistories();
     }
   }, [StatusGame]);
@@ -222,7 +224,9 @@ export default function CoinFlip(statsDatas) {
                 <h1 className="text-center text-4xl font-bold text-primary-800">
                   Coin Flip
                 </h1>
-                <h3 className="text-center text-2xl font-bold">{t('game_content.game')}</h3>
+                <h3 className="text-center text-2xl font-bold">
+                  {t("game_content.game")}
+                </h3>
               </div>
             )}
             {isDesktop && (
@@ -231,35 +235,40 @@ export default function CoinFlip(statsDatas) {
                   <h1 className="text-center text-4xl font-bold text-primary-800">
                     Coin Flip
                   </h1>
-                  <h3 className="text-center text-2xl font-bold">{t('game_content.game')}</h3>
+                  <h3 className="text-center text-2xl font-bold">
+                    {t("game_content.game")}
+                  </h3>
                 </div>
                 <h1
                   className="px-6 py-3 text-center text-lg font-bold rounded-t-lg"
                   style={{ backgroundColor: "#2F3030" }}
                 >
-                  {t('game_content.recently_play')}
+                  {t("game_content.recently_play")}
                 </h1>
                 <div className="relative overflow-x-auto shadow-md rounded-b-lg">
                   <table className="w-full text-base text-left text-gray-500 font-coolvetica">
-                    <thead class="text-lg text-white" style={{ backgroundColor: "#2F3030" }}>
+                    <thead
+                      class="text-lg text-white"
+                      style={{ backgroundColor: "#2F3030" }}
+                    >
                       <tr>
                         <th scope="col" class="px-6 py-3">
-                          {t('game_content.player')}
+                          {t("game_content.player")}
                         </th>
                         <th scope="col" class="px-6 py-3">
-                          {t('game_content.choice')}
+                          {t("game_content.choice")}
                         </th>
                         <th scope="col" class="px-6 py-3">
-                          {t('game_content.result')}
+                          {t("game_content.result")}
                         </th>
                         <th scope="col" class="px-6 py-3">
-                          {t('game_content.wager')}
+                          {t("game_content.wager")}
                         </th>
                         <th scope="col" class="px-6 py-3">
-                          {t('game_content.profit')}
+                          {t("game_content.profit")}
                         </th>
                         <th scope="col" class="px-6 py-3">
-                          {t('game_content.time')}
+                          {t("game_content.time")}
                         </th>
                       </tr>
                     </thead>
@@ -270,17 +279,22 @@ export default function CoinFlip(statsDatas) {
                           className="border-b border-[#2F3030] dark:border-[#2F3030]"
                           style={{ backgroundColor: "#262626" }}
                         >
-                          {stat.username !== null ?
+                          {stat.username !== null ? (
                             <th
                               scope="row"
-                              className="px-6 py-2 font-medium whitespace-nowrap text-start truncate" style={{ color: "#" + stat?.playerLv?.hex, maxWidth: '1px' }}
+                              className="px-6 py-2 font-medium whitespace-nowrap text-start truncate"
+                              style={{
+                                color: "#" + stat?.playerLv?.hex,
+                                maxWidth: "1px",
+                              }}
                             >
                               {stat.username}
                             </th>
-                            :
+                          ) : (
                             <th
                               scope="row"
-                              className="px-6 py-2 font-medium whitespace-nowrap text-start" style={{ color: "#" + stat?.playerLv?.hex }}
+                              className="px-6 py-2 font-medium whitespace-nowrap text-start"
+                              style={{ color: "#" + stat?.playerLv?.hex }}
                             >
                               {stat.walletAddress.substr(0, 4) +
                                 "....." +
@@ -289,32 +303,34 @@ export default function CoinFlip(statsDatas) {
                                   stat.walletAddress.length
                                 )}{" "}
                             </th>
-                          }
+                          )}
                           <th
                             scope="row"
                             className="px-6 py-2 font-medium whitespace-nowrap text-start text-white"
                           >
-                            {stat.gameData?.choice?.charAt(0).toUpperCase() + stat.gameData?.choice?.slice(1)}{" "}
+                            {stat.gameData?.choice?.charAt(0).toUpperCase() +
+                              stat.gameData?.choice?.slice(1)}{" "}
                           </th>
                           <th
                             scope="row"
                             className="px-6 py-2 font-medium whitespace-nowrap text-start text-white"
                           >
-                            {stat.gameData?.flipResult?.charAt(0).toUpperCase() + stat.gameData?.flipResult?.slice(1)}{" "}
+                            {stat.gameData?.flipResult
+                              ?.charAt(0)
+                              .toUpperCase() +
+                              stat.gameData?.flipResult?.slice(1)}{" "}
                           </th>
                           <th
                             scope="row"
                             className="px-6 py-2 font-medium whitespace-nowrap text-start text-white"
                           >
-                            <div
-                              className="flex items-center"
-                            >
+                            <div className="flex items-center">
                               <img
                                 width={25}
                                 src="/images/sui_brand.png"
                                 alt="Sui Brand"
                               />
-                              {(Number(stat.wager)).toFixed(2)}
+                              {Number(stat.wager).toFixed(2)}
                             </div>
                           </th>
                           <th
@@ -331,8 +347,7 @@ export default function CoinFlip(statsDatas) {
                                   src="/images/sui_brand.png"
                                   alt="Sui Brand"
                                 />
-                                -
-                                {(Number(stat.wager)).toFixed(2)}
+                                -{Number(stat.wager).toFixed(2)}
                               </div>
                             ) : (
                               <div
@@ -344,7 +359,7 @@ export default function CoinFlip(statsDatas) {
                                   src="/images/sui_brand.png"
                                   alt="Sui Brand"
                                 />
-                                +{(Number(stat.wager)).toFixed(2)}
+                                +{Number(stat.wager).toFixed(2)}
                               </div>
                             )}
                           </th>
@@ -361,43 +376,54 @@ export default function CoinFlip(statsDatas) {
                 </div>
               </div>
             )}
-            {IsLoadResult ?
+            {IsLoadResult ? (
               <div className="col-span-3 w-1/3 h-full w-full mr-4 h-60 bg-gradient-to-r p-[6px] from-[#6002BF] via-[#C74CDB] to-[#4C6BDB] rounded-lg">
                 <div className="flex justify-center items-center h-full bg-[#2F3030] text-white p-4 rounded-lg">
                   <div className="text-center">
-                    <img className="mx-auto rounded-lg" src="/images/cf-loading.gif" />
+                    <img
+                      className="mx-auto rounded-lg"
+                      src="/images/cf-loading.png"
+                    />
                     <div class="w-full bg-gray-300 h-2 rounded-full relative mt-2">
                       <div class="h-full bg-gradient-to-r from-[#6002BF] via-[#C74CDB] to-[#4C6BDB] rounded-full absolute animate-loading-bar"></div>
                     </div>
                   </div>
                 </div>
               </div>
-              :
+            ) : (
               <div className="col-span-3 w-1/3 h-full w-full mr-4 h-60 bg-gradient-to-r p-[6px] from-[#6002BF] via-[#C74CDB] to-[#4C6BDB] rounded-lg">
                 {StatusGame === "ready" ? (
                   <div className="lg:grid lg:grid-cols-5 justify-center h-full bg-[#2F3030] text-white p-4 rounded-lg">
                     <div className="col-span-2 xl:px-2 2xl:px-8 self-center">
                       {Picked ? (
-                        <img onClick={() => {
-                          setPicked(false);
-                          setIsPlaying(true);
-                        }} className="mx-auto" src="/images/tail-coin.png" />
+                        <img
+                          onClick={() => {
+                            setPicked(false);
+                            setIsPlaying(true);
+                          }}
+                          className="mx-auto"
+                          src="/images/tail-coin.png"
+                        />
                       ) : (
-                        <img onClick={() => {
-                          setPicked(true);
-                          setIsPlaying(true);
-                        }} className="mx-auto" src="/images/head-coin.png" />
+                        <img
+                          onClick={() => {
+                            setPicked(true);
+                            setIsPlaying(true);
+                          }}
+                          className="mx-auto"
+                          src="/images/head-coin.png"
+                        />
                       )}
                     </div>
                     <div className="col-span-3 lg:px-10 self-center">
                       <h1 className="text-center text-xl font-bold">
-                        {t('game_content.set_your_bet')}
+                        {t("game_content.set_your_bet")}
                       </h1>
                       <div className="2xl:px-10">
                         <div className="flow-root">
                           <div className="grid grid-cols-2">
                             <label className="block mb-2 text-sm font-medium text-white text-start">
-                              {t('game_content.wager')}
+                              {t("game_content.wager")}
                             </label>
                             <label className="block mb-2 text-sm font-medium text-white text-end">
                               Min {MinBet}
@@ -417,13 +443,18 @@ export default function CoinFlip(statsDatas) {
                             className="bg-black border border-primary-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-3 px-2.5"
                             placeholder=""
                           />
-                          <button onClick={() => { setWager(MaxBet) }} className="block mb-2 text-sm font-bold text-primary-500 bg-primary-800 w-fit float-right p-1 rounded-md text-end mt-1.5">
-                            {t('game_content.max')} {MaxBet}
+                          <button
+                            onClick={() => {
+                              setWager(MaxBet);
+                            }}
+                            className="block mb-2 text-sm font-bold text-primary-500 bg-primary-800 w-fit float-right p-1 rounded-md text-end mt-1.5"
+                          >
+                            {t("game_content.max")} {MaxBet}
                           </button>
                         </div>
                         <div>
                           <label className="block mb-2 text-sm font-medium text-white">
-                            {t('game_content.multiple_bets')}
+                            {t("game_content.multiple_bets")}
                           </label>
                           <input
                             value={MultipleBets}
@@ -447,7 +478,7 @@ export default function CoinFlip(statsDatas) {
                         <div className="mt-4 grid grid-cols-2 space-x-4">
                           <div>
                             <label className="block mb-2 text-sm font-medium text-white">
-                              {t('game_content.max_payout')}
+                              {t("game_content.max_payout")}
                             </label>
                             <input
                               value={MaxPayout}
@@ -462,7 +493,7 @@ export default function CoinFlip(statsDatas) {
                           </div>
                           <div>
                             <label className="block mb-2 text-sm font-medium text-white text-end">
-                              {t('game_content.total_wager')}
+                              {t("game_content.total_wager")}
                             </label>
                             <input
                               value={TotalWager}
@@ -478,7 +509,7 @@ export default function CoinFlip(statsDatas) {
                         </div>
                         <div className="mt-4">
                           <label className="block mb-2 text-sm font-medium text-white">
-                            {t('game_content.pick_a_side')}
+                            {t("game_content.pick_a_side")}
                           </label>
                           <div className="grid grid-cols-2 space-x-4">
                             <div>
@@ -500,7 +531,7 @@ export default function CoinFlip(statsDatas) {
                               >
                                 <div className="block">
                                   <div className="w-full text-lg font-semibold">
-                                    {t('game_content.HEADS')}
+                                    {t("game_content.HEADS")}
                                   </div>
                                 </div>
                               </label>
@@ -523,7 +554,7 @@ export default function CoinFlip(statsDatas) {
                               >
                                 <div className="block">
                                   <div className="w-full text-lg font-semibold">
-                                    {t('game_content.TAILS')}
+                                    {t("game_content.TAILS")}
                                   </div>
                                 </div>
                               </label>
@@ -534,19 +565,19 @@ export default function CoinFlip(statsDatas) {
                           {wallet?.connected ? (
                             <>
                               {Number(TotalWager) <= Number(MaxBet) &&
-                                Number(TotalWager) >= Number(MinBet) ? (
+                              Number(TotalWager) >= Number(MinBet) ? (
                                 <button
                                   onClick={playGame}
                                   className="w-full py-2 bg-primary-800 rounded-lg text-black font-bold"
                                 >
-                                  {t('game_content.play')}
+                                  {t("game_content.play")}
                                 </button>
                               ) : (
                                 <button
                                   disabled
                                   className="w-full py-2 bg-gray-500 rounded-lg text-gray-300 text-sm font-bold"
                                 >
-                                  {t('game_content.alert_bet')}
+                                  {t("game_content.alert_bet")}
                                 </button>
                               )}
                             </>
@@ -564,7 +595,7 @@ export default function CoinFlip(statsDatas) {
                         {IsWin ? (
                           <div className="text-center">
                             <label className="block mb-2 text-5xl font-bold text-white">
-                              {t('game_content.win')}
+                              {t("game_content.win")}
                             </label>
                             <label
                               className="block mb-2 text-3xl font-medium"
@@ -589,7 +620,7 @@ export default function CoinFlip(statsDatas) {
                         ) : (
                           <div className="text-center">
                             <label className="block mb-2 text-5xl font-bold text-white">
-                              {t('game_content.lose')}
+                              {t("game_content.lose")}
                             </label>
                             <label
                               className="block mb-2 text-3xl font-medium"
@@ -619,7 +650,7 @@ export default function CoinFlip(statsDatas) {
                             }}
                             className="w-full py-2 bg-primary-800 rounded-lg text-black font-bold"
                           >
-                            {t('game_content.try_again')}
+                            {t("game_content.try_again")}
                           </button>
                         </div>
                       </div>
@@ -627,36 +658,39 @@ export default function CoinFlip(statsDatas) {
                   </div>
                 )}
               </div>
-            }
+            )}
             {isTabletOrMobile && (
               <div className="col-span- mt-6">
                 <h1
                   className="px-6 py-3 text-center text-lg font-bold rounded-t-lg"
                   style={{ backgroundColor: "#2F3030" }}
                 >
-                  {t('game_content.recently_play')}
+                  {t("game_content.recently_play")}
                 </h1>
                 <div className="relative overflow-x-auto shadow-md rounded-b-lg">
                   <table className="w-full text-base text-left text-gray-500 dark:text-gray-400 font-coolvetica">
-                    <thead class="text-lg text-white" style={{ backgroundColor: "#2F3030" }}>
+                    <thead
+                      class="text-lg text-white"
+                      style={{ backgroundColor: "#2F3030" }}
+                    >
                       <tr>
                         <th scope="col" class="px-6 py-3">
-                          {t('game_content.player')}
+                          {t("game_content.player")}
                         </th>
                         <th scope="col" class="px-6 py-3">
-                          {t('game_content.choice')}
+                          {t("game_content.choice")}
                         </th>
                         <th scope="col" class="px-6 py-3">
-                          {t('game_content.result')}
+                          {t("game_content.result")}
                         </th>
                         <th scope="col" class="px-6 py-3">
-                          {t('game_content.wager')}
+                          {t("game_content.wager")}
                         </th>
                         <th scope="col" class="px-6 py-3">
-                          {t('game_content.profit')}
+                          {t("game_content.profit")}
                         </th>
                         <th scope="col" class="px-6 py-3">
-                          {t('game_content.time')}
+                          {t("game_content.time")}
                         </th>
                       </tr>
                     </thead>
@@ -667,17 +701,22 @@ export default function CoinFlip(statsDatas) {
                           className="border-b border-[#2F3030] dark:border-[#2F3030]"
                           style={{ backgroundColor: "#262626" }}
                         >
-                          {stat.username !== null ?
+                          {stat.username !== null ? (
                             <th
                               scope="row"
-                              className="px-6 py-2 font-medium whitespace-nowrap text-start truncate" style={{ color: "#" + stat?.playerLv?.hex, maxWidth: '1px' }}
+                              className="px-6 py-2 font-medium whitespace-nowrap text-start truncate"
+                              style={{
+                                color: "#" + stat?.playerLv?.hex,
+                                maxWidth: "1px",
+                              }}
                             >
                               {stat.username}
                             </th>
-                            :
+                          ) : (
                             <th
                               scope="row"
-                              className="px-6 py-2 font-medium whitespace-nowrap text-start" style={{ color: "#" + stat?.playerLv?.hex }}
+                              className="px-6 py-2 font-medium whitespace-nowrap text-start"
+                              style={{ color: "#" + stat?.playerLv?.hex }}
                             >
                               {stat.walletAddress.substr(0, 4) +
                                 "....." +
@@ -686,32 +725,34 @@ export default function CoinFlip(statsDatas) {
                                   stat.walletAddress.length
                                 )}{" "}
                             </th>
-                          }
+                          )}
                           <th
                             scope="row"
                             className="px-6 py-2 font-medium whitespace-nowrap text-start text-white"
                           >
-                            {stat.gameData?.choice?.charAt(0).toUpperCase() + stat.gameData?.choice?.slice(1)}{" "}
+                            {stat.gameData?.choice?.charAt(0).toUpperCase() +
+                              stat.gameData?.choice?.slice(1)}{" "}
                           </th>
                           <th
                             scope="row"
                             className="px-6 py-2 font-medium whitespace-nowrap text-start text-white"
                           >
-                            {stat.gameData?.flipResult?.charAt(0).toUpperCase() + stat.gameData?.flipResult?.slice(1)}{" "}
+                            {stat.gameData?.flipResult
+                              ?.charAt(0)
+                              .toUpperCase() +
+                              stat.gameData?.flipResult?.slice(1)}{" "}
                           </th>
                           <th
                             scope="row"
                             className="px-6 py-2 font-medium whitespace-nowrap text-start text-white"
                           >
-                            <div
-                              className="flex items-center"
-                            >
+                            <div className="flex items-center">
                               <img
                                 width={25}
                                 src="/images/sui_brand.png"
                                 alt="Sui Brand"
                               />
-                              {(Number(stat.wager)).toFixed(2)}
+                              {Number(stat.wager).toFixed(2)}
                             </div>
                           </th>
                           <th
@@ -728,8 +769,7 @@ export default function CoinFlip(statsDatas) {
                                   src="/images/sui_brand.png"
                                   alt="Sui Brand"
                                 />
-                                -
-                                {(Number(stat.wager)).toFixed(2)}
+                                -{Number(stat.wager).toFixed(2)}
                               </div>
                             ) : (
                               <div
@@ -741,7 +781,7 @@ export default function CoinFlip(statsDatas) {
                                   src="/images/sui_brand.png"
                                   alt="Sui Brand"
                                 />
-                                +{(Number(stat.wager)).toFixed(2)}
+                                +{Number(stat.wager).toFixed(2)}
                               </div>
                             )}
                           </th>
@@ -769,24 +809,27 @@ export default function CoinFlip(statsDatas) {
             {IsConfetti && <Confetti />}
             <Sound
               url="/sound/coin-sound.mp3"
-              playStatus={isPlaying ? Sound.status.PLAYING : Sound.status.STOPPED}
-              onFinishedPlaying={() => { setIsPlaying(false); }}
+              playStatus={
+                isPlaying ? Sound.status.PLAYING : Sound.status.STOPPED
+              }
+              onFinishedPlaying={() => {
+                setIsPlaying(false);
+              }}
             />
-          </div >
-        )
-        }
+          </div>
+        )}
         <Footer />
       </>
     );
   } else {
-    return <LoadingSpinner />
+    return <LoadingSpinner />;
   }
 }
 
 export async function getStaticProps({ locale }) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['global']))
-    }
+      ...(await serverSideTranslations(locale, ["global"])),
+    },
   };
 }
