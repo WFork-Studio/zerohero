@@ -130,7 +130,7 @@ export default function Home() {
                         </div>
                         <div className="flex mb-4">
                           <div className="w-full">
-                            <h2 className="text-xl">
+                            <h2 className="text-xl text-white">
                               {t("landing_content.buy_nft")}
                             </h2>
                           </div>
@@ -181,7 +181,7 @@ export default function Home() {
                         </div>
                         <div className="mb-4">
                           <div className="w-full mb-2">
-                            <h2 className="text-xl">
+                            <h2 className="text-xl text-white">
                               {t("landing_content.buy_nft")}
                             </h2>
                           </div>
@@ -248,7 +248,7 @@ export default function Home() {
                                   className={`${locale === "es"
                                     ? "lg:text-base xl:text-xl 2xl:text-4xl"
                                     : "lg:text-xl xl:text-2xl 2xl:text-5xl"
-                                    } mt-2`}
+                                    } mt-2 text-white`}
                                 >
                                   {t("landing_content.buy_nft")}
                                 </h2>

@@ -45,7 +45,7 @@ export default function Chatbox() {
               : message.username}
           </span>
           <img className="w-5 h-5 rounded-full inline mx-1" src={message.image} alt="badges" />
-          <span className="align-bottom mb-auto">: {message.message}</span>
+          <span className="align-bottom mb-auto text-white">: {message.message}</span>
         </div>
       </div>
     </div>
@@ -100,17 +100,17 @@ export default function Chatbox() {
   return (
     <div className="floating-chat" style={{ zIndex: '1000' }}>
       <i
-        className="fa fa-comments"
+        className="fa fa-comments text-white"
         style={{ fontSize: "1.25em" }}
         aria-hidden="true"
       ></i>
       <div className="chat">
         <div className="header">
-          <span className="title font-coolvetica">
+          <span className="title font-coolvetica text-white">
             Chat and Notification Box
           </span>
           <button>
-            <i className="fa fa-times" aria-hidden="true"></i>
+            <i className="fa fa-times text-white" aria-hidden="true"></i>
           </button>
         </div>
         {wallet.address === undefined ? (
@@ -158,7 +158,7 @@ export default function Chatbox() {
                 sendMessageHandle();
               }}
             >
-              <i className="fa fa-paper-plane pl-2 pr-2"></i>
+              <i className="fa fa-paper-plane pl-2 pr-2 text-white"></i>
             </button>
           </div>
         )}

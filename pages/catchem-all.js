@@ -208,7 +208,7 @@ export default function CatchemAll(statsDatas) {
                 <h1 className="text-center text-4xl font-bold text-primary-800">
                   Catch'em All
                 </h1>
-                <h3 className="text-center text-2xl font-bold">{t('game_content.game')}</h3>
+                <h3 className="text-center text-2xl font-bold text-white">{t('game_content.game')}</h3>
               </div>
             )}
             {isDesktop && (
@@ -217,10 +217,10 @@ export default function CatchemAll(statsDatas) {
                   <h1 className="text-center text-4xl font-bold text-primary-800">
                     Catch'em All
                   </h1>
-                  <h3 className="text-center text-2xl font-bold">{t('game_content.game')}</h3>
+                  <h3 className="text-center text-2xl font-bold text-white">{t('game_content.game')}</h3>
                 </div>
                 <h1
-                  className="px-6 py-3 text-center text-lg font-bold rounded-t-lg"
+                  className="px-6 py-3 text-center text-lg font-bold rounded-t-lg text-white"
                   style={{ backgroundColor: "#2F3030" }}
                 >
                   {t('game_content.recently_play')}
@@ -534,7 +534,7 @@ export default function CatchemAll(statsDatas) {
             {isTabletOrMobile && (
               <div className="col-span- mt-6">
                 <h1
-                  className="px-6 py-3 text-center text-lg font-bold rounded-t-lg"
+                  className="px-6 py-3 text-center text-lg font-bold rounded-t-lg text-white"
                   style={{ backgroundColor: "#2F3030" }}
                 >
                   {t('game_content.recently_play')}
