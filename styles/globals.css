@@ -208,6 +208,7 @@ a {
     color: white;
     background: #121212;
   }
+}
   
 .floating-chat {
   cursor: pointer;
@@ -467,7 +468,7 @@ a {
     margin-right: 0;
   }
 }
-}
+
 @keyframes loading {
   0% {
     width: 0%;
