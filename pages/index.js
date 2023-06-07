@@ -83,14 +83,13 @@ export default function Home() {
           <section className="font-coolvetica pb-7">
             <div className={styles.container}>
               <div className="md:flex items-center pt-3 justify-between">
-                <div className="row-span-3 text-white text-6xl md:text-7xl 2xl:text-8xl py-6 md:py-20">
-                  <div className="col-span-3">Work is overrated</div>
-                  <span className="row-span-3 col-span-3">Retire early at</span>
+                <div className="row-span-3 text-white lg:max-w-4xl text-6xl md:text-7xl 2xl:text-8xl py-6 md:py-20">
+                  <div className="col-span-3">{t('landing_content.landing_title')}</div>
                   <span
                     className="row-span-3 col-span-3"
                     style={{ color: "#00F0FF" }}
                   >
-                    &nbsp;ZeroHero
+                    ZeroHero
                   </span>
                 </div>
                 <div className="md:w-1/2 h-max grid grid-cols-1">
@@ -245,11 +244,10 @@ export default function Home() {
                                 style={{ alignItems: "self-start" }}
                               >
                                 <h2
-                                  className={`${
-                                    locale === "es"
-                                      ? "lg:text-base xl:text-xl 2xl:text-4xl"
-                                      : "lg:text-xl xl:text-2xl 2xl:text-5xl"
-                                  } mt-2 text-white`}
+                                  className={`${locale === "es"
+                                    ? "lg:text-base xl:text-xl 2xl:text-4xl"
+                                    : "lg:text-xl xl:text-2xl 2xl:text-5xl"
+                                    } mt-2 text-white`}
                                 >
                                   {t("landing_content.buy_nft")}
                                 </h2>
@@ -499,36 +497,30 @@ export default function Home() {
                   <div className="md:w-1/3 md:mr-4 h-60 rounded-tr-[100px] rounded-[10px] bg-gradient-to-r p-[6px] from-[#6002BF] via-[#C74CDB] to-[#4C6BDB]">
                     <div className="flex flex-col justify-center h-full bg-[#2F3030] text-white rounded-tr-[100px] rounded-[10px] p-4">
                       <div className="text-xl lg:text-3xl text-white">
-                        Provably fair betting
+                        {t('landing_content.t&c_1_title')}
                       </div>
                       <div className="text-base lg:text-xl text-[#808080]">
-                        Our bet results are backed by Chainlink VRF so you can
-                        trust that every spin and deal is completely fair and
-                        random.
+                        {t('landing_content.t&c_1_desc')}
                       </div>
                     </div>
                   </div>
                   <div className="md:w-1/3 md:mr-4 h-60 rounded-[10px] bg-gradient-to-r p-[6px] from-[#6002BF] via-[#C74CDB] to-[#4C6BDB]">
                     <div className="flex flex-col justify-center text-center h-full bg-[#2F3030] text-white rounded-[10px] p-4">
                       <div className="text-xl lg:text-3xl text-white">
-                        Play, earn, and win ZeroHero NFTs!
+                        {t('landing_content.t&c_2_title')}
                       </div>
                       <div className="text-base lg:text-xl text-[#808080]">
-                        1% of all bets will be distributed back to ZeroHero
-                        holders. If you lose 13 consecutive flips of 4 SUI or
-                        more, we'll airdrop you a free random ZeroHero NFT.
+                        {t('landing_content.t&c_2_desc')}
                       </div>
                     </div>
                   </div>
                   <div className="md:w-1/3 h-60 rounded-tl-[100px] rounded-[10px] bg-gradient-to-r p-[6px] from-[#6002BF] via-[#C74CDB] to-[#4C6BDB]">
                     <div className="flex flex-col justify-center text-right h-full bg-[#2F3030] text-white rounded-tl-[100px] rounded-[10px] p-4">
                       <div className="text-xl lg:text-3xl text-white">
-                        Play risk free
+                        {t('landing_content.t&c_3_title')}
                       </div>
                       <div className="text-base lg:text-xl text-[#808080]">
-                        We do not require user registration or funds to be
-                        deposited. Simply connect to the website and place bets
-                        straight from your wallet.
+                        {t('landing_content.t&c_3_desc')}
                       </div>
                     </div>
                   </div>

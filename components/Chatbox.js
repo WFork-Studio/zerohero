@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { useWallet, ConnectButton } from "@suiet/wallet-kit";
 import { AppContext } from "../utils/AppContext";
 import { sendMessage } from "../pages/api/db_services";
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 export default function Chatbox() {
   const messagesColumnRef = useRef(null);
@@ -9,6 +11,7 @@ export default function Chatbox() {
   const { chatbox, state } = useContext(AppContext);
   const { messagesReceived } = chatbox;
   const { userData, playerCurrentLevel } = state;
+  const { t } = useTranslation('global');
   const wallet = useWallet();
 
   const sendMessageHandle = async () => {
@@ -36,11 +39,11 @@ export default function Chatbox() {
           >
             {message.username === null
               ? message.walletAddress.substr(0, 4) +
-                "....." +
-                message.walletAddress.substr(
-                  message.walletAddress.length - 4,
-                  message.walletAddress.length
-                )
+              "....." +
+              message.walletAddress.substr(
+                message.walletAddress.length - 4,
+                message.walletAddress.length
+              )
               : message.username}
           </span>
           <img
@@ -117,7 +120,7 @@ export default function Chatbox() {
       <div className="chat">
         <div className="header">
           <span className="title font-coolvetica text-white">
-            Chat and Notification Box
+            {t('chatbox_content.title_chatbox')}
           </span>
           <button>
             <i className="fa fa-times text-white" aria-hidden="true"></i>
@@ -154,7 +157,7 @@ export default function Chatbox() {
           )}
         </div>
         <div className="font-coolvetica text-xs pt-1 text-ellipsis">
-          Connected as:
+          {t('chatbox_content.connected')}:
           {wallet.address != undefined ? (
             <>
               {" "}
@@ -178,4 +181,12 @@ export default function Chatbox() {
     //   </body>
     // </Html>
   );
+}
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['global']))
+    }
+  };
 }

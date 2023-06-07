@@ -1,6 +1,6 @@
 {
     "landing_content": {
-        "buy_nft": "Kaufe jetzt ZeroHero NFTs auf dem Markt!",
+        "buy_nft": "Kaufen Sie jetzt unsere NFTs auf dem Markt!",
         "total_wagered": "Gesamtwetteinsatz",
         "total_bets": "Gesamte Wetten",
         "shop_now": "Jetzt einkaufen",
@@ -11,7 +11,13 @@
         "profit": "Gewinn",
         "show_more": "Mehr anzeigen",
         "game_list": "Spieleliste",
-        "landing_title": "Arbeit wird überbewertet. Geh früh in Rente bei"
+        "landing_title": "Entfesseln Sie den Nervenkitzel des Glücks mit",
+        "t&c_1_title": "Nachweislich faires Wetten",
+        "t&c_1_desc": "Unsere Wettergebnisse werden durch VRF unterstützt, sodass Sie darauf vertrauen können, dass jeder Spin und Deal völlig fair und zufällig ist.",
+        "t&c_2_title": "Spielen, verdienen und NFTs gewinnen!",
+        "t&c_2_desc": "1% aller Wetten werden an ZeroHero-Inhaber verteilt. Wenn Sie 15 aufeinanderfolgende Wetten von 50 SUI oder mehr verlieren, erhalten Sie einen kostenlosen zufälligen ZeroHero-NFT per Airdrop.",
+        "t&c_3_title": "Spiel risikofrei",
+        "t&c_3_desc": "Wir verlangen keine Registrierung der Benutzer oder Einzahlungen von Geldern. Sie können sich einfach mit der Website verbinden und Wetten direkt von Ihrer Geldbörse aus platzieren."
     },
     "statistics_content": {
         "statistics_title": "Alle Statistiken",
@@ -35,7 +41,7 @@
         "bets": "Einsätze",
         "wins": "Gewinne",
         "favorite_game": "Lieblingsspiel",
-        "buy_nft": "Kaufe jetzt ZeroHero NFTs auf dem Markt!",
+        "buy_nft": "Kaufen Sie jetzt unsere NFTs auf dem Markt!",
         "shop_now": "Jetzt einkaufen",
         "visit_website": "Besuchen Sie unsere offizielle Website",
         "here": "Hier",
@@ -68,9 +74,16 @@
         "max": "max"
     },
     "footer_content": {
-        "community_social": "Unsere Gemeinschaft und sozialen Medien",
+        "community_social": "Unsere Gemeinschaft & sozialen Medien",
         "support": "Unterstützung",
         "available_on": "VERFÜGBAR AUF",
-        "mwlb": "Mit Liebe gemacht von"
+        "mwlb": "Mit Liebe gemacht von",
+        "buy_trainers": "Kaufen Sie Trainer",
+        "buy_zerohero": "Kaufe ZeroHero",
+        "zerohero_desc": "Bitte überprüfen Sie vor der Nutzung, ob die Verwendung von ZeroHero in Ihrer Gerichtsbarkeit legal ist. ZeroHero übernimmt keine Verantwortung für die Nutzung der Plattform. Diese Plattform hat eine Gebühr von 5%. ZeroHero ist ein dezentrales Protokoll und die Betreiber dieser Benutzeroberfläche sind nicht verantwortlich für Verluste oder Schäden, die durch die Nutzung dieser Benutzeroberfläche entstehen."
+    },
+    "chatbox_content": {
+        "title_chatbox": "Chat- und Benachrichtigungsfeld",
+        "connected": "Verbunden als"
     }
 }

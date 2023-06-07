@@ -42,27 +42,17 @@ export default function Footer() {
           <div className="w-full pl-7 self-center">
             <div className="mt-1 text-2xl lg:text-4xl text-white">ZeroHero</div>
             <p className="mt-1 text-xs 2xl:text-base text-[#A5A5A5]">
-              Please research if ZeroHero is legal to use in your jurisdiction
-              prior to use. ZeroHero assumes no responsibility for your use of the
-              platform. This platform has 5% rake. ZeroHero is a decentralized
-              protocol and the maintainers of this interface are not responsible
-              for any losses or damages incurred by using this interface.
+              {t('footer_content.zerohero_desc')}
             </p>
           </div>
 
           <div className="w-full pl-7 lg:pl-32 self-center">
             <div className="mt-1 text-2xl lg:text-4xl text-white">{t('footer_content.support')}</div>
             <a href="#">
-              <div className="text-xs lg:text-base text-[#A5A5A5]">Buy Lucky Charm</div>
+              <div className="text-xs lg:text-base text-[#A5A5A5]">{t('footer_content.buy_trainers')}</div>
             </a>
             <a href="#">
-              <div className="text-xs lg:text-base text-[#A5A5A5]">Buy Card ID</div>
-            </a>
-            <a href="#">
-              <div className="text-xs lg:text-base text-[#A5A5A5]">ZeroHero Stats</div>
-            </a>
-            <a href="#">
-              <div className="text-xs lg:text-base text-[#A5A5A5]">Game Responsibly</div>
+              <div className="text-xs lg:text-base text-[#A5A5A5]">{t('footer_content.buy_zerohero')}</div>
             </a>
           </div>
         </div>
