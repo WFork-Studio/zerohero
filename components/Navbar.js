@@ -15,7 +15,7 @@ export default function Navbar() {
   ];
   return (
     <nav
-      className="flex items-center justify-between flex-wrap drop-shadow-xl nav_dropshadow"
+      className="flex items-center justify-between flex-wrap drop-shadow-xl"
       style={{ backgroundColor: "#2F3030" }}
     >
       <div className="mr-6 2xl:mr-80 flex flex-shrink-0 items-center text-white bg-gradient-to-b from-purple-500 to-purple-500/25 self-stretch pr-20 [clip-path:polygon(0_0,100%_0,calc(100%-theme(spacing.8))_100%,0_100%)]">
