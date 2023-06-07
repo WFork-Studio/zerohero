@@ -224,7 +224,7 @@ export default function CoinFlip(statsDatas) {
                 <h1 className="text-center text-4xl font-bold text-primary-800">
                   Coin Flip
                 </h1>
-                <h3 className="text-center text-2xl font-bold">
+                <h3 className="text-center text-2xl font-bold text-white">
                   {t("game_content.game")}
                 </h3>
               </div>
@@ -235,7 +235,7 @@ export default function CoinFlip(statsDatas) {
                   <h1 className="text-center text-4xl font-bold text-primary-800">
                     Coin Flip
                   </h1>
-                  <h3 className="text-center text-2xl font-bold">
+                  <h3 className="text-center text-2xl font-bold text-white">
                     {t("game_content.game")}
                   </h3>
                 </div>

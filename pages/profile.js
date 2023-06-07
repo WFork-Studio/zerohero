@@ -482,7 +482,7 @@ export default function profile() {
               <div class="mt-12 flex flex-col justify-center mb-6">
                 <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
                   <div className="text-center">
-                    <p className="text-2xl font-medium">
+                    <p className="text-2xl font-medium text-white">
                       {t("profile_content.buy_nft")}
                     </p>
 
