@@ -13,7 +13,7 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import Confetti from "react-confetti";
 import { storeHistory, getAllHistories } from "./api/db_services";
-import Sound from "react-sound";
+import useSound from 'use-sound'
 import LoadingSpinner from "../components/Spinner";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
@@ -45,13 +45,13 @@ export default function CoinFlip(statsDatas) {
   const [StatusGame, setStatusGame] = useState("ready");
   const [IsWin, setIsWin] = useState(false);
   const [FlipResult, setFlipResult] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
   const { state, setUserData } = useContext(AppContext);
   const { userData, playerCurrentLevel } = state;
   const stats = statsDatas.statistics;
   const [isLoad, setisLoad] = useState();
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const isTabletOrMobile = useMediaQuery({ maxWidth: 991.9 });
+  const [playSound] = useSound('/sound/coin-sound.mp3')
 
   const contextClass = {
     info: "bg-[#6103bf]",
@@ -381,7 +381,7 @@ export default function CoinFlip(statsDatas) {
                 <div className="flex justify-center items-center h-full bg-[#2F3030] text-white p-4 rounded-lg">
                   <div className="text-center">
                     <img
-                      className="mx-auto rounded-lg"
+                      className="mx-auto rounded-lg md:w-80"
                       src="/images/cf-loading.png"
                     />
                     <div class="w-full bg-gray-300 h-2 rounded-full relative mt-2">
@@ -399,7 +399,7 @@ export default function CoinFlip(statsDatas) {
                         <img
                           onClick={() => {
                             setPicked(false);
-                            setIsPlaying(true);
+                            playSound()
                           }}
                           className="mx-auto"
                           src="/images/tail-coin.png"
@@ -408,7 +408,7 @@ export default function CoinFlip(statsDatas) {
                         <img
                           onClick={() => {
                             setPicked(true);
-                            setIsPlaying(true);
+                            playSound()
                           }}
                           className="mx-auto"
                           src="/images/head-coin.png"
@@ -522,7 +522,7 @@ export default function CoinFlip(statsDatas) {
                                 defaultChecked
                                 onClick={() => {
                                   setPicked(false);
-                                  setIsPlaying(true);
+                                  playSound()
                                 }}
                               />
                               <label
@@ -545,7 +545,7 @@ export default function CoinFlip(statsDatas) {
                                 className="hidden peer"
                                 onClick={() => {
                                   setPicked(true);
-                                  setIsPlaying(true);
+                                  playSound()
                                 }}
                               />
                               <label
@@ -807,15 +807,6 @@ export default function CoinFlip(statsDatas) {
               />
             </div>
             {IsConfetti && <Confetti />}
-            <Sound
-              url="/sound/coin-sound.mp3"
-              playStatus={
-                isPlaying ? Sound.status.PLAYING : Sound.status.STOPPED
-              }
-              onFinishedPlaying={() => {
-                setIsPlaying(false);
-              }}
-            />
           </div>
         )}
         <Footer />
