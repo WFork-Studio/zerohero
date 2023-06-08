@@ -8,33 +8,35 @@ export default function Footer() {
   return (
     <div className="font-coolvetica w-screen pl-8 md:pl-32 pt-8 pb-8 bg-[#2F3030] self-stretch [clip-path:polygon(0%_0,100%_0,100%_100%,0_100%)] lg:[clip-path:polygon(7em_0,100%_0,100%_100%,0_100%)]">
       <div className="lg:grid lg:grid-cols-4 items-start">
-        <div className="w-full self-center pl-7 pb-2">
+        <div className="w-full self-center pl-7 pb-2 md:grid md:grid-cols-2 lg:block">
           <img className="img-alert" src="/images/begamble.png" alt="Be Gamble" />
-          <div className="mt-1 text-base md:text-xl pl-1 text-white">
-            {t('footer_content.community_social')}
-          </div>
-          <div className="flex flex-row pl-1 pt-1">
-            <a href="#">
-              <img
-                src="/images/telegram.png"
-                className="mr-3 h-5 lg:h-7"
-                alt="Telegram"
-              />
-            </a>
-            <a href="#">
-              <img
-                src="/images/twitter.png"
-                className="mr-3 h-5 lg:h-7"
-                alt="Twitter"
-              />
-            </a>
-            <a href="#">
-              <img
-                src="/images/discord.png"
-                className="mr-3 h-5 lg:h-7"
-                alt="Discord"
-              />
-            </a>
+          <div>
+            <div className="mt-1 text-base md:text-xl pl-1 text-white">
+              {t('footer_content.community_social')}
+            </div>
+            <div className="flex flex-row pl-1 pt-1">
+              <a href="#">
+                <img
+                  src="/images/telegram.png"
+                  className="mr-3 h-5 lg:h-7"
+                  alt="Telegram"
+                />
+              </a>
+              <a href="#">
+                <img
+                  src="/images/twitter.png"
+                  className="mr-3 h-5 lg:h-7"
+                  alt="Twitter"
+                />
+              </a>
+              <a href="#">
+                <img
+                  src="/images/discord.png"
+                  className="mr-3 h-5 lg:h-7"
+                  alt="Discord"
+                />
+              </a>
+            </div>
           </div>
         </div>
 
