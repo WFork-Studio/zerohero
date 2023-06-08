@@ -1,18 +1,21 @@
 import { useState } from "react";
 import { ConnectButton, useWallet } from "@suiet/wallet-kit";
-import Link from "next/link";
+import Link from "../components/Link";
 import { useRouter } from "next/router";
 import { GB, ES, DE } from 'country-flag-icons/react/3x2'
+import LanguageSwitchLink from './LanguageSwitchLink'
+import i18nextConfig from '../next-i18next.config'
 
 export default function Navbar() {
   const wallet = useWallet();
-  const { locale } = useRouter();
+  const { locale, query } = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const languageOptions = [
     { label: 'English', flag: <GB className="w-10 mx-auto" />, locale: 'en' },
     { label: 'Spanish', flag: <ES className="w-10 mx-auto" />, locale: 'es' },
     { label: 'Germany', flag: <DE className="w-10 mx-auto" />, locale: 'de' },
   ];
+  const currentLocale = query.locale || i18nextConfig.i18n.defaultLocale
   return (
     <nav
       className="flex items-center justify-between flex-wrap drop-shadow-xl"
@@ -72,18 +75,20 @@ export default function Navbar() {
           </Link>
         </div>
         <div className="block lg:hidden text-center mt-4">
-          <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" class="text-white border border-gray-500 rounded-lg focus:outline-none font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center" type="button">{locale === 'en' ? <GB className="w-5" /> : locale === 'es' ? <ES className="w-5" /> : <DE className="w-5" />} <svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
+          <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" class="text-white border border-gray-500 rounded-lg focus:outline-none font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center" type="button">{currentLocale === 'en' ? <GB className="w-5" /> : currentLocale === 'es' ? <ES className="w-5" /> : <DE className="w-5" />} <svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
 
           <div id="dropdown" class="z-10 hidden divide-y rounded-lg w-20" style={{ background: '#2F3030' }}>
             <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
-              {languageOptions.map((option) => (
-                <li>
-                  <Link href="" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" locale={option.locale}>
-                    {option.flag}
-                  </Link>
-                </li>
-              ))
-              }
+              {i18nextConfig.i18n.locales.map((locale) => {
+                return (
+                  <li>
+                    <LanguageSwitchLink
+                      locale={locale}
+                      key={locale}
+                    />
+                  </li>
+                )
+              })}
             </ul>
           </div>
         </div>
@@ -114,18 +119,20 @@ export default function Navbar() {
           }
 
 
-          <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown2" class="hidden lg:inline-flex text-white border border-gray-500 ml-4 rounded-lg focus:outline-none font-medium rounded-lg text-sm px-4 py-2.5 text-center items-center" type="button">{locale === 'en' ? <GB className="w-5" /> : locale === 'es' ? <ES className="w-5" /> : <DE className="w-5" />} <svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
+          <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown2" class="hidden lg:inline-flex text-white border border-gray-500 ml-4 rounded-lg focus:outline-none font-medium rounded-lg text-sm px-4 py-2.5 text-center items-center" type="button">{currentLocale === 'en' ? <GB className="w-5" /> : currentLocale === 'es' ? <ES className="w-5" /> : <DE className="w-5" />} <svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg></button>
 
           <div id="dropdown2" class="z-10 hidden divide-y rounded-lg w-20" style={{ background: '#2F3030' }}>
             <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
-              {languageOptions.map((option) => (
-                <li>
-                  <Link href="" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" locale={option.locale}>
-                    {option.flag}
-                  </Link>
-                </li>
-              ))
-              }
+              {i18nextConfig.i18n.locales.map((locale) => {
+                return (
+                  <li>
+                    <LanguageSwitchLink
+                      locale={locale}
+                      key={locale}
+                    />
+                  </li>
+                )
+              })}
             </ul>
           </div>
         </div>

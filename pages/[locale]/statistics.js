@@ -1,23 +1,26 @@
-import styles from "../styles/Home.module.css";
-import { getAllHistories, getStatsData } from "./api/db_services";
+import styles from "../../styles/Home.module.css";
+import { getAllHistories, getStatsData } from "../api/db_services";
 import { useState, useEffect, useContext } from "react";
 import moment from "moment/moment";
-import Footer from "../components/Footer";
-import LoadingSpinner from "../components/Spinner";
+import Footer from "../../components/Footer";
+import LoadingSpinner from "../../components/Spinner";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
 import "moment/locale/de";
 import "moment/locale/es";
-import { AppContext } from "../utils/AppContext";
+import { AppContext } from "../../utils/AppContext";
+import { getStaticPaths, makeStaticProps } from '../../lib/getStatic'
+import i18nextConfig from '../../next-i18next.config'
 
 export function configureMoment(langauge) {
   moment.locale(langauge);
 }
 
 export default function Statistics(statsDatas) {
-  const { t } = useTranslation("global");
-  const { locale } = useRouter();
+  const { t } = useTranslation('common');
+  const { locale, query } = useRouter();
+  const currentLocale = query.locale || i18nextConfig.i18n.defaultLocale
   const [isLoad, setisLoad] = useState();
   const [allHistories, setAllHistories] = useState([]);
   const [statsData, setStatsData] = useState();
@@ -63,8 +66,8 @@ export default function Statistics(statsDatas) {
   }, []);
 
   useEffect(() => {
-    configureMoment(locale);
-  }, [locale]);
+    configureMoment(currentLocale);
+  }, [currentLocale]);
 
   if (isLoad) {
     return (
@@ -314,10 +317,13 @@ export default function Statistics(statsDatas) {
   }
 }
 
-export async function getStaticProps({ locale }) {
-  return {
-    props: {
-      ...(await serverSideTranslations(locale, ["global"])),
-    },
-  };
-}
+const getStaticProps = makeStaticProps(['common'])
+export { getStaticPaths, getStaticProps }
+
+// export async function getStaticProps({ locale }) {
+//   return {
+//     props: {
+//       ...(await serverSideTranslations(locale, ['common'])),
+//     },
+//   };
+// }

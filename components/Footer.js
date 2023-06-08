@@ -1,12 +1,11 @@
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import Image from 'next/image';
 
 export default function Footer() {
-  const { t } = useTranslation('global');
+  const { t } = useTranslation('common');
 
   return (
-    <div className="font-coolvetica w-screen pl-8 md:pl-32 pt-8 pb-8 bg-[#2F3030] self-stretch [clip-path:polygon(0%_0,100%_0,100%_100%,0_100%)] lg:[clip-path:polygon(7em_0,100%_0,100%_100%,0_100%)]">
+    <div className="font-coolvetica w-screen pl-8 pr-4 md:pr-10 lg:pr-0 md:pl-32 pt-8 pb-8 bg-[#2F3030] self-stretch [clip-path:polygon(0%_0,100%_0,100%_100%,0_100%)] lg:[clip-path:polygon(7em_0,100%_0,100%_100%,0_100%)]">
       <div className="lg:grid lg:grid-cols-4 items-start">
         <div className="w-full self-center pl-7 pb-2 md:grid md:grid-cols-2 lg:block">
           <img className="img-alert" src="/images/begamble.png" alt="Be Gamble" />
@@ -64,7 +63,7 @@ export default function Footer() {
             <div className="mt-1 text-2xl font-coolveticaCondensed pr-3 text-white">
               {t('footer_content.available_on')}:
             </div>
-            <Image className="w-10" width={100} height={100} src="/images/sui_brand_text.png" />
+            <img className="w-10" width={100} height={100} src="/images/sui_brand_text.png" />
           </div>
           <div className="text-xs lg:text-base text-[#A5A5A5] font-coolvetica">
             {t('footer_content.mwlb')} WFS
@@ -78,7 +77,7 @@ export default function Footer() {
 export async function getStaticProps({ locale }) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['global']))
+      ...(await serverSideTranslations(locale, ['common']))
     }
   };
 }

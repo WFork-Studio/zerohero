@@ -11,7 +11,7 @@ export default function Chatbox() {
   const { chatbox, state } = useContext(AppContext);
   const { messagesReceived } = chatbox;
   const { userData, playerCurrentLevel } = state;
-  const { t } = useTranslation('global');
+  const { t } = useTranslation('common');
   const wallet = useWallet();
 
   const sendMessageHandle = async () => {
@@ -186,7 +186,7 @@ export default function Chatbox() {
 export async function getStaticProps({ locale }) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['global']))
+      ...(await serverSideTranslations(locale, ['common']))
     }
   };
 }

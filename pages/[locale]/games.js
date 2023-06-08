@@ -1,11 +1,12 @@
-import styles from "../styles/Home.module.css";
-import Link from "next/link";
-import Footer from "../components/Footer";
+import styles from "../../styles/Home.module.css";
+import Link from "../../components/Link";
+import Footer from "../../components/Footer";
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { getStaticPaths, makeStaticProps } from '../../lib/getStatic'
 
 export default function Games(statsDatas) {
-  const { t } = useTranslation('global');
+  const { t } = useTranslation('common');
   return (
     <>
       <section className="font-coolvetica h-screen pb-7">
@@ -43,10 +44,13 @@ export default function Games(statsDatas) {
   );
 }
 
-export async function getStaticProps({ locale }) {
-  return {
-    props: {
-      ...(await serverSideTranslations(locale, ['global']))
-    }
-  };
-}
+const getStaticProps = makeStaticProps(['common'])
+export { getStaticPaths, getStaticProps }
+
+// export async function getStaticProps({ locale }) {
+//   return {
+//     props: {
+//       ...(await serverSideTranslations(locale, ['common']))
+//     }
+//   };
+// }

@@ -1,26 +1,29 @@
 import { useMediaQuery } from "react-responsive";
 import { useState, useEffect, useContext } from "react";
-import Footer from "../components/Footer";
+import Footer from "../../components/Footer";
 import { useWallet } from "@suiet/wallet-kit";
 import {
   getPlayerHistories,
   getAllLevels,
   updateUsernameData,
-} from "./api/db_services";
-import LoadingSpinner from "../components/Spinner";
+} from "../api/db_services";
+import LoadingSpinner from "../../components/Spinner";
 import moment from "moment";
 import { useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useRouter } from "next/router";
-import { AppContext } from "../utils/AppContext";
+import { AppContext } from "../../utils/AppContext";
+import { getStaticPaths, makeStaticProps } from '../../lib/getStatic'
+import i18nextConfig from '../../next-i18next.config'
 
 export function configureMoment(langauge) {
   moment.locale(langauge);
 }
 
 export default function profile() {
-  const { t } = useTranslation("global");
-  const { locale } = useRouter();
+  const { t } = useTranslation('common');
+  const { locale, query } = useRouter();
+  const currentLocale = query.locale || i18nextConfig.i18n.defaultLocale
   const wallet = useWallet();
   const [playerHistories, setPlayerHistories] = useState([]);
   const [levelThresholds, setLevelThresholds] = useState([]);
@@ -77,8 +80,8 @@ export default function profile() {
   //   }, [totalWager]);
 
   useEffect(() => {
-    configureMoment(locale);
-  }, [locale]);
+    configureMoment(currentLocale);
+  }, [currentLocale]);
 
   const calculateLevel = (userExp, levelThresholds) => {
     for (let i = levelThresholds.length - 1; i >= 0; i--) {
@@ -522,10 +525,13 @@ export default function profile() {
   }
 }
 
-export async function getStaticProps({ locale }) {
-  return {
-    props: {
-      ...(await serverSideTranslations(locale, ["global"])),
-    },
-  };
-}
+const getStaticProps = makeStaticProps(['common'])
+export { getStaticPaths, getStaticProps }
+
+// export async function getStaticProps({ locale }) {
+//   return {
+//     props: {
+//       ...(await serverSideTranslations(locale, ['common'])),
+//     },
+//   };
+// }
