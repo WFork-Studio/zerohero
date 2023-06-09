@@ -143,7 +143,7 @@ export default function profile() {
                     <div className="flex justify-center items-center">
                       <p class="font-bold text-white text-xl pl-4">
                         {!playerHistories.biggestWager ||
-                        playerHistories.biggestWager === -Infinity
+                          playerHistories.biggestWager === -Infinity
                           ? "0.00"
                           : playerHistories.biggestWager.toFixed(2)}
                       </p>
@@ -262,8 +262,8 @@ export default function profile() {
                       editingMode === true
                         ? handleSubmit
                         : () => {
-                            setEditingMode(!editingMode);
-                          }
+                          setEditingMode(!editingMode);
+                        }
                     }
                   >
                     {editingMode ? (
@@ -305,11 +305,10 @@ export default function profile() {
                 <p
                   class="font-medium text-2xl text-white mt-3"
                   style={{
-                    color: `#${
-                      playerCurrentLevel
+                    color: `#${playerCurrentLevel
                         ? playerCurrentLevel.colorHex
                         : "FFFFFF"
-                    }`,
+                      }`,
                   }}
                 >
                   {playerCurrentLevel ? playerCurrentLevel.levelName : "-"}
@@ -320,25 +319,22 @@ export default function profile() {
                     className="h-6 rounded-full dark:bg-blue-500 text-center"
                     style={{
                       width: `${progressPercentage ? progressPercentage : 0}%`,
-                      backgroundColor: `#${
-                        playerCurrentLevel
+                      backgroundColor: `#${playerCurrentLevel
                           ? playerCurrentLevel.colorHex
                           : "FFFFFF"
-                      }`,
+                        }`,
                     }}
-                  >{`${
-                    progressPercentage ? progressPercentage.toFixed(2) : 0
-                  }%`}</div>
+                  >{`${progressPercentage ? progressPercentage.toFixed(2) : 0
+                    }%`}</div>
                   <div className="grid grid-cols-2 mt-2">
                     <div className="text-start">
                       <p
                         className="text-base font-medium"
                         style={{
-                          color: `#${
-                            playerCurrentLevel
+                          color: `#${playerCurrentLevel
                               ? playerCurrentLevel.colorHex
                               : "FFFFFF"
-                          }`,
+                            }`,
                         }}
                       >
                         {playerCurrentLevel
@@ -355,27 +351,26 @@ export default function profile() {
                       <p
                         className="text-base font-medium"
                         style={{
-                          color: `#${
-                            playerNextLevel
+                          color: `#${playerNextLevel
                               ? playerNextLevel.colorHex
                               : "FFFFFF"
-                          }`,
+                            }`,
                         }}
                       >
                         {playerCurrentLevel.levelName ===
-                        playerNextLevel.levelName
+                          playerNextLevel.levelName
                           ? t("profile_content.max_level")
                           : playerNextLevel
-                          ? playerNextLevel.levelName
-                          : "-"}
+                            ? playerNextLevel.levelName
+                            : "-"}
                       </p>
                       <p className="text-xs font-light">
                         {playerCurrentLevel.levelName ===
-                        playerNextLevel.levelName
+                          playerNextLevel.levelName
                           ? t("profile_content.max_level_reached")
                           : playerNextLevel
-                          ? playerNextLevel.threshold.toFixed(2)
-                          : "0.00"}
+                            ? playerNextLevel.threshold.toFixed(2)
+                            : "0.00"}
                       </p>
                     </div>
                   </div>
@@ -491,7 +486,8 @@ export default function profile() {
 
                     <div className="flex flex-col items-center justify-center px-16 mt-8 space-y-4 sm:space-y-0 sm:space-x-4 sm:flex-row sm:px-0">
                       <a
-                        href="#"
+                        href="https://linktr.ee/trainersshop"
+                        target="_blank"
                         title=""
                         className="className='w-full py-4 px-10 bg-primary-800 rounded-lg text-black font-bold"
                         role="button"

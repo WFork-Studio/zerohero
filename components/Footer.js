@@ -14,21 +14,21 @@ export default function Footer() {
               {t('footer_content.community_social')}
             </div>
             <div className="flex flex-row pl-1 pt-1">
-              <a href="#">
+              <a href="https://linktr.ee/trainersnfts" target='_blank'>
                 <img
                   src="/images/telegram.png"
                   className="mr-3 h-5 lg:h-7"
                   alt="Telegram"
                 />
               </a>
-              <a href="#">
+              <a href="https://twitter.com/ZeroHeroNFTs" target='_blank'>
                 <img
                   src="/images/twitter.png"
                   className="mr-3 h-5 lg:h-7"
                   alt="Twitter"
                 />
               </a>
-              <a href="#">
+              <a href="https://discord.gg/6W3B6a3wgK" target='_blank'>
                 <img
                   src="/images/discord.png"
                   className="mr-3 h-5 lg:h-7"
@@ -49,10 +49,10 @@ export default function Footer() {
 
           <div className="w-full pl-7 lg:pl-32 self-center">
             <div className="mt-1 text-2xl lg:text-4xl text-white">{t('footer_content.support')}</div>
-            <a href="#">
+            <a href="https://linktr.ee/trainersshop" target='_blank'>
               <div className="text-xs lg:text-base text-[#A5A5A5]">{t('footer_content.buy_trainers')}</div>
             </a>
-            <a href="#">
+            <a href="https://linktr.ee/trainersshop" target='_blank'>
               <div className="text-xs lg:text-base text-[#A5A5A5]">{t('footer_content.buy_zerohero')}</div>
             </a>
           </div>

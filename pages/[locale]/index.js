@@ -140,12 +140,14 @@ export default function Home() {
                             </h2>
                           </div>
                           <div className="grid items-center">
-                            <button
+                            <a
+                              href="https://linktr.ee/trainersshop"
+                              target="_blank"
                               className="w-full py-4 px-4 md:px-10 bg-primary-800 rounded-lg text-black font-bold"
                               style={{ minWidth: "max-content" }}
                             >
                               {t("landing_content.shop_now")}
-                            </button>
+                            </a>
                           </div>
                         </div>
                       </div>
@@ -191,12 +193,14 @@ export default function Home() {
                             </h2>
                           </div>
                           <div>
-                            <button
+                            <a
+                              href="https://linktr.ee/trainersshop"
+                              target="_blank"
                               className="w-full py-4 px-10 bg-primary-800 rounded-lg text-black font-bold"
                               style={{ minWidth: "max-content" }}
                             >
                               {t("landing_content.shop_now")}
-                            </button>
+                            </a>
                           </div>
                         </div>
                       </div>
@@ -257,12 +261,14 @@ export default function Home() {
                                 >
                                   {t("landing_content.buy_nft")}
                                 </h2>
-                                <button
+                                <a
+                                  href="https://linktr.ee/trainersshop"
+                                  target="_blank"
                                   className="mt-2 w-1/3 py-4 px-10 bg-primary-800 rounded-lg text-black font-bold"
                                   style={{ minWidth: "max-content" }}
                                 >
                                   {t("landing_content.shop_now")}
-                                </button>
+                                </a>
                               </div>
                             </div>
 
