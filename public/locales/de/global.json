@@ -13,9 +13,9 @@
         "game_list": "Spieleliste",
         "landing_title": "Entfesseln Sie den Nervenkitzel des Glücks mit",
         "t&c_1_title": "Nachweislich faires Wetten",
-        "t&c_1_desc": "Unsere Wettergebnisse werden durch VRF unterstützt, sodass Sie darauf vertrauen können, dass jeder Spin und Deal völlig fair und zufällig ist.",
+        "t&c_1_desc": "Alle Transaktionen werden in der Kette verfolgt und können von jedem überprüft werden.",
         "t&c_2_title": "Spielen, verdienen und NFTs gewinnen!",
-        "t&c_2_desc": "1% aller Wetten werden an ZeroHero-Inhaber verteilt. Wenn Sie 15 aufeinanderfolgende Wetten von 50 SUI oder mehr verlieren, erhalten Sie einen kostenlosen zufälligen ZeroHero-NFT per Airdrop.",
+        "t&c_2_desc": "3% aller Wetten werden an ZeroHero-Inhaber zurückgezahlt. Unsere treuen Benutzer erhalten kostenlose NFTs.",
         "t&c_3_title": "Spiel risikofrei",
         "t&c_3_desc": "Wir verlangen keine Registrierung der Benutzer oder Einzahlungen von Geldern. Sie können sich einfach mit der Website verbinden und Wetten direkt von Ihrer Geldbörse aus platzieren."
     },
@@ -80,7 +80,8 @@
         "mwlb": "Mit Liebe gemacht von",
         "buy_trainers": "Kaufen Sie Trainer",
         "buy_zerohero": "Kaufe ZeroHero",
-        "zerohero_desc": "Bitte überprüfen Sie vor der Nutzung, ob die Verwendung von ZeroHero in Ihrer Gerichtsbarkeit legal ist. ZeroHero übernimmt keine Verantwortung für die Nutzung der Plattform. Diese Plattform hat eine Gebühr von 5%. ZeroHero ist ein dezentrales Protokoll und die Betreiber dieser Benutzeroberfläche sind nicht verantwortlich für Verluste oder Schäden, die durch die Nutzung dieser Benutzeroberfläche entstehen."
+        "zerohero_title": "ZeroHero-Haftungsausschluss",
+        "zerohero_desc": "Diese Website bietet Glücksspiel mit Risikoerlebnis. Um Nutzer unserer Plattform zu sein, müssen Sie mindestens 18 Jahre alt sein. Bitte informieren Sie sich vor der Nutzung darüber, ob die Verwendung von ZeroHero in Ihrem Land legal ist. ZeroHero übernimmt keine Verantwortung für Verstöße gegen Ihre lokalen Gesetze im Zusammenhang mit I-Gaming. ZeroHero ist ein dezentrales Protokoll. Diese Plattform hat einen Rake von 5 % und die Betreuer dieser Schnittstelle sind nicht verantwortlich für Verluste oder Schäden, die durch die Nutzung dieser Schnittstelle entstehen."
     },
     "chatbox_content": {
         "title_chatbox": "Chat- und Benachrichtigungsfeld",

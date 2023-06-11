@@ -14,8 +14,8 @@ import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import "moment/locale/de";
 import "moment/locale/es";
 import { AppContext } from "../../utils/AppContext";
-import { getStaticPaths, makeStaticProps } from '../../lib/getStatic'
-import i18nextConfig from '../../next-i18next.config'
+import { getStaticPaths, makeStaticProps } from "../../lib/getStatic";
+import i18nextConfig from "../../next-i18next.config";
 
 // const getStaticProps = makeStaticProps(['common'])
 // export { getStaticPaths, getStaticProps }
@@ -25,9 +25,9 @@ export function configureMoment(langauge) {
 }
 
 export default function Home() {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation("common");
   const { locale, query, push } = useRouter();
-  const currentLocale = query.locale || i18nextConfig.i18n.defaultLocale
+  const currentLocale = query.locale || i18nextConfig.i18n.defaultLocale;
   const [domLoaded, setDomLoaded] = useState(false);
 
   const [isLoad, setisLoad] = useState();
@@ -90,7 +90,9 @@ export default function Home() {
             <div className={styles.container}>
               <div className="md:flex items-center pt-3 justify-between">
                 <div className="row-span-3 text-white lg:max-w-4xl text-6xl md:text-7xl 2xl:text-8xl py-6 md:py-20">
-                  <div className="col-span-3">{t('landing_content.landing_title')}</div>
+                  <div className="col-span-3">
+                    {t("landing_content.landing_title")}
+                  </div>
                   <span
                     className="row-span-3 col-span-3"
                     style={{ color: "#00F0FF" }}
@@ -187,7 +189,7 @@ export default function Home() {
                           </Carousel>
                         </div>
                         <div className="mb-4">
-                          <div className="w-full mb-2">
+                          <div className="w-full mb-4">
                             <h2 className="text-xl text-white">
                               {t("landing_content.buy_nft")}
                             </h2>
@@ -254,10 +256,11 @@ export default function Home() {
                                 style={{ alignItems: "self-start" }}
                               >
                                 <h2
-                                  className={`${currentLocale === "es"
-                                    ? "lg:text-base xl:text-xl 2xl:text-4xl"
-                                    : "lg:text-xl xl:text-2xl 2xl:text-5xl"
-                                    } mt-2 text-white`}
+                                  className={`${
+                                    currentLocale === "es"
+                                      ? "lg:text-base xl:text-xl 2xl:text-4xl"
+                                      : "lg:text-xl xl:text-2xl 2xl:text-5xl"
+                                  } mt-2 text-white`}
                                 >
                                   {t("landing_content.buy_nft")}
                                 </h2>
@@ -306,7 +309,7 @@ export default function Home() {
                               scope="row"
                               className="text-xl lg:text-3xl lg:px-6 py-2 pb-2 font-medium whitespace-nowrap dark:text-white"
                             >
-                              {(statsData[0].total_wagered).toFixed(2)}
+                              {statsData[0].total_wagered.toFixed(2)}
                               <br />
                               {/* <div className="text-[#8C8888] text-sm">
                                 Gamble sum: 30,219
@@ -341,7 +344,7 @@ export default function Home() {
                               scope="row"
                               className="text-xl lg:text-3xl lg:px-6 py-2 pb-2 font-medium whitespace-nowrap dark:text-white"
                             >
-                              {(allHistories.count).toFixed(2)}
+                              {allHistories.count.toFixed(2)}
                               <br />
                               {/* <div className="text-[#8C8888] text-sm">
                                 Gamble sum: 30,219
@@ -509,30 +512,30 @@ export default function Home() {
                   <div className="md:w-1/3 md:mr-4 h-60 rounded-tr-[100px] rounded-[10px] bg-gradient-to-r p-[6px] from-[#6002BF] via-[#C74CDB] to-[#4C6BDB]">
                     <div className="flex flex-col justify-center h-full bg-[#2F3030] text-white rounded-tr-[100px] rounded-[10px] p-4">
                       <div className="text-xl lg:text-3xl text-white">
-                        {t('landing_content.t&c_1_title')}
+                        {t("landing_content.t&c_1_title")}
                       </div>
                       <div className="text-base lg:text-xl text-[#808080]">
-                        {t('landing_content.t&c_1_desc')}
+                        {t("landing_content.t&c_1_desc")}
                       </div>
                     </div>
                   </div>
                   <div className="md:w-1/3 md:mr-4 h-60 rounded-[10px] bg-gradient-to-r p-[6px] from-[#6002BF] via-[#C74CDB] to-[#4C6BDB]">
                     <div className="flex flex-col justify-center text-center h-full bg-[#2F3030] text-white rounded-[10px] p-4">
                       <div className="text-xl lg:text-3xl text-white">
-                        {t('landing_content.t&c_2_title')}
+                        {t("landing_content.t&c_2_title")}
                       </div>
                       <div className="text-base lg:text-xl text-[#808080]">
-                        {t('landing_content.t&c_2_desc')}
+                        {t("landing_content.t&c_2_desc")}
                       </div>
                     </div>
                   </div>
                   <div className="md:w-1/3 h-60 rounded-tl-[100px] rounded-[10px] bg-gradient-to-r p-[6px] from-[#6002BF] via-[#C74CDB] to-[#4C6BDB]">
                     <div className="flex flex-col justify-center text-right h-full bg-[#2F3030] text-white rounded-tl-[100px] rounded-[10px] p-4">
                       <div className="text-xl lg:text-3xl text-white">
-                        {t('landing_content.t&c_3_title')}
+                        {t("landing_content.t&c_3_title")}
                       </div>
                       <div className="text-base lg:text-xl text-[#808080]">
-                        {t('landing_content.t&c_3_desc')}
+                        {t("landing_content.t&c_3_desc")}
                       </div>
                     </div>
                   </div>
@@ -549,8 +552,8 @@ export default function Home() {
   }
 }
 
-const getStaticProps = makeStaticProps(['common'])
-export { getStaticPaths, getStaticProps }
+const getStaticProps = makeStaticProps(["common"]);
+export { getStaticPaths, getStaticProps };
 
 // export async function getStaticProps({ locale }) {
 //   return {

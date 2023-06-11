@@ -13,9 +13,9 @@
         "game_list": "Lista de juegos",
         "landing_title": "Desata la emoción de la fortuna con",
         "t&c_1_title": "Apuestas demostrablemente justas",
-        "t&c_1_desc": "Nuestros resultados de apuestas están respaldados por VRF, por lo que puedes confiar en que cada giro y reparto es completamente justo y aleatorio.",
+        "t&c_1_desc": "Todas las transacciones se rastrean en cadena y pueden ser auditadas por cualquier persona.",
         "t&c_2_title": "¡Juega, gana y obtén NFTs!",
-        "t&c_2_desc": "El 1% de todas las apuestas se distribuirá entre los poseedores de ZeroHero. Si pierdes 15 apuestas consecutivas de 50 SUI o más, te enviaremos un NFT gratuito de ZeroHero al azar mediante airdrop.",
+        "t&c_2_desc": "El 3% de todas las apuestas se distribuirá a los titulares de ZeroHero. Nuestros usuarios leales obtendrán NFT gratis.",
         "t&c_3_title": "Juega sin riesgo",
         "t&c_3_desc": "No requerimos registro de usuario ni depósito de fondos. Simplemente conéctate al sitio web y realiza apuestas directamente desde tu billetera."
     },
@@ -80,7 +80,8 @@
         "mwlb": "Hecho con amor por",
         "buy_trainers": "Compra zapatillas deportivas",
         "buy_zerohero": "Compra ZeroHero",
-        "zerohero_desc": "Por favor, investiga si el uso de ZeroHero es legal en tu jurisdicción antes de utilizarlo. ZeroHero no asume ninguna responsabilidad por el uso de la plataforma. Esta plataforma tiene una comisión del 5%. ZeroHero es un protocolo descentralizado y los responsables de esta interfaz no se hacen responsables de las pérdidas o daños incurridos al utilizar esta interfaz."
+        "zerohero_title": "Descargo de responsabilidad de ZeroHero",
+        "zerohero_desc": "Este sitio web ofrece juegos con experiencia de riesgo. Para ser usuario de nuestra plataforma debes tener 18 años. Investigue si ZeroHero es legal para usar en su jurisdicción antes de usarlo. ZeroHero no asume ninguna responsabilidad por cualquier violación de las leyes locales relacionadas con los juegos electrónicos. ZeroHero es un protocolo descentralizado. Esta plataforma tiene una comisión del 5% y los mantenedores de esta interfaz no son responsables de las pérdidas o daños ocasionados por el uso de esta interfaz."
     },
     "chatbox_content": {
         "title_chatbox": "Chat y caja de notificaciones",

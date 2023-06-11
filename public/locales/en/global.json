@@ -13,9 +13,9 @@
         "game_list": "Game List",
         "landing_title": "Unleash the thrill of fortune with",
         "t&c_1_title": "Provably fair betting",
-        "t&c_1_desc": "Our bet results are backed by VRF so you can trust that every spin and deal is completely fair and random.",
+        "t&c_1_desc": "All transactions are tracked on chain and can be audited by anyone.",
         "t&c_2_title": "Play, earn, and win NFTs!",
-        "t&c_2_desc": "1% of all bets will be distributed back to ZeroHero holders. If you lose 15 consecutive bets of 50 SUI or more, we'll airdrop you a free random ZeroHero NFT.",
+        "t&c_2_desc": "3% of all bets will be distributed back to ZeroHero holders. Our loyal users will get free NFTs.",
         "t&c_3_title": "Play risk free",
         "t&c_3_desc": "We do not require user registration or funds to be deposited. Simply connect to the website and place bets straight from your wallet."
     },
@@ -80,7 +80,8 @@
         "mwlb": "Made with love by",
         "buy_trainers": "Buy Trainers",
         "buy_zerohero": "Buy ZeroHero",
-        "zerohero_desc": "Please research if ZeroHero is legal to use in your jurisdiction prior to use. ZeroHero assumes no responsibility for your use of the platform. This platform has 5% rake. ZeroHero is a decentralized protocol and the maintainers of this interface are not responsible for any losses or damages incurred by using this interface"
+        "zerohero_title": "ZeroHero Disclaimer",
+        "zerohero_desc": "This website offers gaming with risk experience. To be a user of our platform you must be 18 y.o. Please research if ZeroHero is legal to use in your jurisdiction prior to use. ZeroHero assumes no responsibility for any violation of your local laws related to i-gaming. ZeroHero is a decentralized protocol, This platform has 5% rake and the maintainers of this interface are not responsible for any losses or damages incurred by using this interface."
     },
     "chatbox_content": {
         "title_chatbox": "Chat and Notification Box",
