@@ -22,6 +22,7 @@ import "moment/locale/de";
 import "moment/locale/es";
 import { getStaticPaths, makeStaticProps } from '../../lib/getStatic'
 import i18nextConfig from '../../next-i18next.config'
+import { Tooltip } from 'react-tooltip'
 const provider = new JsonRpcProvider(testnetConnection);
 
 export function configureMoment(langauge) {
@@ -140,13 +141,26 @@ export default function CoinFlip(statsDatas) {
           } else {
             setIsWin(false);
           }
+
+          var profit;
+          var payout;
+          if (result.events[0].parsedJson?.winning === 'win') {
+            var wager = parseFloat(result.events[0].parsedJson?.bet_amount) / 1000000000;
+            var percentage = 5;
+            profit = wager - (wager * (percentage / 100))
+            payout = wager * 2;
+          } else if (result.events[0].parsedJson?.winning === 'lose') {
+            profit = parseFloat(result.events[0].parsedJson?.bet_amount) / 1000000000;
+            payout = 0;
+          }
+
+          console.log(profit, payout);
           //Storing Result to Database
           await storeHistory(
             result.events[0].parsedJson?.sender,
-            `${parseFloat(result.events[0].parsedJson?.profit) / 1000000000}`,
-            `${
-              parseFloat(result.events[0].parsedJson?.bet_amount) / 1000000000
-            }`,
+            profit, //profit
+            payout, //payout
+            `${parseFloat(result.events[0].parsedJson?.bet_amount) / 1000000000}`,
             {
               choice: result.events[0].parsedJson?.bet,
               flipResult: result.events[0].parsedJson?.result,
@@ -267,6 +281,9 @@ export default function CoinFlip(statsDatas) {
                         <th scope="col" class="px-6 py-3">
                           {t("game_content.wager")}
                         </th>
+                        <th scope="col" className="px-6 py-3">
+                          {t("game_content.payout")}
+                        </th>
                         <th scope="col" class="px-6 py-3">
                           {t("game_content.profit")}
                         </th>
@@ -333,7 +350,20 @@ export default function CoinFlip(statsDatas) {
                                 src="/images/sui_brand.png"
                                 alt="Sui Brand"
                               />
-                              {Number(stat.wager).toFixed(2)}
+                              {stat.wager}
+                            </div>
+                          </th>
+                          <th
+                            scope="row"
+                            className="px-6 py-2 font-medium whitespace-nowrap text-start text-white"
+                          >
+                            <div className="flex items-center">
+                              <img
+                                width={25}
+                                src="/images/sui_brand.png"
+                                alt="Sui Brand"
+                              />
+                              {Number(stat.payout).toFixed(2)}
                             </div>
                           </th>
                           <th
@@ -350,7 +380,7 @@ export default function CoinFlip(statsDatas) {
                                   src="/images/sui_brand.png"
                                   alt="Sui Brand"
                                 />
-                                -{Number(stat.wager).toFixed(2)}
+                                -{Number(stat.profit).toFixed(2)}
                               </div>
                             ) : (
                               <div
@@ -362,7 +392,7 @@ export default function CoinFlip(statsDatas) {
                                   src="/images/sui_brand.png"
                                   alt="Sui Brand"
                                 />
-                                +{Number(stat.wager).toFixed(2)}
+                                +{stat.profit}
                               </div>
                             )}
                           </th>
@@ -456,9 +486,19 @@ export default function CoinFlip(statsDatas) {
                           </button>
                         </div>
                         <div>
-                          <label className="block mb-2 text-sm font-medium text-white">
-                            {t("game_content.multiple_bets")}
-                          </label>
+                          <div className="flex">
+                            <label className="block mb-2 text-sm font-medium text-white">
+                              {t("game_content.multiple_bets")}
+                            </label>
+                            <div className="ml-2">
+                              <a id="clickable" className="bg-white rounded-full text-black px-2 font-medium">
+                                ὶ
+                              </a>
+                              <Tooltip anchorSelect="#clickable">
+                                <button>The number of bets you want to wager in one transaction.</button>
+                              </Tooltip>
+                            </div>
+                          </div>
                           <input
                             value={MultipleBets}
                             disabled
@@ -511,9 +551,21 @@ export default function CoinFlip(statsDatas) {
                           </div>
                         </div>
                         <div className="mt-4">
-                          <label className="block mb-2 text-sm font-medium text-white">
-                            {t("game_content.pick_a_side")}
-                          </label>
+                          <div className="max-w-fit" id="my-tooltip-pick">
+                            <div className="flex text-white hover:text-gray-300">
+                              <a className="cursor-pointer bg-white rounded-full text-black w-5 h-5 font-medium flex items-center justify-center mr-2">ὶ</a>
+                              <Tooltip anchorSelect="#my-tooltip-pick" place="bottom" >
+                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                  <span>Select your preferred option of either 'heads' or 'tails' for</span>
+                                  <span>each displayed coin by clicking on it. If you want to bet</span>
+                                  <span>all on one side select one of the buttons below.</span>
+                                </div>
+                              </Tooltip>
+                              <label className="block mb-2 text-sm font-medium">
+                                {t("game_content.pick_a_side")}
+                              </label>
+                            </div>
+                          </div>
                           <div className="grid grid-cols-2 space-x-4">
                             <div>
                               <input
@@ -568,7 +620,7 @@ export default function CoinFlip(statsDatas) {
                           {wallet?.connected ? (
                             <>
                               {Number(TotalWager) <= Number(MaxBet) &&
-                              Number(TotalWager) >= Number(MinBet) ? (
+                                Number(TotalWager) >= Number(MinBet) ? (
                                 <button
                                   onClick={playGame}
                                   className="w-full py-2 bg-primary-800 rounded-lg text-black font-bold"
@@ -689,6 +741,9 @@ export default function CoinFlip(statsDatas) {
                         <th scope="col" class="px-6 py-3">
                           {t("game_content.wager")}
                         </th>
+                        <th scope="col" className="px-6 py-3">
+                          {t("game_content.payout")}
+                        </th>
                         <th scope="col" class="px-6 py-3">
                           {t("game_content.profit")}
                         </th>
@@ -755,7 +810,20 @@ export default function CoinFlip(statsDatas) {
                                 src="/images/sui_brand.png"
                                 alt="Sui Brand"
                               />
-                              {Number(stat.wager).toFixed(2)}
+                              {stat.wager}
+                            </div>
+                          </th>
+                          <th
+                            scope="row"
+                            className="px-6 py-2 font-medium whitespace-nowrap text-start text-white"
+                          >
+                            <div className="flex items-center">
+                              <img
+                                width={25}
+                                src="/images/sui_brand.png"
+                                alt="Sui Brand"
+                              />
+                              {Number(stat.payout).toFixed(2)}
                             </div>
                           </th>
                           <th
@@ -772,7 +840,7 @@ export default function CoinFlip(statsDatas) {
                                   src="/images/sui_brand.png"
                                   alt="Sui Brand"
                                 />
-                                -{Number(stat.wager).toFixed(2)}
+                                -{stat.profit}
                               </div>
                             ) : (
                               <div
@@ -784,7 +852,7 @@ export default function CoinFlip(statsDatas) {
                                   src="/images/sui_brand.png"
                                   alt="Sui Brand"
                                 />
-                                +{Number(stat.wager).toFixed(2)}
+                                +{stat.profit}
                               </div>
                             )}
                           </th>

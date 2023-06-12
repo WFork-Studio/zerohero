@@ -4,13 +4,14 @@ var authKey = "Basic emVyb2hlcm86bm9wYXNzd29yZA==";
 var schema = "zerohero_app";
 
 const supabase = createClient(
-  "https://ufelwnylsmdquentynib.supabase.co",
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmZWx3bnlsc21kcXVlbnR5bmliIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODU2MjMxNTQsImV4cCI6MjAwMTE5OTE1NH0.NMUn8xqjit6NdPKYTPOVAMMUDRbeEiez_vM-17lqg60"
+  "https://blznedvnlyxsgwpzewas.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJsem5lZHZubHl4c2d3cHpld2FzIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY1ODA5MTgsImV4cCI6MjAwMjE1NjkxOH0.WV8XqUaK4Zrkj2aTvb7AJ45JvTG98N2oXRucnA6P5EM"
 );
 
 export async function storeHistory(
   walletAddress,
   profit,
+  payout,
   wager,
   gameData,
   result,
@@ -22,7 +23,7 @@ export async function storeHistory(
     const { error } = await supabase
       .from("histories")
       .insert([
-        { gameData: gameData, gameName: gameName, profit: profit, result: result, wager: wager, walletAddress: walletAddress, playerLv: playerLv, username: username },
+        { gameData: gameData, gameName: gameName, profit: profit, payout: payout, result: result, wager: wager, walletAddress: walletAddress, playerLv: playerLv, username: username },
       ]);
 
     if (error) {
@@ -129,7 +130,9 @@ export async function getPlayerHistories(walletAddress, limit = null) {
     const wins = records.filter((row) => row.result === "win").length;
     const losses = records.filter((row) => row.result === "lose").length;
     const biggestWager = Math.max(...records.map((row) => row.wager));
-    const totalProfit = records.reduce((acc, row) => acc + row.profit, 0);
+    
+    const winsFilter = records.filter((row) => row.result === "win");
+    const totalProfit = winsFilter.reduce((acc, row) => acc + row.profit, 0);
 
     let slicedRecords = records;
 

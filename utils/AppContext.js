@@ -19,8 +19,8 @@ export const AppDataProvider = ({ children }) => {
   const isEffectExecutedRef = useRef(false);
   const wallet = useWallet();
   const supabase = createClient(
-    "https://ufelwnylsmdquentynib.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVmZWx3bnlsc21kcXVlbnR5bmliIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODU2MjMxNTQsImV4cCI6MjAwMTE5OTE1NH0.NMUn8xqjit6NdPKYTPOVAMMUDRbeEiez_vM-17lqg60"
+    "https://blznedvnlyxsgwpzewas.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJsem5lZHZubHl4c2d3cHpld2FzIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODY1ODA5MTgsImV4cCI6MjAwMjE1NjkxOH0.WV8XqUaK4Zrkj2aTvb7AJ45JvTG98N2oXRucnA6P5EM"
   );
 
   const levelPlayer = async (e) => {
@@ -43,6 +43,9 @@ export const AppDataProvider = ({ children }) => {
 
   const getMessages = async () => {
     const messages = await getAllMessages();
+    if (messages === null) {
+      return;
+    }
     const newMessages = messages.filter(
       (message) =>
         !messagesReceived.some(

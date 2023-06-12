@@ -194,6 +194,9 @@ export default function Statistics(statsDatas) {
                       {t("statistics_content.wager")}
                     </th>
                     <th scope="col" className="px-6 py-3 text-center">
+                      {t("statistics_content.payout")}
+                    </th>
+                    <th scope="col" className="px-6 py-3 text-center">
                       {t("statistics_content.profit")}
                     </th>
                   </tr>
@@ -240,11 +243,17 @@ export default function Statistics(statsDatas) {
                           {stat.wager}
                         </div>
                       </td>
-                      {stat.profit == 0 ? (
+                      <td className="px-6 text-white">
+                        <div className="flex items-center justify-center">
+                          <img src="/images/sui_brand.png" alt="Sui Brand" />
+                          {stat.payout}
+                        </div>
+                      </td>
+                      {stat.result === 'lose' ? (
                         <td className="px-6 py-1 text-red-500">
                           <div className="flex items-center justify-center">
                             <img src="/images/sui_brand.png" alt="Sui Brand" />-
-                            {stat.wager}
+                            {stat.profit}
                           </div>
                         </td>
                       ) : (

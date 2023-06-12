@@ -7,7 +7,7 @@ export default function Footer() {
   return (
     <div className="font-coolvetica w-screen pl-8 pr-4 md:pr-10 lg:pr-0 md:pl-32 pt-8 pb-8 bg-[#2F3030] self-stretch [clip-path:polygon(0%_0,100%_0,100%_100%,0_100%)] lg:[clip-path:polygon(7em_0,100%_0,100%_100%,0_100%)]">
       <div className="lg:grid lg:grid-cols-4 items-start">
-        <div className="w-full self-center pl-7 pb-2 md:grid md:grid-cols-2 lg:block">
+        <div className="w-full self-center pl-7 pb-2 grid grid-cols-2 lg:block">
           <img
             className="img-alert"
             src="/images/begamble.png"
@@ -44,8 +44,8 @@ export default function Footer() {
         </div>
 
         <div className="flex pb-2 col-span-2">
-          <div className="w-full pl-7 self-center">
-            <div className="mt-1 text-2xl lg:text-4xl text-white">
+          <div className="w-full pl-7 xl:pl-3 self-center">
+            <div className="mt-1 text-2xl lg:text-lg xl:text-2xl 2xl:text-4xl text-white">
               {t("footer_content.zerohero_title")}
             </div>
             <p className="mt-1 text-xs 2xl:text-base text-[#A5A5A5]">
@@ -53,7 +53,7 @@ export default function Footer() {
             </p>
           </div>
 
-          <div className="w-full pl-7 lg:pl-32 self-center">
+          <div className="w-full pl-7 lg:pl-16 xl:pl-28 2xl:pl-44 self-center">
             <div className="mt-1 text-2xl lg:text-4xl text-white">
               {t("footer_content.support")}
             </div>

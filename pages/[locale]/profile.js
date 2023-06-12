@@ -306,8 +306,8 @@ export default function profile() {
                   class="font-medium text-2xl text-white mt-3"
                   style={{
                     color: `#${playerCurrentLevel
-                        ? playerCurrentLevel.colorHex
-                        : "FFFFFF"
+                      ? playerCurrentLevel.colorHex
+                      : "FFFFFF"
                       }`,
                   }}
                 >
@@ -320,8 +320,8 @@ export default function profile() {
                     style={{
                       width: `${progressPercentage ? progressPercentage : 0}%`,
                       backgroundColor: `#${playerCurrentLevel
-                          ? playerCurrentLevel.colorHex
-                          : "FFFFFF"
+                        ? playerCurrentLevel.colorHex
+                        : "FFFFFF"
                         }`,
                     }}
                   >{`${progressPercentage ? progressPercentage.toFixed(2) : 0
@@ -332,8 +332,8 @@ export default function profile() {
                         className="text-base font-medium"
                         style={{
                           color: `#${playerCurrentLevel
-                              ? playerCurrentLevel.colorHex
-                              : "FFFFFF"
+                            ? playerCurrentLevel.colorHex
+                            : "FFFFFF"
                             }`,
                         }}
                       >
@@ -352,8 +352,8 @@ export default function profile() {
                         className="text-base font-medium"
                         style={{
                           color: `#${playerNextLevel
-                              ? playerNextLevel.colorHex
-                              : "FFFFFF"
+                            ? playerNextLevel.colorHex
+                            : "FFFFFF"
                             }`,
                         }}
                       >
@@ -394,6 +394,9 @@ export default function profile() {
                         </th>
                         <th scope="col" className="px-6 py-3">
                           {t("profile_content.wager")}
+                        </th>
+                        <th scope="col" className="px-6 py-3">
+                          {t("profile_content.payout")}
                         </th>
                         <th scope="col" className="px-6 py-3">
                           {t("profile_content.profit")}
@@ -449,10 +452,19 @@ export default function profile() {
                               />
                             </div>
                           </td>
-                          {stat.profit == 0 ? (
+                          <td class="px-6 py-4 text-white">
+                            <div className="flex items-center">
+                              {stat.payout}
+                              <img
+                                src="/images/sui_brand.png"
+                                alt="Sui Brand"
+                              />
+                            </div>
+                          </td>
+                          {stat.result == 'lose' ? (
                             <td className="px-6 py-1 text-red-500">
                               <div className="flex items-center">
-                                -{stat.wager}
+                                -{stat.profit}
                                 <img
                                   src="/images/sui_brand.png"
                                   alt="Sui Brand"

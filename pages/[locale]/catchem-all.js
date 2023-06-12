@@ -21,6 +21,7 @@ import 'moment/locale/de';
 import 'moment/locale/es';
 import { getStaticPaths, makeStaticProps } from '../../lib/getStatic'
 import i18nextConfig from '../../next-i18next.config'
+import { Tooltip } from 'react-tooltip'
 const provider = new JsonRpcProvider(testnetConnection);
 
 export function configureMoment(langauge) {
@@ -129,11 +130,24 @@ export default function CatchemAll(statsDatas) {
             setIsWin(false);
           }
 
+          var profit;
+          var payout;
+          if (result.events[0].parsedJson?.winning === 'win') {
+            var wager = parseFloat(result.events[0].parsedJson?.bet_amount) / 1000000000;
+            var percentage = 5;
+            profit = wager - (wager * (percentage / 100))
+            payout = wager * 2;
+          } else if (result.events[0].parsedJson?.winning === 'lose') {
+            profit = parseFloat(result.events[0].parsedJson?.bet_amount) / 1000000000;
+            payout = 0;
+          }
+
           //Storing Result to Database
           await storeHistory(
             result.events[0].parsedJson?.sender,
-            `${parseFloat(result.events[0].parsedJson?.profit) / 1000000000}`,
-            `${parseFloat(result.events[0].parsedJson?.bet_amount) / 1000000000}`,
+            profit, //profit
+            payout, //payout
+            `${parseFloat(result.events[0].parsedJson?.bet_amount) / 1000000000}`, //wager
             {},
             result.events[0].parsedJson?.winning,
             "Catchem All",
@@ -241,6 +255,9 @@ export default function CatchemAll(statsDatas) {
                         <th scope="col" class="px-6 py-3">
                           {t('game_content.wager')}
                         </th>
+                        <th scope="col" className="px-6 py-3">
+                          {t("game_content.payout")}
+                        </th>
                         <th scope="col" class="px-6 py-3">
                           {t('game_content.profit')}
                         </th>
@@ -294,7 +311,22 @@ export default function CatchemAll(statsDatas) {
                                 src="/images/sui_brand.png"
                                 alt="Sui Brand"
                               />
-                              {(Number(stat.wager)).toFixed(2)}
+                              {stat.wager}
+                            </div>
+                          </th>
+                          <th
+                            scope="row"
+                            className="px-6 py-2 font-medium whitespace-nowrap text-start dark:text-white"
+                          >
+                            <div
+                              className="flex items-center"
+                            >
+                              <img
+                                width={25}
+                                src="/images/sui_brand.png"
+                                alt="Sui Brand"
+                              />
+                              {(Number(stat.payout)).toFixed(2)}
                             </div>
                           </th>
                           <th
@@ -312,7 +344,7 @@ export default function CatchemAll(statsDatas) {
                                   alt="Sui Brand"
                                 />
                                 -
-                                {(Number(stat.wager)).toFixed(2)}
+                                {stat.profit}
                               </div>
                             ) : (
                               <div
@@ -324,7 +356,7 @@ export default function CatchemAll(statsDatas) {
                                   src="/images/sui_brand.png"
                                   alt="Sui Brand"
                                 />
-                                +{(Number(stat.wager)).toFixed(2)}
+                                +{stat.profit}
                               </div>
                             )}
                           </th>
@@ -397,9 +429,19 @@ export default function CatchemAll(statsDatas) {
                           </button>
                         </div>
                         <div>
-                          <label className="block mb-2 text-sm font-medium text-white">
-                            {t('game_content.multiple_bets')}
-                          </label>
+                          <div className="flex">
+                            <label className="block mb-2 text-sm font-medium text-white">
+                              {t('game_content.multiple_bets')}
+                            </label>
+                            <div className="ml-2">
+                              <a id="clickable" className="bg-white rounded-full text-black px-2 font-medium">
+                                ὶ
+                              </a>
+                              <Tooltip anchorSelect="#clickable">
+                                <button>The number of bets you want to wager in one transaction.</button>
+                              </Tooltip>
+                            </div>
+                          </div>
                           <input
                             value={MultipleBets}
                             disabled
@@ -555,6 +597,9 @@ export default function CatchemAll(statsDatas) {
                         <th scope="col" class="px-6 py-3">
                           {t('game_content.wager')}
                         </th>
+                        <th scope="col" className="px-6 py-3">
+                          {t("game_content.payout")}
+                        </th>
                         <th scope="col" class="px-6 py-3">
                           {t('game_content.profit')}
                         </th>
@@ -608,7 +653,22 @@ export default function CatchemAll(statsDatas) {
                                 src="/images/sui_brand.png"
                                 alt="Sui Brand"
                               />
-                              {(Number(stat.wager)).toFixed(2)}
+                              {stat.wager}
+                            </div>
+                          </th>
+                          <th
+                            scope="row"
+                            className="px-6 py-2 font-medium whitespace-nowrap text-start dark:text-white"
+                          >
+                            <div
+                              className="flex items-center"
+                            >
+                              <img
+                                width={25}
+                                src="/images/sui_brand.png"
+                                alt="Sui Brand"
+                              />
+                              {(Number(stat.payout)).toFixed(2)}
                             </div>
                           </th>
                           <th
@@ -626,7 +686,7 @@ export default function CatchemAll(statsDatas) {
                                   alt="Sui Brand"
                                 />
                                 -
-                                {(Number(stat.wager)).toFixed(2)}
+                                {stat.profit}
                               </div>
                             ) : (
                               <div
@@ -638,7 +698,7 @@ export default function CatchemAll(statsDatas) {
                                   src="/images/sui_brand.png"
                                   alt="Sui Brand"
                                 />
-                                +{(Number(stat.wager)).toFixed(2)}
+                                +{stat.profit}
                               </div>
                             )}
                           </th>

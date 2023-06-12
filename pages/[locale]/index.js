@@ -256,11 +256,10 @@ export default function Home() {
                                 style={{ alignItems: "self-start" }}
                               >
                                 <h2
-                                  className={`${
-                                    currentLocale === "es"
+                                  className={`${currentLocale === "es"
                                       ? "lg:text-base xl:text-xl 2xl:text-4xl"
                                       : "lg:text-xl xl:text-2xl 2xl:text-5xl"
-                                  } mt-2 text-white`}
+                                    } mt-2 text-white`}
                                 >
                                   {t("landing_content.buy_nft")}
                                 </h2>
@@ -309,7 +308,7 @@ export default function Home() {
                               scope="row"
                               className="text-xl lg:text-3xl lg:px-6 py-2 pb-2 font-medium whitespace-nowrap dark:text-white"
                             >
-                              {statsData[0].total_wagered.toFixed(2)}
+                              {statsData[0].total_wagered?.toFixed(2) || 0}
                               <br />
                               {/* <div className="text-[#8C8888] text-sm">
                                 Gamble sum: 30,219
@@ -377,6 +376,9 @@ export default function Home() {
                         {t("landing_content.wager")}
                       </th>
                       <th scope="col" className="px-6 py-3 text-center">
+                        {t("landing_content.payout")}
+                      </th>
+                      <th scope="col" className="px-6 py-3 text-center">
                         {t("landing_content.profit")}
                       </th>
                     </tr>
@@ -428,14 +430,20 @@ export default function Home() {
                             {stat.wager}
                           </div>
                         </td>
-                        {stat.profit == 0 ? (
+                        <td className="px-6">
+                          <div className="flex items-center justify-center">
+                            <img src="/images/sui_brand.png" alt="Sui Brand" />
+                            {stat.payout}
+                          </div>
+                        </td>
+                        {stat.result == 'lose' ? (
                           <td className="px-6 py-1 text-red-500">
                             <div className="flex items-center justify-center">
                               <img
                                 src="/images/sui_brand.png"
                                 alt="Sui Brand"
                               />
-                              -{stat.wager}
+                              -{stat.profit}
                             </div>
                           </td>
                         ) : (

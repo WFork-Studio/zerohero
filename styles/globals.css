@@ -484,3 +484,8 @@ a {
 .animate-loading-bar {
   animation: loading 4s infinite;
 }
+
+
+.tooltip:hover .tooltip-text {
+  opacity: 1;
+}
