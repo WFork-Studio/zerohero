@@ -43,9 +43,6 @@ export const AppDataProvider = ({ children }) => {
 
   const getMessages = async () => {
     const messages = await getAllMessages();
-    if (messages === null) {
-      return;
-    }
     const newMessages = messages.filter(
       (message) =>
         !messagesReceived.some(
