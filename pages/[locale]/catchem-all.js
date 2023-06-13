@@ -153,7 +153,8 @@ export default function CatchemAll(statsDatas) {
             "Catchem All",
             {
               level: playerCurrentLevel.levelName,
-              hex: playerCurrentLevel.colorHex
+              hex: playerCurrentLevel.colorHex,
+              image: playerCurrentLevel.image
             },
             userData?.username
           );
@@ -273,26 +274,40 @@ export default function CatchemAll(statsDatas) {
                           className="border-b border-[#2F3030] dark:border-[#2F3030]"
                           style={{ backgroundColor: "#262626" }}
                         >
-                          {stat.username !== null ?
+                          {stat.username !== null ? (
                             <th
                               scope="row"
-                              className="px-6 py-2 font-medium whitespace-nowrap text-start truncate" style={{ color: "#" + stat?.playerLv?.hex, maxWidth: '1px' }}
+                              className="px-6 text-center"
                             >
-                              {stat.username}
+                              <div className="flex items-center">
+                                <img className="w-5 h-5 rounded-full mr-2" src={stat?.playerLv?.image} alt="Sui Brand" />
+                                <div className="font-medium whitespace-nowrap text-start" style={{
+                                  color: "#" + stat?.playerLv?.hex,
+                                  maxWidth: "15em",
+                                }}>
+                                  <p className="truncate" style={{ color: "#" + stat?.playerLv?.hex }}>{stat.username}</p>
+                                </div>
+                              </div>
                             </th>
-                            :
+                          ) : (
                             <th
                               scope="row"
-                              className="px-6 py-2 font-medium whitespace-nowrap text-start" style={{ color: "#" + stat?.playerLv?.hex }}
+                              className="px-6 py-2 font-medium whitespace-nowrap text-start"
+                              style={{ color: "#" + stat?.playerLv?.hex }}
                             >
-                              {stat.walletAddress.substr(0, 4) +
-                                "....." +
-                                stat.walletAddress.substr(
-                                  stat.walletAddress.length - 4,
-                                  stat.walletAddress.length
-                                )}{" "}
+                              <div className="flex items-center">
+                                <img className="w-5 h-5 rounded-full mr-2" src={stat?.playerLv?.image} alt="Sui Brand" />
+                                <p>
+                                  {stat.walletAddress.substr(0, 4) +
+                                    "....." +
+                                    stat.walletAddress.substr(
+                                      stat.walletAddress.length - 4,
+                                      stat.walletAddress.length
+                                    )}{" "}
+                                </p>
+                              </div>
                             </th>
-                          }
+                          )}
                           <th
                             scope="row"
                             className="px-6 py-2 font-medium whitespace-nowrap text-start dark:text-white"
@@ -615,26 +630,40 @@ export default function CatchemAll(statsDatas) {
                           className="border-b border-[#2F3030] dark:border-[#2F3030]"
                           style={{ backgroundColor: "#262626" }}
                         >
-                          {stat.username !== null ?
+                          {stat.username !== null ? (
                             <th
                               scope="row"
-                              className="px-6 py-2 font-medium whitespace-nowrap text-start truncate" style={{ color: "#" + stat?.playerLv?.hex, maxWidth: '1px' }}
+                              className="px-6 text-center"
                             >
-                              {stat.username}
+                              <div className="flex items-center">
+                                <img className="w-5 h-5 rounded-full mr-2" src={stat?.playerLv?.image} alt="Sui Brand" />
+                                <div className="font-medium whitespace-nowrap text-start" style={{
+                                  color: "#" + stat?.playerLv?.hex,
+                                  maxWidth: "15em",
+                                }}>
+                                  <p className="truncate" style={{ color: "#" + stat?.playerLv?.hex }}>{stat.username}</p>
+                                </div>
+                              </div>
                             </th>
-                            :
+                          ) : (
                             <th
                               scope="row"
-                              className="px-6 py-2 font-medium whitespace-nowrap text-start" style={{ color: "#" + stat?.playerLv?.hex }}
+                              className="px-6 py-2 font-medium whitespace-nowrap text-start"
+                              style={{ color: "#" + stat?.playerLv?.hex }}
                             >
-                              {stat.walletAddress.substr(0, 4) +
-                                "....." +
-                                stat.walletAddress.substr(
-                                  stat.walletAddress.length - 4,
-                                  stat.walletAddress.length
-                                )}{" "}
+                              <div className="flex items-center">
+                                <img className="w-5 h-5 rounded-full mr-2" src={stat?.playerLv?.image} alt="Sui Brand" />
+                                <p>
+                                  {stat.walletAddress.substr(0, 4) +
+                                    "....." +
+                                    stat.walletAddress.substr(
+                                      stat.walletAddress.length - 4,
+                                      stat.walletAddress.length
+                                    )}{" "}
+                                </p>
+                              </div>
                             </th>
-                          }
+                          )}
                           <th
                             scope="row"
                             className="px-6 py-2 font-medium whitespace-nowrap text-start dark:text-white"

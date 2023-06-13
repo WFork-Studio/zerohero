@@ -257,8 +257,8 @@ export default function Home() {
                               >
                                 <h2
                                   className={`${currentLocale === "es"
-                                      ? "lg:text-base xl:text-xl 2xl:text-4xl"
-                                      : "lg:text-xl xl:text-2xl 2xl:text-5xl"
+                                    ? "lg:text-base xl:text-xl 2xl:text-4xl"
+                                    : "lg:text-xl xl:text-2xl 2xl:text-5xl"
                                     } mt-2 text-white`}
                                 >
                                   {t("landing_content.buy_nft")}
@@ -402,13 +402,15 @@ export default function Home() {
                         {stat.username !== null ? (
                           <td
                             scope="row"
-                            className="px-6 text-center truncate"
-                            style={{
-                              color: "#" + stat?.playerLv?.hex,
-                              maxWidth: "1px",
-                            }}
+                            className="px-6 text-center"
                           >
-                            {stat.username}
+                            <div className="flex items-center justify-center">
+                              <img className="w-5 h-5 rounded-full mr-2" src={stat?.playerLv?.image} alt="Sui Brand" />
+                              <p className="truncate" style={{
+                                color: "#" + stat?.playerLv?.hex,
+                                maxWidth: "15em",
+                              }}>{stat.username}</p>
+                            </div>
                           </td>
                         ) : (
                           <td
@@ -416,12 +418,17 @@ export default function Home() {
                             className="px-6 text-center"
                             style={{ color: "#" + stat?.playerLv?.hex }}
                           >
-                            {stat.walletAddress.substr(0, 4) +
-                              "....." +
-                              stat.walletAddress.substr(
-                                stat.walletAddress.length - 4,
-                                stat.walletAddress.length
-                              )}{" "}
+                            <div className="flex items-center justify-center">
+                              <img src="/images/sui_brand.png" alt="Sui Brand" />
+                              <span>
+                                {stat.walletAddress.substr(0, 4) +
+                                  "....." +
+                                  stat.walletAddress.substr(
+                                    stat.walletAddress.length - 4,
+                                    stat.walletAddress.length
+                                  )}{" "}
+                              </span>
+                            </div>
                           </td>
                         )}
                         <td className="px-6">
