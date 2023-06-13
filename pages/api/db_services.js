@@ -202,7 +202,7 @@ export async function getAllMessages() {
   try {
     const { data: records, error } = await supabase
       .from("messages")
-      .select("*, users!fk_messages_users(walletAddress, username)")
+      .select("*, users!messages_userId_fkey(walletAddress, username)")
       .order("createdAt", { ascending: true });
 
     if (error) {
