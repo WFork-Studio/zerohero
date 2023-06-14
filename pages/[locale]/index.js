@@ -343,7 +343,7 @@ export default function Home() {
                               scope="row"
                               className="text-xl lg:text-3xl lg:px-6 py-2 pb-2 font-medium whitespace-nowrap dark:text-white"
                             >
-                              {allHistories.count.toFixed(2)}
+                              {allHistories.count}
                               <br />
                               {/* <div className="text-[#8C8888] text-sm">
                                 Gamble sum: 30,219
