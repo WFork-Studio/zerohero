@@ -419,29 +419,38 @@ export default function profile() {
                             {moment(Date.parse(stat.createdAt)).fromNow()}
                           </td>
                           {stat.username !== null ? (
-                            <td
+                            <th
                               scope="row"
-                              className="px-6 py-4 truncate"
-                              style={{
-                                color: "#" + stat?.playerLv?.hex,
-                                maxWidth: "1px",
-                              }}
+                              className="px-6 text-center"
                             >
-                              {stat.username}
-                            </td>
+                              <div className="flex items-center">
+                                <img className="w-5 h-5 rounded-full mr-2" src={stat?.playerLv?.image} alt="Sui Brand" />
+                                <div className="font-medium whitespace-nowrap text-start" style={{
+                                  color: "#" + stat?.playerLv?.hex,
+                                  maxWidth: "15em",
+                                }}>
+                                  <p className="truncate" style={{ color: "#" + stat?.playerLv?.hex }}>{stat.username}</p>
+                                </div>
+                              </div>
+                            </th>
                           ) : (
-                            <td
+                            <th
                               scope="row"
-                              className="px-6 py-4"
+                              className="px-6 py-2 font-medium whitespace-nowrap text-start"
                               style={{ color: "#" + stat?.playerLv?.hex }}
                             >
-                              {stat.walletAddress.substr(0, 4) +
-                                "....." +
-                                stat.walletAddress.substr(
-                                  stat.walletAddress.length - 4,
-                                  stat.walletAddress.length
-                                )}{" "}
-                            </td>
+                              <div className="flex items-center">
+                                <img className="w-5 h-5 rounded-full mr-2" src={stat?.playerLv?.image} alt="Sui Brand" />
+                                <p>
+                                  {stat.walletAddress.substr(0, 4) +
+                                    "....." +
+                                    stat.walletAddress.substr(
+                                      stat.walletAddress.length - 4,
+                                      stat.walletAddress.length
+                                    )}{" "}
+                                </p>
+                              </div>
+                            </th>
                           )}
                           <td class="px-6 py-4 text-white">
                             <div className="flex items-center">
