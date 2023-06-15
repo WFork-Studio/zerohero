@@ -75,7 +75,7 @@ export default function CoinFlip(statsDatas) {
 
   const getMinMax = async (e) => {
     const txn = await provider.getObject({
-      id: "0xf91e8c689a0b8eab5b1da09e636e4d3c972637816278f298fb0a37fe5699aea0",
+      id: "0x2fc051c6ca948a80c4387dbb48572386045fea99cf68175f2558279f0163f997",
       // fetch the object content field
       options: { showContent: true },
     });
@@ -85,7 +85,7 @@ export default function CoinFlip(statsDatas) {
 
     let bank = Number(txn?.data?.content?.fields?.bank) / 1000000000;
     let max = (bank * txn?.data?.content?.fields?.max_bet) / 10000;
-    setMaxBet(Number(max.toFixed(1)));
+    setMaxBet(Number(max));
   };
 
   const playGame = async (e) => {
@@ -102,9 +102,9 @@ export default function CoinFlip(statsDatas) {
         const betValue = Number(Wager) * 1000000000;
 
         const packageId =
-          "0x887860346e70e750d8b86b3a5b0203e99174c35c14cfb78c41286b482d4ea024";
+          "0x0ffed97890cdc836902c2434024d84aba19ee83504c8283e1beb7dc9bfd294f7";
         const coinFlipId =
-          "0xf91e8c689a0b8eab5b1da09e636e4d3c972637816278f298fb0a37fe5699aea0";
+          "0x2fc051c6ca948a80c4387dbb48572386045fea99cf68175f2558279f0163f997";
         const tx = new TransactionBlock();
         let [coin] = tx.splitCoins(tx.gas, [tx.pure(betValue)]);
         tx.setGasBudget(10000000);

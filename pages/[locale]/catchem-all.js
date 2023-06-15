@@ -71,17 +71,18 @@ export default function CatchemAll(statsDatas) {
 
   const getMinMax = async (e) => {
     const txn = await provider.getObject({
-      id: "0x4636ec6eeb986b3c1f09931b3abfd166692d64d514b7ee9c1c356fb605cb6d8d",
+      id: "0x6a2400b8affd446efa005397dc2d1ec2fcb2a759c738698a6c354b51f82aa321",
       // fetch the object content field
       options: { showContent: true },
     });
 
+    console.log(txn?.data?.content?.fields);
     var minBet = txn?.data?.content?.fields?.min_bet / 1000000000;
     setMinBet(minBet);
 
     let bank = Number(txn?.data?.content?.fields?.bank) / 1000000000;
     let max = (bank * txn?.data?.content?.fields?.max_bet) / 10000;
-    setMaxBet(Number(max.toFixed(1)));
+    setMaxBet(Number(max));
   };
 
   const playGame = async (e) => {
@@ -91,9 +92,9 @@ export default function CatchemAll(statsDatas) {
         const betValue = Number(TotalWager) * 1000000000;
 
         const packageId =
-          "0x8c9a415d0d7eef5264a794174c9683d1f161a658d0ee9e10a1a9e5ada459e893";
+          "0xe72d80fbb6af68fad13b05ea07f5002b4335d29ecedcf752860b36fac951a00e";
         const catchemAllId =
-          "0x4636ec6eeb986b3c1f09931b3abfd166692d64d514b7ee9c1c356fb605cb6d8d";
+          "0x6a2400b8affd446efa005397dc2d1ec2fcb2a759c738698a6c354b51f82aa321";
         const tx = new TransactionBlock();
         let [coin] = tx.splitCoins(tx.gas, [tx.pure(betValue)]);
         tx.setGasBudget(10000000);
